@@ -1,33 +1,66 @@
 import LoginService from "../service/login";
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router";
 import * as yup from "yup";
+import {useState} from "react";
+// import './Style-1.css';
+// import './Style-2.css';
+// import './Style-3.css';
+// import './Style-4.css';
+// import './Style-5.css';
+// import './Style-6.css';
+// import './Style-7.css';
 
 function Login() {
     const navigate = useNavigate();
+    const [message, setMessage] = useState("")
     const signUpSchema = yup.object().shape({
         username: yup.string()
-            .min(2, "Too Short!")
+            .min(4, "tài khoản phải lớn 4 ký tự!")
             .max(50, "Too Long!")
-            .required("Firstname is required"),
+            .required("tài khoản không được để trống")
+            .matches(
+                /^[a-z0-9]*$/,
+                "tài khoản không được chứa ký tự đặc biệt, và được viết hoa"
+            ),
+        password: yup.string()
+            .min(4, "mật khẩu dài ít nhất 5 ký tự trở lên")
+            .max(50, "Too Long!")
+            .required("mật khẩu không được để trống")
+            .matches(
+                /^[a-zA-Z0-9]*$/,
+                "mật khẩu không được chứa ký tự đặc biệt"
+            ),
     })
     const handleLogin = async (values) => {
-        LoginService.login(values).then(res => {
-            console.log(res.data)
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("account", res.data)
-            if (res.data.status.nameStatus !== "active") {
+        try {
+            const response = await LoginService.login(values);
+            const data = response.data;
+            console.log(data);
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("account", JSON.stringify(data));
+            if (data.status.nameStatus === "active") {
+                if (data.role.nameRole.includes("ROLE_ADMIN")) {
+                    navigate("admin");
+                } else if (data.role.nameRole.includes("ROLE_USER")) {
+                    navigate("user");
+                } else if (data.role.nameRole.includes("ROLE_CCDV")) {
+                    navigate("ccdv");
+                }
+            } else if (data.status.nameStatus === "register") {
                 navigate("/");
-            } else if (res.data.status) {
-
-            } else if (res.data.roles.includes("ROLE_ADMIN")) {
-                navigate("admin");
-            } else if (res.data.roles.includes("ROLE_USER")) {
-                navigate("user");
-            } else {
-
+                setMessage("tài khoản chưa được chấp nhận");
+            } else if (data.status.nameStatus ==="block"){
+                navigate("/");
+                setMessage("tài khoản của bạn đã bị khóa");
+            }else {
+                // else này đang ko nhận
+                navigate("/");
+                setMessage(data);
             }
-        })
+        } catch (error) {
+            setMessage("tài khoản hoặc mật khẩu không chính xác");
+        }
     }
     return (
         <>
@@ -158,7 +191,7 @@ function Login() {
                                 padding: '20px',
                                 boxShadow: '5px 5px 7px 0'
                             }}>
-                                <h3 style={{color: '#f0564a'}}>Nơi tình yêu bắt đầu</h3>
+                                <h3 style={{color: '#f0564a'}}>Thuê làm gì bỏ đi làm người</h3>
                                 <Formik
                                     initialValues={{
                                         username: '',
@@ -170,11 +203,16 @@ function Login() {
                                     <Form>
                                         <div className="fieldGroup">
                                             <Field type="text" name="username" placeholder="Tên đăng nhập hoặc email"
-                                                   maxLength={5000} autoComplete="false"/>
+                                                   maxLength={18} autoComplete="false"/>
+                                            <ErrorMessage name={'username'}/>
+                                            {
+                                                message &&  <p style={{textAlign: 'center'}}>{message}</p>
+                                            }
                                         </div>
                                         <div className="fieldGroup">
                                             <Field type="password" name="password" placeholder="Mật khẩu"
-                                                   maxLength={5000} autoComplete="false"/>
+                                                   maxLength={50} autoComplete="false"/>
+                                            <ErrorMessage name={'password'}/>
                                         </div>
                                         <p className="forgot-password">
                                             <a href="#"><span>Quên mật khẩu?</span></a>
