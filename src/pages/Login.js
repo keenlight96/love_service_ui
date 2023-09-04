@@ -39,12 +39,12 @@ function Login() {
             console.log(data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("account", JSON.stringify(data));
-            if (data.status.nameStatus === "active") {
-                if (data.role.nameRole.includes("ROLE_ADMIN")) {
+            if (data.status.nameStatus === "active" && data.isActive == "true") {
+                if (data.role.nameRole === "ROLE_ADMIN") {
                     navigate("admin");
-                } else if (data.role.nameRole.includes("ROLE_USER")) {
+                } else if (data.role.nameRole ==="ROLE_USER") {
                     navigate("user");
-                } else if (data.role.nameRole.includes("ROLE_CCDV")) {
+                } else if (data.role.nameRole === "ROLE_CCDV") {
                     navigate("ccdv");
                 }
             } else if (data.status.nameStatus === "register") {
@@ -53,7 +53,10 @@ function Login() {
             } else if (data.status.nameStatus ==="block"){
                 navigate("/");
                 setMessage("tài khoản của bạn đã bị khóa");
-            }else {
+            }else if (data.isActive === "false") {
+                navigate("allBills");
+                setMessage("tài khoản của bạn đã bị xóa");
+            } else {
                 // else này đang ko nhận
                 navigate("/");
                 setMessage(data);
