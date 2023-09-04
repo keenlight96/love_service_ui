@@ -1,15 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router";
-import NewestCCDVs from "./pages/NewestCCDVs";
+import Home from "./pages/home/Home";
+import Layout from "./components/Layout";
 
 function App() {
     return (
-        <div>
+        <>
             <Routes>
-                <Route path={"/"} element={<NewestCCDVs/>}></Route>
+                <Route path={"/"} element={<Layout/>}>
+                    <Route path={""} element={<Home/>}></Route>
+                </Route>
             </Routes>
-        </div>
+        </>
     );
 }
 
