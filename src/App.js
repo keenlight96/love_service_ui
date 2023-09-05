@@ -1,17 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router";
-import UserProfile from "./UserProfile/UserProfile";
-import UserDetail from "./UserProfile/UserDetail";
-
+import Home from "./pages/home/Home";
+import UserDetail from "./pages/home/userProfile/UserDetail";
 function App() {
-  return (
-  <>
-    <Routes>
-      <Route path="/" element={<UserProfile/>}/>
-      <Route path="/userDetail/:id" element={<UserDetail/>} />
-    </Routes>
-  </>)
+    return (
+        <div>
+            <Routes>
+                <Route path={"/"} element={<Home/>}></Route>
+                <Route path={"/api/userDetail/:id"} element={<UserDetail/>}></Route>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;
