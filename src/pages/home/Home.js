@@ -4,11 +4,13 @@ import {getNewestCCDVs} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
+import {getAllSupplies} from "../../service/SupplyService";
 
 const Home = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getNewestCCDVs(10));
+        dispatch(getAllSupplies());
     }, [])
     return (
         <>
@@ -53,7 +55,9 @@ const Home = () => {
                 </div>
                 <div className="wrapper">
                     <div className="home-flex">
+
                         <SidebarSupplies/>
+
                         <div className="home-flex-content">
                             <p className="btn-chat-global false"><span>Trò Chuyện</span></p>
                             <div className="hided">
@@ -204,6 +208,7 @@ const Home = () => {
                                 </button>
                             </div>
                             <div className="list-player">
+
                                 <NewCcdVs/>
 
                                 <div className="box hot-player">
