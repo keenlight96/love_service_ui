@@ -834,7 +834,9 @@
     border: 1px solid #e6e5ea;
     border-radius: 10px
 }
-
+.player-information{
+   margin-top: 66px;
+}
 .player-information-card-wrap .player-avatar {
     position: relative;
     overflow: hidden

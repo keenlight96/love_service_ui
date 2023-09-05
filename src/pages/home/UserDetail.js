@@ -11,7 +11,7 @@ function UserDetail() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/userDetail/` + id)
+        axios.get(`http://localhost:8080/userDetail/` + id)
             .then(response => {
                 setUserDetail(response.data.userProfile);
                 setImage(response.data.image)
@@ -33,7 +33,7 @@ function UserDetail() {
                         <li className="item-icon notificate dropdown">
                             <a id="basic-nav-dropdown" role="button" className="dropdown-toggle"
                                aria-haspopup="true"
-                               aria-expanded="false" href="#">
+                               aria-expanded="false" href="home/userProfile#">
                                 <div className="item-title">
                                     <i className="fal fa-bell"></i>
                                 </div>
@@ -59,13 +59,13 @@ function UserDetail() {
                         <li className="item-icon item-avatar dropdown"><a id="header-nav-dropdown" role="button"
                                                                           className="dropdown-toggle"
                                                                           aria-haspopup="true"
-                                                                          aria-expanded="false" href="#"><img
+                                                                          aria-expanded="false" href="home/userProfile#"><img
                             src="../resources/raw/avatar6.png"
                             className="avt-img"
                             alt="PD"/></a>
                             <ul role="menu" className="dropdown-menu" aria-labelledby="header-nav-dropdown">
                                 <li role="presentation" className="page-user"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><img
+                                                                                 href="home/userProfile#"><img
                                     src="../resources/raw/avatar6.png" className="avt-img" alt="PD"/>
                                     <div className="text-logo"><h5>keenlight</h5>
                                         <p>ID : <span>keenlight</span></p>
@@ -74,29 +74,29 @@ function UserDetail() {
                                 </a></li>
                                 <li role="presentation" className="menu-item hidden-lg hidden-md"><a role="menuitem"
                                                                                                      tabIndex="-1"
-                                                                                                     href="#"><i
+                                                                                                     href="home/userProfile#"><i
                                     className="fas fa-plus"></i> <span>Số dư</span> : <span
                                     className="money">0 đ</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-minus"></i> <span>Rút tiền</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-credit-card"></i> <span>Mua thẻ</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-user-lock"></i> <span>Tạo khóa bảo vệ</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-clock"></i> <span>Lịch sử giao dịch</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-users"></i> <span>Danh sách theo dõi</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-cogs"></i> <span>Cài đặt tài khoản</span></a></li>
                                 <li role="presentation" className="menu-item"><a role="menuitem" tabIndex="-1"
-                                                                                 href="#"><i
+                                                                                 href="home/userProfile#"><i
                                     className="fas fa-power-off"></i> <span>Đăng xuất</span></a></li>
                                 <div className="menu-item list-flag">
                                     <div className="box-item">
@@ -304,14 +304,14 @@ function UserDetail() {
                                                                                               role="tab"
                                                                                               aria-controls="top-donate-pane-1"
                                                                                               aria-selected="true"
-                                                                                              href="#">Top
+                                                                                              href="home/userProfile#">Top
                                                     Donate</a></li>
                                                 <li role="presentation" className=""><a id="top-donate-tab-2"
                                                                                         role="tab"
                                                                                         aria-controls="top-donate-pane-2"
                                                                                         tabIndex="-1"
                                                                                         aria-selected="false"
-                                                                                        href="#">Top Donate
+                                                                                        href="home/userProfile#">Top Donate
                                                     Tháng</a></li>
                                             </ul>
                                             <div className="tab-content">
