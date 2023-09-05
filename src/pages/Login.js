@@ -37,25 +37,26 @@ function Login() {
                 if (data.role.nameRole ==="ROLE_ADMIN") {
                     navigate("admin");
                 } else if (data.role.nameRole ==="ROLE_USER") {
-                    navigate("user");
+                    navigate("home");
                 } else if (data.role.nameRole ===("ROLE_CCDV")) {
-                    navigate("ccdv");
+                    navigate("home");
                 }
             } else if (data.status.nameStatus === "register") {
-                navigate("/");
+                navigate("/login");
                 setMessage("tài khoản chưa được chấp nhận");
             } else if (data.status.nameStatus === "block") {
-                navigate("/");
+                navigate("/login");
                 setMessage("tài khoản của bạn đã bị khóa");
             } else if (data.isActive == "false") {
                 navigate("allBills");
                 setMessage("tài khoản của bạn đã bị xóa");
             } else {
                 // else này đang ko nhận
-                navigate("/");
+                navigate("/login");
                 setMessage(data);
             }
         } catch (error) {
+            navigate("/login");
             setMessage("tài khoản hoặc mật khẩu không chính xác");
         }
     }
@@ -206,7 +207,7 @@ function Login() {
                                     padding: '20px',
                                     boxShadow: '5px 5px 7px 0'
                                 }}>
-                                    <h3 style={{color: '#f0564a'}}>Thuê làm gì bỏ đi làm người</h3>
+                                    <h3 style={{color: '#f0564a'}}>Nơi kết nối yêu thương</h3>
                                     <Formik
                                         initialValues={{
                                             username: '',
