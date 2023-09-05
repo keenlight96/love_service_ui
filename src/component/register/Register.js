@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import React from 'react';
+import {ErrorMessage, Field, Formik} from 'formik';
 import * as Yup from 'yup';
 import './cssRegister.css'
 import SignupCCDV from "../../services/SignupCCDV";
@@ -36,8 +36,7 @@ const SignupForm = () => {
                                    onSubmit={(values, actions) => {
                                        // Đây là nơi xử lý submit form sau khi đã validate thành công
                                        console.log(values);
-
-                                       SignupCCDV.register(values)
+                                       SignupCCDV.registerAndProfile(values)
                                            .then( async (response) => {
                                                console.log(response)
                                            if (response.data.validStatus === 'NAME_EXISTED') {
@@ -98,14 +97,14 @@ const SignupForm = () => {
                                                            autoComplete="false"
                                                            style={{
                                                                textAlign: 'center',
-                                                               width: '107px',
+                                                               width: '160px',
                                                                marginTop: '10px',
                                                                marginBottom: '10px',
                                                                borderRadius: '7px',
                                                                padding: '7px',
-                                                               marginLeft: '1px',
+                                                               marginLeft: '20px',
                                                                marginRight: '0px',
-                                                               borderRight:'0',
+                                                               borderRight: '0',
                                                                borderTopRightRadius: '0', // Không bo tròn góc trên bên phải
                                                                borderBottomRightRadius: '0',
                                                                outline: 'none',
@@ -114,13 +113,15 @@ const SignupForm = () => {
                                                        />
                                                    <div>
                                                        <button type="button" disabled={isSubmitting}  style={{
-                                                           backgroundColor:'#FFE4E1',
-                                                           height: '32px',
+                                                           backgroundColor: '#FFE4E1',
+                                                           width: '100px',
+                                                           height: '40px',
                                                            marginTop: '10px',
-                                                           marginBottom:'1px',
+                                                           marginBottom: '1px',
                                                            marginLeft: '1px',
+
                                                            border: '0px',
-                                                           borderRadius:'7px',
+                                                           borderRadius: '7px',
                                                            borderTopLeftRadius: '0', // Không bo tròn góc trên bên trái
                                                            borderBottomLeftRadius: '0',   // Không bo tròn góc dưới bên trái
                                                        }}>
@@ -138,16 +139,31 @@ const SignupForm = () => {
                                                        placeholder="Tên người dùng"
                                                        maxLength="5000"
                                                        autoComplete="false"
-                                                       style={{ textAlign: 'center',borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none'}}
+                                                       style={{
+                                                           textAlign: 'center',
+                                                           borderRadius: '7px',
+                                                           padding: '7px',
+                                                           margin: '10px',
+                                                           outline: 'none'
+                                                       }}
                                                    />
-                                                   <ErrorMessage name="nickName" component="div" className="error" />
+                                                   <ErrorMessage name="nickName" component="div" className="error"/>
                                                </div>
                                            </div>
                                            <div className="recaptcha">
                                                {/* Đoạn mã reCAPTCHA */}
                                            </div>
-                                           <button type={"submit"} disabled={isSubmitting} style={{backgroundColor:'#FFE4E1', marginTop:'30px',height:'30px', borderRadius:'10px'}}>
-                                               <span style={{margin:'20px',padding:'10px',}}>Đăng ký tài khoản</span>
+                                           <button type={"submit"} disabled={isSubmitting}
+                                                   style={{
+                                                       backgroundColor: '#FFE4E1',
+                                                       marginTop: '2px',
+                                                       marginLeft:'39px',
+                                                       marginBottom:'20px',
+                                                       height: '30px',
+                                                       borderRadius: '10px',
+                                                       alignContent:'center'
+                                                   }}>
+                                               <span style={{margin: '20px', padding: '10px',}}>Đăng ký tài khoản</span>
                                            </button>
                                        </form>
                                    )}

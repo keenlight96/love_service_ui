@@ -4,8 +4,16 @@ import axios from "axios";
 
 
 
-    // call api đăng kí tài khoản
-     static async register(values) {
+    // call api đăng kí tài khoản và tự động tạo profile
+     static async registerAndProfile(values) {
+         return await axios.post("http://localhost:8080/accounts/registerUserAndProfile", values, {
+             headers: {
+                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+             }
+         });
+     }
+     // call api đăng kí tài khoản
+     static async registerUser(values) {
          return await axios.post("http://localhost:8080/accounts/registerUser", values, {
              headers: {
                  "Authorization": `Bearer ${localStorage.getItem("token")}`

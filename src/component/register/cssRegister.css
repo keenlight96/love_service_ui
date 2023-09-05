@@ -22,6 +22,7 @@
 }
 
 .contentmain {
+
     width: 300px;
     border: 1px solid #dcdcdc;
     border-radius: 8px;
@@ -31,6 +32,7 @@
 }
 
 .wrapper {
+    margin-top: 85px;
     min-height: 140vh;
     height: auto;
 }
