@@ -33,13 +33,14 @@ function Login() {
             console.log(data.isActive);
             localStorage.setItem("token", data.token);
             localStorage.setItem("account", JSON.stringify(data));
-            if (data.status.nameStatus === "active" && data.isActive == "true") {
+            if (data.status.nameStatus === "active" && data.isActive) {
                 if (data.role.nameRole ==="ROLE_ADMIN") {
                     navigate("admin");
                 } else if (data.role.nameRole ==="ROLE_USER") {
-                    navigate("home");
+                    navigate("/");
                 } else if (data.role.nameRole ===("ROLE_CCDV")) {
-                    navigate("home");
+                    console.log("1")
+                    navigate("/");
                 }
             } else if (data.status.nameStatus === "register") {
                 navigate("/login");
@@ -47,8 +48,8 @@ function Login() {
             } else if (data.status.nameStatus === "block") {
                 navigate("/login");
                 setMessage("tài khoản của bạn đã bị khóa");
-            } else if (data.isActive == "false") {
-                navigate("allBills");
+            } else if (!data.isActive) {
+                navigate("/login");
                 setMessage("tài khoản của bạn đã bị xóa");
             } else {
                 // else này đang ko nhận
@@ -201,6 +202,7 @@ function Login() {
                                          alt="PD"/>
                                 </div>
                                 <div className="content-main" style={{
+                                    width: '450px',
                                     border: '1px',
                                     borderRadius: '8px',
                                     backgroundColor: '#fff',
