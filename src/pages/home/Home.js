@@ -4,6 +4,9 @@ import {getNewestCCDVs} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
+import {getAllSupplies} from "../../service/SupplyService";
+import Top6ServiceCCDV from "./Top6ServiceCCDV";
+import SreachByFilter from "./SearchByFilter";
 import {getAllActiveSupplies} from "../../service/SupplyService";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
 
@@ -24,27 +27,27 @@ const Home = () => {
     }, [])
     return (
         <>
-            <title>Game Community</title>
-            <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
-            <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
-            <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />
-            <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />
-            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />
-            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />
-            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />
-            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />
-            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />
-            <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
-            <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
-            <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
-            <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
-            <link rel="manifest" href="https://playerduo.net/manifest.json" />
-            <meta name="msapplication-TileColor" content="#ffffff" />
-            <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
-            <meta name="theme-color" content="#ffffff" />
-            <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
-            <link href="../resources/all.css" rel="stylesheet" />
-            <link href="../resources/css.css" rel="stylesheet" />
+            <title>Trang Chủ</title>
+            <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png"/>
+            <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png"/>
+            <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png"/>
+            <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png"/>
+            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png"/>
+            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png"/>
+            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png"/>
+            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png"/>
+            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png"/>
+            <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png"/>
+            <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png"/>
+            <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png"/>
+            <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png"/>
+            <link rel="manifest" href="https://playerduo.net/manifest.json"/>
+            <meta name="msapplication-TileColor" content="#ffffff"/>
+            <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png"/>
+            <meta name="theme-color" content="#ffffff"/>
+            <link rel="shortcut icon" href="../resources/raw/favicon.ico"/>
+            <link href="../resources/all.css" rel="stylesheet"/>
+            <link href="../resources/css.css" rel="stylesheet"/>
             <title>PlayerDuo - Thuê người chơi</title>
             <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet" />
             <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet" />
@@ -221,6 +224,7 @@ const Home = () => {
 
                                 {chosenSupplies.length > 0 ? <CcdVsByChosenSupplies/> : <div></div>}
 
+                                <Top6ServiceCCDV/>
                                 <NewCcdVs/>
 
                                 <div className="box hot-player">
@@ -316,7 +320,6 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-
             </div>
             <div style={{backgroundColor: 'rgb(255, 255, 255)', border: '1px solid rgb(204, 204, 204)', boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px', position: 'absolute', transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s', opacity: 0, visibility: 'hidden', zIndex: 2000000000, left: '0px', top: '-10000px'}}>
                 <div style={{width: '100%', height: '100%', position: 'fixed', top: '0px', left: '0px', zIndex: 2000000000, backgroundColor: 'rgb(255, 255, 255)', opacity: '0.05'}} />
