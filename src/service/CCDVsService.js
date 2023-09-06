@@ -8,3 +8,11 @@ export const getNewestCCDVs = createAsyncThunk(
         return res.data;
     }
 )
+
+export const getCCDVsBySupplies = createAsyncThunk(
+    "getCCDVsBySupplies",
+    async (supplies) => {
+        const res = await customAxios.post("userDetail/searchBySupplies", supplies, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        return res.data;
+    }
+)

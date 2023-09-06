@@ -4,13 +4,23 @@ import {getNewestCCDVs} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
-import {getAllSupplies} from "../../service/SupplyService";
+import {getAllActiveSupplies} from "../../service/SupplyService";
+import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
 
 const Home = () => {
     const dispatch = useDispatch();
+
+    const chosenSupplies = useSelector(state => {
+        return state.supplies.supplies.chosen;
+    })
+
+    const CCDVsByChosenSupplies = useSelector(state => {
+        return state.CCDVs.CCDVs.byChosenSupplies;
+    })
+
     useEffect(() => {
         dispatch(getNewestCCDVs(10));
-        dispatch(getAllSupplies());
+        dispatch(getAllActiveSupplies());
     }, [])
     return (
         <>
@@ -209,6 +219,8 @@ const Home = () => {
                             </div>
                             <div className="list-player">
 
+                                {chosenSupplies.length > 0 ? <CcdVsByChosenSupplies/> : <div></div>}
+
                                 <NewCcdVs/>
 
                                 <div className="box hot-player">
@@ -304,6 +316,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
+
             </div>
             <div style={{backgroundColor: 'rgb(255, 255, 255)', border: '1px solid rgb(204, 204, 204)', boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px', position: 'absolute', transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s', opacity: 0, visibility: 'hidden', zIndex: 2000000000, left: '0px', top: '-10000px'}}>
                 <div style={{width: '100%', height: '100%', position: 'fixed', top: '0px', left: '0px', zIndex: 2000000000, backgroundColor: 'rgb(255, 255, 255)', opacity: '0.05'}} />

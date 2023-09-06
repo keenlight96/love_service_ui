@@ -1,20 +1,19 @@
 import React from 'react';
 import {useSelector} from "react-redux";
 
-const NewCcdVs = () => {
-
-    const newestCCDVs = useSelector(state => {
-        console.log(state);
-        return state.CCDVs.CCDVs.newestCCDVs;
+const CcdVsByChosenSupplies = () => {
+    const CCDVsByChoseSupplies = useSelector(state => {
+        return state.CCDVs.CCDVs.byChosenSupplies;
     })
+
     return (
         <>
-            <div className="box newest-ccdvs">
-                <header className="title-header vip"><h5 className="title-header-left">Người CCDV mới</h5>
+            <div className="box ccdvs-chosen-supplies">
+                <header className="title-header vip"><h5 className="title-header-left">Người CCDV có dịch vụ được lựa chọn</h5>
                     <p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>
                 </header>
                 <div className="card-player row">
-                    {newestCCDVs && newestCCDVs.map((item, key) => (
+                    {CCDVsByChoseSupplies && CCDVsByChoseSupplies.map((item, key) => (
                         <div className="col-md-3" key={key}>
                             <div className="player-information-card-wrap">
                                 <div className="player-avatar">
@@ -82,4 +81,4 @@ const NewCcdVs = () => {
     );
 };
 
-export default NewCcdVs;
+export default CcdVsByChosenSupplies;
