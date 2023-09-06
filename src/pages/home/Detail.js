@@ -1,12 +1,12 @@
 import SidebarSupplies from "./SidebarSupplies";
 import Top6ServiceCCDV from "./Top6ServiceCCDV";
 import NewCcdVs from "./NewCCDVs";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
 
 function Detail(){
-    const [userDetail, setUserDetail] = useState([]);
+    const [userDetail, setUserDetail] = useState({});
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
     const [bill, setBill] = useState([])
@@ -16,37 +16,39 @@ function Detail(){
     useEffect(() => {
         axios.get(`http://localhost:8080/userDetail/` + id)
             .then(response => {
+                console.log(response);
                 setUserDetail(response.data.userProfile);
                 setImage(response.data.image)
                 setInterest(response.data.interests)
                 setBill(response.data.bills)
-                console.log(response.data.interests)
-                console.log(response.data.bills);
             })
             .catch(error => {
                 console.log(error);
             });
     }, []);
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0)
+    });
     return(
         <>
-        <title>Rabbit nee 🐰🐰 on PlayerDuo</title>
-        {/*<link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />*/}
-        {/*<link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />*/}
+        <title>User Profile</title>
+        <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
         <link rel="manifest" href="https://playerduo.net/manifest.json" />
-        {/*<meta name="msapplication-TileColor" content="#ffffff" />*/}
-        {/*<meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />*/}
-        {/*<meta name="theme-color" content="#ffffff" />*/}
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
+        <meta name="theme-color" content="#ffffff" />
         <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
         <link href="../resources/all.css" rel="stylesheet" />
         <link href="../resources/css.css" rel="stylesheet" />

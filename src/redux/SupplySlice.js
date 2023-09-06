@@ -1,9 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAllSupplies} from "../service/SupplyService";
+import {getAllActiveSupplies, setChosenSupplies} from "../service/SupplyService";
 
 const initialState = {
     supplies : {
-        all : []
+        all : [],
+        chosen : []
     }
 }
 
@@ -12,8 +13,11 @@ const SupplySlice = createSlice({
     initialState,
     reducers : {},
     extraReducers: builder => {
-        builder.addCase(getAllSupplies.fulfilled, (state, action) => {
+        builder.addCase(getAllActiveSupplies.fulfilled, (state, action) => {
             state.supplies.all = action.payload;
+        })
+        builder.addCase(setChosenSupplies.fulfilled, (state, action) => {
+            state.supplies.chosen = action.payload;
         })
     }
 })
