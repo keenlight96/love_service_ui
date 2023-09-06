@@ -46,7 +46,7 @@ function Top6ServiceCCDV() {
                                                     <div class="player-avatar">
                                                         <Link to={"/userDetail/" + user.id}>
                                                             <a target="_blank"
-                                                               href="https://playerduo.net/daotrangdai97">
+                                                               href="#">
                                                                 <img src={user.account.avatar} class=""
                                                                      style={{height: "100%"}} alt="PD"
                                                                      id="avt-img-reponsiver"/>

@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
 import {getAllSupplies} from "../../service/SupplyService";
 import Top6ServiceCCDV from "./Top6ServiceCCDV";
+import SreachByFilter from "./SearchByFilter";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -274,33 +275,81 @@ const Home = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="filter-player  hidden"><select className="form-control gender ">
-                                <option value selected="selected">Giới tính</option>
-                                <option value="female">Nữ</option>
-                                <option value="male">Nam</option>
-                            </select><select className="form-control type ">
-                                <option value selected="selected">Thể loại</option>
-                                <option value="new">Người mới</option>
-                                <option value="hot">Hot</option>
-                                <option value="vip">Vip</option>
-                            </select>
-                                <div className="form-control ready false">Sẵn sàng</div>
-                                <div className="form-control online false">Online</div>
-                                <button type="button" className="form-control price false btn btn-default">Khoảng giá
-                                </button>
-                                <input type="text" className="form-control city" placeholder="Sống tại" readOnly
-                                       defaultValue/><input type="text" className="form-control name"
-                                                            placeholder="Tên/Url Player" autoComplete="off"
-                                                            maxLength={32} defaultValue/><input type="text"
-                                                                                                className="form-control category"
-                                                                                                placeholder="Tên game"
-                                                                                                autoComplete="off"
-                                                                                                defaultValue/>
-                                <button type="button" className="form-control btn-filter btn btn-default"><i
-                                    className="fa fa-search"/>
-                                    Tìm kiếm
-                                </button>
-                            </div>
+                            {/*<div className="filter-player  hidden">*/}
+                            {/*    <select className="form-control gender ">*/}
+                            {/*        <option value selected="selected">Giới tính</option>*/}
+                            {/*        <option value="female">Nữ</option>*/}
+                            {/*        <option value="male">Nam</option>*/}
+                            {/*    </select>*/}
+                            {/*    <select className="form-control type ">*/}
+                            {/*        <option value selected="selected">Địa Chỉ</option>*/}
+                            {/*        <option value="new">Hà Nội</option>*/}
+                            {/*        <option value="hot">Hồ Chí Minh</option>*/}
+                            {/*        <option value="vip">Đà Nẵng</option>*/}
+                            {/*        <input type="text" value="Khác"/>*/}
+                            {/*    </select>*/}
+                            {/*    <select className="form-control gender ">*/}
+                            {/*        <option value selected="selected">Lượt views</option>*/}
+                            {/*        <option value="maxViews">Views Cao Nhất</option>*/}
+                            {/*        <option value="minViews">Views Thấp Nhất</option>*/}
+                            {/*    </select>*/}
+                            {/*    <select className="form-control gender ">*/}
+                            {/*        <option value selected="selected">Lượt Thuê</option>*/}
+                            {/*        <option value="maxBill">Lượt Thuê Cao Nhất</option>*/}
+                            {/*        <option value="minBill">Lượt Thuê Thấp Nhất</option>*/}
+                            {/*    </select>*/}
+                            {/*    <button type="button" className="form-control price false btn btn-default">Độ Tuổi*/}
+                            {/*        /!*<div id="popover-trigger-price" role="tooltip" className="fade in popover bottom" style={{display: 'block', top: '603px', left: '565.469px'}}>*!/*/}
+                            {/*        /!*    <div className="arrow" style={{left: '50%'}} />*!/*/}
+                            {/*        /!*    /!*<h3 className="popover-title">Khoảng giá</h3>*!/*!/*/}
+                            {/*        /!*    /!*<div className="popover-content">*!/*!/*/}
+                            {/*        /!*    /!*    <div id="skipstep" className="noUi-target noUi-ltr noUi-horizontal">*!/*!/*/}
+                            {/*        /!*    /!*        <div className="noUi-base">*!/*!/*/}
+                            {/*        /!*    /!*            <div className="noUi-connects">*!/*!/*/}
+                            {/*        /!*    /!*                <div className="noUi-connect" style={{transform: 'translate(15%, 0px) scale(0.75, 1)'}} />*!/*!/*/}
+                            {/*        /!*    /!*            </div><div className="noUi-origin" style={{transform: 'translate(-85%, 0px)', zIndex: 5}}>*!/*!/*/}
+                            {/*        /!*    /!*            <div className="noUi-handle noUi-handle-Loạiower" data-handle={0} tabIndex={0} role="slider" aria-orientation="horizontal" aria-valuemin={5000.0} aria-valuemax={2000000.0} aria-valuenow={30000.0} aria-valuetext={30000.00} />*!/*!/*/}
+                            {/*        /!*    /!*        </div>*!/*!/*/}
+                            {/*        /!*    /!*            <div className="noUi-origin" style={{transform: 'translate(-10%, 0px)', zIndex: 4}}>*!/*!/*/}
+                            {/*        /!*    /!*                <div className="noUi-handle noUi-handle-upper" data-handle={1} tabIndex={0} role="slider" aria-orientation="horizontal" aria-valuemin={30000.0} aria-valuemax={5000000.0} aria-valuenow={2000000.0} aria-valuetext={2000000.00} />*!/*!/*/}
+                            {/*        /!*    /!*            </div>*!/*!/*/}
+                            {/*        /!*    /!*        </div>*!/*!/*/}
+                            {/*        /!*    /!*    </div>*!/*!/*/}
+                            {/*        /!*    /!*    <div className="mt-10 row">*!/*!/*/}
+                            {/*        /!*    /!*        <div className="text-left col-xs-4">*!/*!/*/}
+                            {/*        /!*    /!*            <span className="example-val" id="skip-value-lower">30,000</span>*!/*!/*/}
+                            {/*        /!*    /!*        </div>*!/*!/*/}
+                            {/*        /!*    /!*        <div className="text-center col-xs-3">*!/*!/*/}
+                            {/*        /!*    /!*            <span className="example-val" id="skip-value-lower">*!/*!/*/}
+                            {/*        /!*    /!*                <span>đến</span>*!/*!/*/}
+                            {/*        /!*    /!*            </span>*!/*!/*/}
+                            {/*        /!*    /!*        </div>*!/*!/*/}
+                            {/*        /!*    /!*        <div className="col-xs-5">*!/*!/*/}
+                            {/*        /!*    /!*            <span className="example-val" id="skip-value-upper">2,000,000</span>*!/*!/*/}
+                            {/*        /!*    /!*        </div>*!/*!/*/}
+                            {/*        /!*    /!*    </div>*!/*!/*/}
+                            {/*        /!*    /!*</div>*!/*!/*/}
+                            {/*        /!*</div>*!/*/}
+                            {/*    </button>*/}
+                            {/*    <input style={{*/}
+                            {/*        width: "450px",*/}
+                            {/*        borderRadius: "25px",*/}
+                            {/*        fontSize: "11px",*/}
+                            {/*        padding: "5px",*/}
+                            {/*        height: "32px",*/}
+                            {/*        marginRight: "3px",*/}
+                            {/*        marginBottom: "5px",*/}
+                            {/*        maxWidth: "500px",*/}
+                            {/*        float: "left",*/}
+                            {/*        cursor: "pointer",*/}
+                            {/*        fontWeight: "600"*/}
+                            {/*    }} type="text" placeholder="Nhập Tên Bạn Muốn Tìm..."*/}
+                            {/*           autoComplete="off"/>*/}
+                            {/*    <button type="button" className="form-control btn-filter btn btn-default">*/}
+                            {/*        <i className="fa fa-search"/>Tìm kiếm*/}
+                            {/*    </button>*/}
+                            {/*</div>*/}
+                            <SreachByFilter/>
                             <div className="list-player">
                                 <Top6ServiceCCDV/>
                                 <NewCcdVs/>
