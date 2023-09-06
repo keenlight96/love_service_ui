@@ -1,40 +1,55 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {getNewestCCDVs} from "../../service/CCDVsService";
+import {getNewestCCDVs, getTopFemale, getTopMale} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
-import {getAllSupplies} from "../../service/SupplyService";
+import {getAllActiveSupplies} from "../../service/SupplyService";
+import Top6ServiceCCDV from "./Top6ServiceCCDV";
+import SreachByFilter from "./SearchByFilter";
+import TopMaleAndFemale from "./TopMaleAndFemale";
+import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
 
 const Home = () => {
     const dispatch = useDispatch();
+
+    const chosenSupplies = useSelector(state => {
+        return state.supplies.supplies.chosen;
+    })
+
+    const CCDVsByChosenSupplies = useSelector(state => {
+        return state.CCDVs.CCDVs.byChosenSupplies;
+    })
+
     useEffect(() => {
         dispatch(getNewestCCDVs(10));
-        dispatch(getAllSupplies());
+        dispatch(getAllActiveSupplies());
+        dispatch(getTopMale(4));
+        dispatch(getTopFemale(8));
     }, [])
     return (
         <>
-            <title>Game Community</title>
-            <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
-            <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
-            <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />
-            <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />
-            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />
-            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />
-            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />
-            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />
-            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />
-            <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
-            <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
-            <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
-            <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
-            <link rel="manifest" href="https://playerduo.net/manifest.json" />
-            <meta name="msapplication-TileColor" content="#ffffff" />
-            <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
-            <meta name="theme-color" content="#ffffff" />
-            <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
-            <link href="../resources/all.css" rel="stylesheet" />
-            <link href="../resources/css.css" rel="stylesheet" />
+            <title>Trang Chủ</title>
+            <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png"/>
+            <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png"/>
+            <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png"/>
+            <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png"/>
+            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png"/>
+            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png"/>
+            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png"/>
+            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png"/>
+            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png"/>
+            <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png"/>
+            <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png"/>
+            <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png"/>
+            <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png"/>
+            <link rel="manifest" href="https://playerduo.net/manifest.json"/>
+            <meta name="msapplication-TileColor" content="#ffffff"/>
+            <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png"/>
+            <meta name="theme-color" content="#ffffff"/>
+            <link rel="shortcut icon" href="../resources/raw/favicon.ico"/>
+            <link href="../resources/all.css" rel="stylesheet"/>
+            <link href="../resources/css.css" rel="stylesheet"/>
             <title>PlayerDuo - Thuê người chơi</title>
             <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet" />
             <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet" />
@@ -209,106 +224,56 @@ const Home = () => {
                             </div>
                             <div className="list-player">
 
+                                {chosenSupplies.length > 0 ? <CcdVsByChosenSupplies/> : <div></div>}
+
+                                <Top6ServiceCCDV/>
                                 <NewCcdVs/>
-
-                                <div className="box hot-player">
-                                    <header className="title-header hot"><h5 className="title-header-left">HOT PLAYERS</h5>
-                                        <p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>
-                                    </header>
-                                    <div className="card-player row">
-                                        <div className="col-md-3">
-                                            <div className="player-information-card-wrap">
-                                                <div className="player-avatar">
-                                                    <a target="_blank" href="/ngocngayngohihihehe">
-                                                        <img src="https://playerduo.net/api/upload-service/images/a0b07166-1e65-4e77-a651-b2fef639aa86__25eed2b0-417d-11ee-a657-a54d6be1d46a__player_avatar.jpg" className alt="PD" id="avt-img-reponsiver" />
-                                                    </a>
-                                                    <a target="_blank" className="player-price" href="/ngocngayngohihihehe">69,000 đ/h</a>
-                                                </div>
-                                                <a target="_blank" className="player-information" href="/ngocngayngohihihehe">
-                                                    <h3 className="player-name">
-                                                        <a target="_blank" href="/ngocngayngohihihehe">Bích Ngọc</a>
-                                                        <i className="fas fa-check-circle kyc" aria-hidden="true" />
-                                                        <div className="player-status ready">
-                                                        </div>
-                                                    </h3>
-                                                    <p className="player-title">LOL,PUPG PC,TFT,CALL VIDEO</p>
-                                                    <div className="category">
-                                                        <div className="div--flex">
-                                                            <div className="rate">
-                                                                <i className="fas fa-star" />
-                                                                <p>4.9 <i>(164)</i></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="player-information-card-wrap">
-                                                <div className="player-avatar">
-                                                    <a target="_blank" href="/ngocngayngohihihehe">
-                                                        <img src="https://playerduo.net/api/upload-service/images/a0b07166-1e65-4e77-a651-b2fef639aa86__25eed2b0-417d-11ee-a657-a54d6be1d46a__player_avatar.jpg" className alt="PD" id="avt-img-reponsiver" />
-                                                    </a>
-                                                    <a target="_blank" className="player-price" href="/ngocngayngohihihehe">69,000 đ/h</a>
-                                                </div>
-                                                <a target="_blank" className="player-information" href="/ngocngayngohihihehe">
-                                                    <h3 className="player-name">
-                                                        <a target="_blank" href="/ngocngayngohihihehe">Bích Ngọc</a>
-                                                        <i className="fas fa-check-circle kyc" aria-hidden="true" />
-                                                        <div className="player-status ready">
-                                                        </div>
-                                                    </h3>
-                                                    <p className="player-title">LOL,PUPG PC,TFT,CALL VIDEO</p>
-                                                    <div className="category">
-                                                        <div className="div--flex">
-                                                            <div className="rate">
-                                                                <i className="fas fa-star" />
-                                                                <p>4.9 <i>(164)</i></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <div className="player-information-card-wrap">
-                                                <div className="player-avatar">
-                                                    <a target="_blank" href="/ngocngayngohihihehe">
-                                                        <img src="https://playerduo.net/api/upload-service/images/a0b07166-1e65-4e77-a651-b2fef639aa86__25eed2b0-417d-11ee-a657-a54d6be1d46a__player_avatar.jpg" className alt="PD" id="avt-img-reponsiver" />
-                                                    </a>
-                                                    <a target="_blank" className="player-price" href="/ngocngayngohihihehe">69,000 đ/h</a>
-                                                </div>
-                                                <a target="_blank" className="player-information" href="/ngocngayngohihihehe">
-                                                    <h3 className="player-name">
-                                                        <a target="_blank" href="/ngocngayngohihihehe">Bích Ngọc</a>
-                                                        <i className="fas fa-check-circle kyc" aria-hidden="true" />
-                                                        <div className="player-status ready">
-                                                        </div>
-                                                    </h3>
-                                                    <p className="player-title">LOL,PUPG PC,TFT,CALL VIDEO</p>
-                                                    <div className="category">
-                                                        <div className="div--flex">
-                                                            <div className="rate">
-                                                                <i className="fas fa-star" />
-                                                                <p>4.9 <i>(164)</i></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
+                                <TopMaleAndFemale/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style={{backgroundColor: 'rgb(255, 255, 255)', border: '1px solid rgb(204, 204, 204)', boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px', position: 'absolute', transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s', opacity: 0, visibility: 'hidden', zIndex: 2000000000, left: '0px', top: '-10000px'}}>
-                <div style={{width: '100%', height: '100%', position: 'fixed', top: '0px', left: '0px', zIndex: 2000000000, backgroundColor: 'rgb(255, 255, 255)', opacity: '0.05'}} />
-                <div className="g-recaptcha-bubble-arrow" style={{border: '11px solid transparent', width: '0px', height: '0px', position: 'absolute', pointerEvents: 'none', marginTop: '-11px', zIndex: 2000000000}} />
-                <div className="g-recaptcha-bubble-arrow" style={{border: '10px solid transparent', width: '0px', height: '0px', position: 'absolute', pointerEvents: 'none', marginTop: '-10px', zIndex: 2000000000}} />
+            <div style={{
+                backgroundColor: 'rgb(255, 255, 255)',
+                border: '1px solid rgb(204, 204, 204)',
+                boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px',
+                position: 'absolute',
+                transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s',
+                opacity: 0,
+                visibility: 'hidden',
+                zIndex: 2000000000,
+                left: '0px',
+                top: '-10000px'
+            }}>
+                <div style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'fixed',
+                    top: '0px',
+                    left: '0px',
+                    zIndex: 2000000000,
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    opacity: '0.05'
+                }}/>
+                <div className="g-recaptcha-bubble-arrow" style={{
+                    border: '11px solid transparent',
+                    width: '0px',
+                    height: '0px',
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    marginTop: '-11px',
+                    zIndex: 2000000000
+                }}/>
+                <div className="g-recaptcha-bubble-arrow" style={{
+                    border: '10px solid transparent',
+                    width: '0px',
+                    height: '0px',
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    marginTop: '-10px',
+                    zIndex: 2000000000
+                }}/>
                 <div style={{zIndex: 2000000000, position: 'relative'}}>
                     <iframe title="hình ảnh xác thực reCAPTCHA sẽ hết hạn sau 2 phút nữa" src="index_1.html" name="c-jfcpck8j42i6" frameBorder={0} scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox" style={{width: '100%', height: '100%'}} />
                 </div>

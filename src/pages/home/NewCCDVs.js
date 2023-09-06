@@ -1,5 +1,6 @@
 import React from 'react';
 import {useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 const NewCcdVs = () => {
 
@@ -10,25 +11,23 @@ const NewCcdVs = () => {
     return (
         <>
             <div className="box newest-ccdvs">
-                <header className="title-header vip"><h5 className="title-header-left">NEW PROVIDERS</h5>
+                <header className="title-header vip"><h5 className="title-header-left">Người CCDV mới</h5>
                     <p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>
                 </header>
                 <div className="card-player row">
                     {newestCCDVs && newestCCDVs.map((item, key) => (
+                        <Link to={"/userDetail/" + item.userProfile.id}>
                         <div className="col-md-3" key={key}>
                             <div className="player-information-card-wrap">
                                 <div className="player-avatar">
                                     <a target="_blank" href={"/profile/" + item.userProfile.account.username}>
-                                        <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" />
+                                        <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" style={{height:"100%", width:"100%"}}/>
                                     </a>
                                     <a target="_blank" className="player-price" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.price} đ/h</a>
                                 </div>
                                 <a target="_blank" className="player-information" href={"/profile/" + item.userProfile.account.username}>
                                     <h3 className="player-name">
                                         <a target="_blank" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.account.nickname}</a>
-                                        {/*<i className="fas fa-check-circle kyc" aria-hidden="true" />*/}
-                                        {/*<div className="player-status ready">*/}
-                                        {/*</div>*/}
                                     </h3>
                                     <p className="player-title">{item.randomServices}</p>
                                     <div className="category">
@@ -46,36 +45,8 @@ const NewCcdVs = () => {
                                 </a>
                             </div>
                         </div>
+                        </Link>
                     ))}
-
-                    {/*<div className="col-md-3">*/}
-                    {/*    <div className="player-information-card-wrap">*/}
-                    {/*        <div className="player-avatar">*/}
-                    {/*            <a target="_blank" href="/ngocngayngohihihehe">*/}
-                    {/*                <img src="https://playerduo.net/api/upload-service/images/a0b07166-1e65-4e77-a651-b2fef639aa86__25eed2b0-417d-11ee-a657-a54d6be1d46a__player_avatar.jpg" className alt="PD" id="avt-img-reponsiver" />*/}
-                    {/*            </a>*/}
-                    {/*            <a target="_blank" className="player-price" href="/ngocngayngohihihehe">69,000 đ/h</a>*/}
-                    {/*        </div>*/}
-                    {/*        <a target="_blank" className="player-information" href="/ngocngayngohihihehe">*/}
-                    {/*            <h3 className="player-name">*/}
-                    {/*                <a target="_blank" href="/ngocngayngohihihehe">Bích Ngọc</a>*/}
-                    {/*                <i className="fas fa-check-circle kyc" aria-hidden="true" />*/}
-                    {/*                <div className="player-status ready">*/}
-                    {/*                </div>*/}
-                    {/*            </h3>*/}
-                    {/*            <p className="player-title">LOL,PUPG PC,TFT,CALL VIDEO</p>*/}
-                    {/*            <div className="category">*/}
-                    {/*                <div className="div--flex">*/}
-                    {/*                    <div className="rate">*/}
-                    {/*                        <i className="fas fa-star" />*/}
-                    {/*                        <p>4.9 <i>(164)</i></p>*/}
-                    {/*                    </div>*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-                    {/*        </a>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
                 </div>
             </div>
         </>
