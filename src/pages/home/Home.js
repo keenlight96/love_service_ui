@@ -1,18 +1,21 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {getNewestCCDVs} from "../../service/CCDVsService";
+import {getNewestCCDVs, getTopFemale, getTopMale} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
 import {getAllSupplies} from "../../service/SupplyService";
 import Top6ServiceCCDV from "./Top6ServiceCCDV";
 import SreachByFilter from "./SearchByFilter";
+import TopMaleAndFemale from "./TopMaleAndFemale";
 
 const Home = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getNewestCCDVs(10));
         dispatch(getAllSupplies());
+        dispatch(getTopMale(4));
+        dispatch(getTopFemale(8));
     }, [])
     return (
         <>
@@ -353,6 +356,7 @@ const Home = () => {
                             <div className="list-player">
                                 <Top6ServiceCCDV/>
                                 <NewCcdVs/>
+                                <TopMaleAndFemale/>
                             </div>
                         </div>
                     </div>

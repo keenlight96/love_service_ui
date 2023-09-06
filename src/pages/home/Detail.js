@@ -29,50 +29,24 @@ function Detail(){
     }, []);
     return(
         <>
-        <meta httpEquiv="origin-trial" content="Az520Inasey3TAyqLyojQa8MnmCALSEU29yQFW8dePZ7xQTvSt73pHazLFTK5f7SyLUJSo2uKLesEtEa9aUYcgMAAACPeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkRpc2FibGVUaGlyZFBhcnR5U3RvcmFnZVBhcnRpdGlvbmluZyIsImV4cGlyeSI6MTcyNTQwNzk5OSwiaXNTdWJkb21haW4iOnRydWUsImlzVGhpcmRQYXJ0eSI6dHJ1ZX0=" />
-        <meta httpEquiv="origin-trial" content="Az520Inasey3TAyqLyojQa8MnmCALSEU29yQFW8dePZ7xQTvSt73pHazLFTK5f7SyLUJSo2uKLesEtEa9aUYcgMAAACPeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkRpc2FibGVUaGlyZFBhcnR5U3RvcmFnZVBhcnRpdGlvbmluZyIsImV4cGlyeSI6MTcyNTQwNzk5OSwiaXNTdWJkb21haW4iOnRydWUsImlzVGhpcmRQYXJ0eSI6dHJ1ZX0=" />
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content={-1} />
-        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,maximum-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        <meta name="description" content="Thuê ngay Rabbit nee 🐰🐰, nhận all game, sv Na, Naraka lĩnh vực PUBG PC,Đấu Trường Chân Lý,Liên Minh Huyền Thoại,Liên Quân Mobile,Liên Minh Tốc Chiến,Valorant,GTA V,Dota 2,CSGO,Naraka Bladepoint,Tâm Sự, chỉ với 75000đ/h!" />
-        <meta name="keywords" content="Thuê ngay Rabbit nee 🐰🐰, nhận all game, sv Na, Naraka lĩnh vực PUBG PC,Đấu Trường Chân Lý,Liên Minh Huyền Thoại,Liên Quân Mobile,Liên Minh Tốc Chiến,Valorant,GTA V,Dota 2,CSGO,Naraka Bladepoint,Tâm Sự, chỉ với 75000đ/h!" />
-        <meta name="google-site-verification" content="KYBoGz-bgnBnLpEUr3USGpSo1rVAvTS9LH44oCeunFw" />
-        <meta name="google" value="notranslate" />
-        <meta name="robots" content="INDEX,FOLLOW" />
-        <meta content="index,follow" name="googlebot" />
-        <meta name="copyright" content=" PlayerDuo 2022" />
-        <meta name="keywords" content="Playerduo, player duo, play dua, thuê gái chơi game" />
-        <meta name="description" content="PlayerDuo Cộng đồng game thủ lớn nhất Việt Nam, Cùng chơi với những game thủ chuyên nghiệp, hot streamer, hot girl và những người nổi tiếng." />
         <title>Rabbit nee 🐰🐰 on PlayerDuo</title>
-        <meta content="index,follow" name="googlebot" />
-        <meta name="copyright" content=" PlayerDuo 2022" />
-        <meta name="robots" content="INDEX,FOLLOW" />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content="Rabbit nee 🐰🐰 on PlayerDuo" />
-        <meta property="og:description" content="Thuê ngay Rabbit nee 🐰🐰, nhận all game, sv Na, Naraka lĩnh vực PUBG PC,Đấu Trường Chân Lý,Liên Minh Huyền Thoại,Liên Quân Mobile,Liên Minh Tốc Chiến,Valorant,GTA V,Dota 2,CSGO,Naraka Bladepoint,Tâm Sự, chỉ với 75000đ/h!" />
-        <meta property="og:image" content="https://playerduo.net/api/upload-service/thumbs/medium/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__182c6540-4388-11ee-a657-a54d6be1d46a__player_avatar.jpg" />
-        <meta property="og:video" content />
-        <title>Rabbit nee 🐰🐰 on PlayerDuo</title>
-        <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />
+        {/*<link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />*/}
+        {/*<link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />*/}
         <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
         <link rel="manifest" href="https://playerduo.net/manifest.json" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#ffffff" />
+        {/*<meta name="msapplication-TileColor" content="#ffffff" />*/}
+        {/*<meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />*/}
+        {/*<meta name="theme-color" content="#ffffff" />*/}
         <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
         <link href="../resources/all.css" rel="stylesheet" />
         <link href="../resources/css.css" rel="stylesheet" />
@@ -871,194 +845,6 @@ function Detail(){
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div style={{
-                backgroundColor: 'rgb(255, 255, 255)',
-                border: '1px solid rgb(204, 204, 204)',
-                boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px',
-                position: 'absolute',
-                transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s',
-                opacity: 0,
-                visibility: 'hidden',
-                zIndex: 2000000000,
-                left: '0px',
-                top: '-10000px'
-            }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'fixed',
-                    top: '0px',
-                    left: '0px',
-                    zIndex: 2000000000,
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    opacity: '0.05'
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '11px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-11px',
-                    zIndex: 2000000000
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '10px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-10px',
-                    zIndex: 2000000000
-                }}/>
-                <div style={{zIndex: 2000000000, position: 'relative'}}>
-                    <iframe title="hình ảnh xác thực reCAPTCHA sẽ hết hạn sau 2 phút nữa" src="index_1.html"
-                            name="c-jfcpck8j42i6" frameBorder={0} scrolling="no"
-                            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"
-                            style={{width: '100%', height: '100%'}}/>
-                </div>
-            </div>
-            <div style={{
-                backgroundColor: 'rgb(255, 255, 255)',
-                border: '1px solid rgb(204, 204, 204)',
-                boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px',
-                position: 'absolute',
-                transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s',
-                opacity: 0,
-                visibility: 'hidden',
-                zIndex: 2000000000,
-                left: '0px',
-                top: '-10000px'
-            }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'fixed',
-                    top: '0px',
-                    left: '0px',
-                    zIndex: 2000000000,
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    opacity: '0.05'
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '11px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-11px',
-                    zIndex: 2000000000
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '10px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-10px',
-                    zIndex: 2000000000
-                }}/>
-                <div style={{zIndex: 2000000000, position: 'relative'}}>
-                    <iframe title="hình ảnh xác thực reCAPTCHA sẽ hết hạn sau 2 phút nữa" src="index_2.html"
-                            name="c-837utcd6rzwu" frameBorder={0} scrolling="no"
-                            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"
-                            style={{width: '100%', height: '100%'}}/>
-                </div>
-            </div>
-            <div style={{
-                backgroundColor: 'rgb(255, 255, 255)',
-                border: '1px solid rgb(204, 204, 204)',
-                boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px',
-                position: 'absolute',
-                transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s',
-                opacity: 0,
-                visibility: 'hidden',
-                zIndex: 2000000000,
-                left: '0px',
-                top: '-10000px'
-            }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'fixed',
-                    top: '0px',
-                    left: '0px',
-                    zIndex: 2000000000,
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    opacity: '0.05'
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '11px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-11px',
-                    zIndex: 2000000000
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '10px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-10px',
-                    zIndex: 2000000000
-                }}/>
-                <div style={{zIndex: 2000000000, position: 'relative'}}>
-                    <iframe title="hình ảnh xác thực reCAPTCHA sẽ hết hạn sau 2 phút nữa" src="index_3.html"
-                            name="c-xoyknwz7mz5" frameBorder={0} scrolling="no"
-                            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"
-                            style={{width: '100%', height: '100%'}}/>
-                </div>
-            </div>
-            <div style={{
-                backgroundColor: 'rgb(255, 255, 255)',
-                border: '1px solid rgb(204, 204, 204)',
-                boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px',
-                position: 'absolute',
-                transition: 'visibility 0s linear 0.3s, opacity 0.3s linear 0s',
-                opacity: 0,
-                visibility: 'hidden',
-                zIndex: 2000000000,
-                left: '0px',
-                top: '-10000px'
-            }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'fixed',
-                    top: '0px',
-                    left: '0px',
-                    zIndex: 2000000000,
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    opacity: '0.05'
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '11px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-11px',
-                    zIndex: 2000000000
-                }}/>
-                <div className="g-recaptcha-bubble-arrow" style={{
-                    border: '10px solid transparent',
-                    width: '0px',
-                    height: '0px',
-                    position: 'absolute',
-                    pointerEvents: 'none',
-                    marginTop: '-10px',
-                    zIndex: 2000000000
-                }}/>
-                <div style={{zIndex: 2000000000, position: 'relative'}}>
-                    <iframe title="hình ảnh xác thực reCAPTCHA sẽ hết hạn sau 2 phút nữa" src="index_4.html"
-                            name="c-9s3rhxajcuwj" frameBorder={0} scrolling="no"
-                            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"
-                            style={{width: '100%', height: '100%'}}/>
                 </div>
             </div>
         </>
