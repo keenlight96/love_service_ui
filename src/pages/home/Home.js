@@ -42,8 +42,8 @@ const Home = () => {
     useEffect(() => {
         dispatch(getNewestCCDVs(10));
         dispatch(getAllActiveSupplies());
-        dispatch(getTopMale(4));
-        dispatch(getTopFemale(8));
+        dispatch(getTopMale(5));
+        dispatch(getTopFemale(5));
         dispatch(getSupplyByUserID(iduser()));
         dispatch(getCCDVProperGender(iduser()));
     }, [])
