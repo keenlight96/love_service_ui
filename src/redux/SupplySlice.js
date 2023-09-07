@@ -1,11 +1,14 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {getAllActiveSupplies, setChosenSupplies} from "../service/SupplyService";
+import {getAllSupplies} from "../service/SupplyService";
+import {getSupplyByUserID} from "../service/CCDVsService";
 
 const initialState = {
     supplies : {
         all : [],
-        chosen : []
-    }
+        chosen : [],
+        user:[]
+    },
 }
 
 const SupplySlice = createSlice({
@@ -18,6 +21,9 @@ const SupplySlice = createSlice({
         })
         builder.addCase(setChosenSupplies.fulfilled, (state, action) => {
             state.supplies.chosen = action.payload;
+        })
+        builder.addCase(getSupplyByUserID.fulfilled, (state, action) => {
+            state.supplies.user = action.payload;
         })
     }
 })

@@ -21,7 +21,7 @@ const NewCcdVs = () => {
                             <div className="player-information-card-wrap">
                                 <div className="player-avatar">
                                     <a target="_blank" href={"/profile/" + item.userProfile.account.username}>
-                                        <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" />
+                                        <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver"/>
                                     </a>
                                     <a target="_blank" className="player-price" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.price} đ/h</a>
                                 </div>

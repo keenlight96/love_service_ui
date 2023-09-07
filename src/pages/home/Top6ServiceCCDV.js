@@ -30,7 +30,7 @@ function Top6ServiceCCDV() {
 
 
             <div class="box vip-player">
-                <header class="title-header vip"><h5 class="title-header-left">TOP 6 VIEWS HOT
+                <header class="title-header vip"><h5 class="title-header-left">TOP 5 VIEWS NHIỀU
                     NHẤT</h5>
                     <p class="title-header-right"><span>Làm mới</span><i
                         class="fas fa-sync false"></i></p>
@@ -44,7 +44,7 @@ function Top6ServiceCCDV() {
                                         <a target="_blank"
                                            href="#">
                                             <img src={user.account.avatar} class=""
-                                                 alt="PD"
+                                                  alt="PD"
                                                  id="avt-img-reponsiver"/>
                                         </a>
                                     </Link>

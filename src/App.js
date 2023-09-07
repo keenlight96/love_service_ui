@@ -8,6 +8,7 @@ import Register from "./component/register/Register";
 import RegisterCCDV from "./component/register/RegisterCCDV";
 import RegisterProfile from "./component/register/RegisterProfile";
 import Home from "./pages/home/Home";
+import CCDVUserProfile from "./pages/home/CCDVUserProfile";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                     <Route path={"registerCCDV/:id"} element={<RegisterCCDV/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
                     <Route path={"/userDetail/:id"} element={<Detail/>}></Route>
+                    <Route path={"/CCDV"} element={<CCDVUserProfile/>}></Route>
                 </Route>
             </Routes>
         </>
