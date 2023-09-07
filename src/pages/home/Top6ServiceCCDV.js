@@ -44,7 +44,7 @@ function Top6ServiceCCDV() {
                                         <a target="_blank"
                                            href="#">
                                             <img src={user.account.avatar} class=""
-                                                 style={{height: "100%"}} alt="PD"
+                                                 alt="PD"
                                                  id="avt-img-reponsiver"/>
                                         </a>
                                     </Link>

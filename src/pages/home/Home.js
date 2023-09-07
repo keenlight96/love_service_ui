@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {getNewestCCDVs, getTopFemale, getTopMale} from "../../service/CCDVsService";
+import {getAllBillByIDCCDV, getNewestCCDVs, getTopFemale, getTopMale} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
@@ -26,6 +26,7 @@ const Home = () => {
         dispatch(getAllActiveSupplies());
         dispatch(getTopMale(4));
         dispatch(getTopFemale(8));
+        dispatch(getAllBillByIDCCDV(7))
     }, [])
     return (
         <>
