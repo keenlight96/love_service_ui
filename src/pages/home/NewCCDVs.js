@@ -4,7 +4,6 @@ import {useSelector} from "react-redux";
 const NewCcdVs = () => {
 
     const newestCCDVs = useSelector(state => {
-        console.log(state);
         return state.CCDVs.CCDVs.newestCCDVs;
     })
     return (
