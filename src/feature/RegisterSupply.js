@@ -3,7 +3,7 @@ import axios from "axios";
 import "./RegisterSupply.css";
 import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
-import {getAllSupplies} from "../service/SupplyService";
+import {getAllActiveSupplies} from "../service/SupplyService";
 import {getSupplyByUserID} from "../service/CCDVsService";
 
 function RegisterSupply() {
@@ -20,15 +20,8 @@ function RegisterSupply() {
     const [hour, setHour] = useState('');
 
     useEffect(() => {
-        dispatch(getAllSupplies());
-        dispatch(getSupplyByUserID(1))
-        // sử dụng idUser để call API
-        // axios.get("http://localhost:8080/supplies/getSupplyByUserID?id="+idUser).then(data => {
-        //     setUser(data.data)
-        //     setUserSupply(data.data.supply);
-        //     setCost(data.data.price);
-        //     setHour(data.data.minHour)
-        // });
+        dispatch(getAllActiveSupplies);
+        dispatch(getSupplyByUserID(idUser))
     }, []);
 
 
