@@ -11,7 +11,7 @@ import SreachByFilter from "./SearchByFilter";
 const Home = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getNewestCCDVs(10));
+        dispatch(getNewestCCDVs(12));
         dispatch(getAllSupplies());
     }, [])
     return (

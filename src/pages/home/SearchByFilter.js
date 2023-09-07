@@ -4,6 +4,9 @@ import axios from "axios";
 
 function SearchByFilter() {
     const [userProfileFilterDTO, setUserProfileFilterDTO] = useState([]);
+    const [minAge, setMinAge] = useState(""); // Độ tuổi tối thiểu
+    const [maxAge, setMaxAge] = useState(""); // Độ tuổi tối đa
+
 
     const navigate = useNavigate();
 
@@ -17,9 +20,15 @@ function SearchByFilter() {
                 console.log(error);
             });
     }, []);
+    const handleSearch = () => {
+        const queryParams = {
+            minAge,
+            maxAge,
+        }
+    };
     return (
         <>
-            <div className="filter-player  hidden">
+            <div className="filter-player  hidden" >
                 <select className="form-control gender " id="gender">
                     <option value selected="selected">Giới tính</option>
                     <option value="female">Nữ</option>
@@ -37,14 +46,55 @@ function SearchByFilter() {
                     <option value="maxViews">Views Cao Nhất</option>
                     <option value="minViews">Views Thấp Nhất</option>
                 </select>
-                <select className="form-control gender "id="bills">
+                <select className="form-control gender "id="bills" >
                     <option value selected="selected">Lượt Thuê</option>
                     <option value="maxBill">Lượt Thuê Cao Nhất</option>
                     <option value="minBill">Lượt Thuê Thấp Nhất</option>
                 </select>
-                <button type="button" className="form-control price false btn btn-default"id="age">Độ Tuổi</button>
+                <button  type="button" className="form-control price false btn btn-default" onClick={handleSearch}>Độ Tuổi</button>
+                <input
+                    style={{
+                        width: "100px",
+                        borderRadius: "25px",
+                        fontSize: "11px",
+                        padding: "5px",
+                        height: "32px",
+                        marginRight: "3px",
+                        marginBottom: "5px",
+                        maxWidth: "500px",
+                        float: "left",
+                        cursor: "pointer",
+                        fontWeight: "600"
+                    }}
+                    type="number"
+                    placeholder="Min Age"
+                    autoComplete="off"
+                    value={minAge}
+                    onChange={(e) => setMinAge(e.target.value)}
+                />
+                <input
+                    style={{
+                        width: "100px",
+                        borderRadius: "25px",
+                        fontSize: "11px",
+                        padding: "5px",
+                        height: "32px",
+                        marginRight: "3px",
+                        marginBottom: "5px",
+                        maxWidth: "500px",
+                        float: "left",
+                        cursor: "pointer",
+                        fontWeight: "600"
+                    }}
+                    type="number"
+                    placeholder="Max Age"
+                    autoComplete="off"
+                    value={maxAge}
+                    onChange={(e) => setMaxAge(e.target.value)}
+                />
+
                 <input style={{
-                    width: "450px",
+                    width: "250px",
                     borderRadius: "25px",
                     fontSize: "11px",
                     padding: "5px",
@@ -56,7 +106,19 @@ function SearchByFilter() {
                     cursor: "pointer",
                     fontWeight: "600"
                 }} type="text" placeholder="Nhập Tên Bạn Muốn Tìm..." autoComplete="off" id="search"/>
-                <button type="button" className="form-control btn-filter btn btn-default">
+                <button style={{
+                    width:"131px",
+                    borderRadius: "25px",
+                    fontSize: "16px",
+                    padding: "1px",
+                    height: "32px",
+                    marginRight: "3px",
+                    marginBottom: "5px",
+                    maxWidth: "500px",
+                    float: "left",
+                    cursor: "pointer",
+                    fontWeight: "600"
+                }} type="button" className="form-control btn-filter btn btn-default">
                     <i className="fa fa-search"/>Tìm kiếm
                 </button>
             </div>
