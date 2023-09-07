@@ -46,11 +46,3 @@ export const getCCDVProperGender = createAsyncThunk(
         return rs.data;
     }
 )
-export const getAllBillByIDCCDV = createAsyncThunk(
-    "getAllBillByIDCCDV",
-    async (idCCDV) => {
-        const res = await customAxios.get("bills/getAllBilByIdCCdv/" + idCCDV ,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
-        console.log(res)
-        return res.data;
-    }
-)

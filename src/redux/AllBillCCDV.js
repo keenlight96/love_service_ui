@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAllBillByIDCCDV, getTopFemale} from "../service/CCDVsService";
+import {getAllBillByIDCCDV} from "../service/BillsService";
 
 const initialState = {
     BillByCCDV: {

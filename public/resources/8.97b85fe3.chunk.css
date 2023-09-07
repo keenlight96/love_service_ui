@@ -11747,3 +11747,67 @@ body.video-react-full-window .video-react-fullscreen {
     -webkit-transform: translateY(-30px);
     transform: translateY(-30px)
 }
+
+
+/*css phần bill*/
+.table-borderedser thead tr th {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    line-height: 40px;
+    color: #354052;
+    text-transform: uppercase;
+    font-family: SegoeUI-Bold;
+    font-size: 12px;
+    text-align: center;
+    width: auto;
+    height: auto;
+}
+.actions {
+    display: flex;
+    justify-content: center;
+    width: auto;
+    height: auto;
+}
+
+.action-button {
+    width: auto;
+    height: auto;
+    margin-left: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.confirm-button {
+    height: auto;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 12px;
+    width: auto;
+}
+
+.receive-payment-button {
+    height: auto;
+    background-color: #2196F3;
+    color: white;
+    font-size: 12px;
+    width: auto;
+}
+
+.cancel-button {
+    height: auto;
+    background-color: #ff5656;
+    color: white;
+    font-size: 12px;
+    width: auto;
+}
+.detail-button {
+    height: auto;
+    background-color: #999999;
+    color: white;
+    font-size: 12px;
+    width: auto;
+}
+/*kết thúc css bill*/
