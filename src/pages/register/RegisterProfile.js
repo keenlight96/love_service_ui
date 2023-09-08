@@ -1,9 +1,6 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import SignupCCDV from "../../services/SignupCCDV";
 import React, {useState} from "react";
-import {ErrorMessage, Field, Formik} from "formik";
 import SignupCCDV from "../../service/custom/SignupCCDV";
-import React from "react";
 import * as Yup from "yup";
 
 import DatePicker from 'react-datepicker';
