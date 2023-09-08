@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import SidebarSupplies from "./SidebarSupplies";
+import RegisterSupply from "../../components/common/RegisterSupply";
 
 const CCDVUserProfile = () => {
  const [isClicked, setIsClicked]=useState(false);

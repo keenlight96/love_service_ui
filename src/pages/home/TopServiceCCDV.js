@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
-function Top6ServiceCCDV() {
+function TopServiceCCDV() {
     const [userProfile, setUserProfile] = useState([]);
 
     const navigate = useNavigate();
@@ -83,4 +83,4 @@ function Top6ServiceCCDV() {
         </>
     )
 };
-export default Top6ServiceCCDV;
+export default TopServiceCCDV;
