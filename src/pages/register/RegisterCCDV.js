@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 import {ErrorMessage, Field, Formik} from "formik";
-import SignupCCDV from "../../services/SignupCCDV";
+import SignupCCDV from "../../service/custom/SignupCCDV";
 import React from "react";
-import "./cssRegister.css"
+import "../../custom-css/cssRegister.css"
 import {Link} from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
