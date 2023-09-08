@@ -16,8 +16,8 @@ const validationSchema = Yup.object().shape({
 const SignupForm = () => {
     return (
        <>
-           <div className={'wrapper'}>
-               <div className={'container'}>
+           <div className={'wrapper-register'}>
+               <div className={'container-register'}>
                    <div className={'layoutForm'}>
                        <div className={'layout1'} >
                            <img src="https://img.lovepik.com/photo/40036/8981.jpg_wh860.jpg" className="" alt="PD" style={{height:'100%'}}/>
