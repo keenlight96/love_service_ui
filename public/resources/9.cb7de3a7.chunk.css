@@ -2233,7 +2233,12 @@
 }
 
 .setting__main .setting__main--menu {
-    background-color: #fafafa
+    background-color: #fafafa;
+}
+
+.setting__main--menu-margin-top {
+    background-color: #fafafa;
+    margin-top: 66px;
 }
 
 .setting__main .setting__main--menu .panel-default {
