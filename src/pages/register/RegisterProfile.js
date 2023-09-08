@@ -1,5 +1,5 @@
 import {ErrorMessage, Field, Formik} from "formik";
-import SignupCCDV from "../../services/SignupCCDV";
+import SignupCCDV from "../../service/custom/SignupCCDV";
 import React from "react";
 import * as Yup from "yup";
 
@@ -18,8 +18,8 @@ const RegisterProfile =()=>{
 
 return(
     <>
-        <div className={'wrapper'}>
-            <div className={'container'}>
+        <div className={'wrapper-register'}>
+            <div className={'container-register'}>
                 <div className={'layoutForm'}>
                     <div className={'layout1'} >
                         <img src="https://img.lovepik.com/photo/40036/8981.jpg_wh860.jpg" className="" alt="PD" style={{height:'100%'}}/>

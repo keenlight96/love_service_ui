@@ -2551,7 +2551,8 @@ li.notification-item:hover {
 }
 
 .wrapper {
-    background-color: #fff
+    background-color: #fff;
+    margin-top: 66px;
 }
 
 .wrapper .list-message .list-message-content {
