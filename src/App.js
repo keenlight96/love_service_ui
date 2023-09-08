@@ -21,6 +21,7 @@ function App() {
                     <Route path={"registerCCDV/:id"} element={<RegisterCCDV/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
                     <Route path={"/userDetail/:id"} element={<Detail/>}></Route>
+                    <Route path={"/ccdv"} element={<CCDVUserProfile/>}></Route>
                 </Route>
             </Routes>
         </>
