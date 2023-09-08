@@ -3,9 +3,17 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router";
 import * as yup from "yup";
 import {useState} from "react";
+import Swal from "sweetalert2";
 
 
 function Login() {
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Kích hoạt thành công. Hãy đăng nhập ngay.',
+        showConfirmButton: false,
+        timer: 1500
+    });
     const navigate = useNavigate();
     const [message, setMessage] = useState("")
     const signUpSchema = yup.object().shape({
