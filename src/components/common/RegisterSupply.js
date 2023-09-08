@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import "./RegisterSupply.css";
+import "../../custom-css/RegisterSupply.css";
 import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
-import {getAllActiveSupplies} from "../service/SupplyService";
-import {getSupplyByUserID} from "../service/CCDVsService";
+import {getAllActiveSupplies} from "../../service/SupplyService";
+import {getSupplyByUserID} from "../../service/CCDVsService";
 
 function RegisterSupply() {
     const dispatch = useDispatch();
