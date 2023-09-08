@@ -1,4 +1,4 @@
-import LoginService from "../service/login";
+import LoginService from "../../service/custom/login";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router";
 import * as yup from "yup";
@@ -74,8 +74,8 @@ function Login() {
             <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
             <title>React App</title>
                  <header class="menu__header" id="header-menu">
-                    <div class="navbar-header"><a href="https://playerduo.net/" class="logo"><img alt="logo playerduo"
-                                                                                                  src="../resources/raw/logo.png"/></a>
+                    <div class="navbar-header"><a href="src/pages/login/Login" class="logo"><img alt="logo playerduo"
+                                                                                                 src="../resources/raw/logo.png"/></a>
                     </div>
                     <div class="navbar">
                         <ul class="nav navbar-nav navbar-left">
@@ -96,7 +96,7 @@ function Login() {
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-center">
-                            <li class="item-icon"><a class="group-user " href="https://playerduo.net/"><i
+                            <li class="item-icon"><a class="group-user " href="src/pages/login/Login"><i
                                 class="fal fa-home-alt"></i></a></li>
                             <li class="item-icon"><a class="group-user " href="https://playerduo.net/stories"><i
                                 class="fal fa-camera-movie"></i></a></li>
@@ -108,7 +108,7 @@ function Login() {
                             </li>
                             <li class="item-icon group-fb"><a class="group-user"><i class="fab fa-facebook-f"></i></a>
                             </li>
-                            <li class="item-icon authent"><a class="money-user" href=""><i
+                            <li class="item-icon authent"><a class="money-user" href="src/pages/login/Login"><i
                                 class="fal fa-power-off"></i><span>Đăng nhập</span></a>
                             </li>
                             <li class="item-icon mode"><a class="group-user"><i class="fas fa-moon"></i></a></li>
@@ -136,7 +136,7 @@ function Login() {
                                         </div>
                                     </nav>
                                     <a class="btn-close"><i class="fal fa-times fa-2x"></i></a></div>
-                                <ul class="list-page"><a href="https://playerduo.net/">
+                                <ul class="list-page"><a href="src/pages/login/Login">
                                     <li class="item-icon "><a class="group-user"><i class="fal fa-home-alt"></i>
                                         <span>Trang chủ</span></a></li>
                                 </a><a href="https://playerduo.net/stories">
@@ -234,7 +234,7 @@ function Login() {
                                                 <ErrorMessage name={'password'}/>
                                             </div>
                                             <p className="forgot-password">
-                                                <a href="#"><span>Quên mật khẩu?</span></a>
+                                                <a href="src/pages/login/Login#"><span>Quên mật khẩu?</span></a>
                                             </p>
                                             <button type="submit"><span>Đăng nhập</span></button>
                                         </Form>
