@@ -1,12 +1,12 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
-import {getAllBillByIDCCDV} from "../../service/BillsService";
+import {getAllBillByIdCCDV} from "../../service/BillsService";
 
 const AllBillByOfCCDV = () => {
     const dispatch = useDispatch();
     let id = JSON.parse(localStorage.getItem("account")).id;
     useEffect(() => {
-        dispatch(getAllBillByIDCCDV(id));
+        dispatch(getAllBillByIdCCDV(id));
     }, []);
     const allBillOfCCDV = useSelector(state => {
         return state.BillByCCDV.BillByCCDV.allBill;
@@ -17,12 +17,13 @@ const AllBillByOfCCDV = () => {
 
         <>
             {/*<link rel="stylesheet" type="text/css" href="../resources/8.97b85fe3.chunk.css"/>*/}
-            <div id="root">
+            <div class="setting__main row" style={{marginTop: '70px'}}>
                 <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                    <div className="aside"><h3>Lịch sử đơn thuê</h3>
+                    <div className="aside">
+                        <h3>Lịch sử đơn thuê</h3>
                         <div className="transaction-table">
                             <div className="table-responsive">
-                                {allBillOfCCDV && SON.parse(localStorage.getItem("account")).role.nameRole === "ROLE_CCDV" &&
+                                {/*{allBillOfCCDV && SON.parse(localStorage.getItem("account")).role.nameRole === "ROLE_CCDV" &&*/}
                                 <table className="table table-striped table-bordered table-condensed table-hover">
                                     <thead>
                                     <tr>
@@ -89,7 +90,7 @@ const AllBillByOfCCDV = () => {
                                         ))}
                                     </tbody>
                                 </table>
-                                }
+                                {/*}*/}
                             </div>
                         </div>
                         {allBillOfCCDV.length == 0 &&
