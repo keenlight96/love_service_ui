@@ -1,7 +1,14 @@
-import {ErrorMessage, Field, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import SignupCCDV from "../../services/SignupCCDV";
+import React, {useState} from "react";
+import {ErrorMessage, Field, Formik} from "formik";
+import SignupCCDV from "../../service/custom/SignupCCDV";
 import React from "react";
 import * as Yup from "yup";
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'; // Import CSS cho DatePicker
+
 
 const validationSchema = Yup.object().shape({
     firstName: Yup.string().required('Họ là bắt buộc'),
@@ -10,75 +17,96 @@ const validationSchema = Yup.object().shape({
     address: Yup.string().required('Địa chỉ là bắt buộc'),
     phoneNumber: Yup.string().required('Số điện thoại là bắt buộc'),
     idCard: Yup.string().required('CCCD là bắt buộc'),
-    price:Yup.string().required('Không được để trống'),
-    email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
-    nickName: Yup.string().required('Tên người dùng là bắt buộc')
-});
-const RegisterProfile =()=>{
+    price: Yup.string().required('Không được để trống'),
+    nickName: Yup.string().required('Tên người dùng là bắt buộc'),
+    height: Yup.string().required('Chiều cao là bắt buộc'),
+    width: Yup.string().required('Cân nặng là bắt buộc')
 
-return(
-    <>
-        <div className={'wrapper'}>
-            <div className={'container'}>
-                <div className={'layoutForm'}>
-                    <div className={'layout1'} >
-                        <img src="https://img.lovepik.com/photo/40036/8981.jpg_wh860.jpg" className="" alt="PD" style={{height:'100%'}}/>
-                    </div>
-                    <div  className={'contentmain'} style={{width:'430px'}}>
-                        <div >
-                            <Formik
-                                initialValues={{
-                                    firstName: '',
-                                    lastName: '',
-                                    country:'',
-                                    address:'',
-                                    phoneNumber:'',
-                                    idCard:'',
-                                    email: '',
-                                    nickName:'',
-                                    price:''
-                                }}
-                                validationSchema={validationSchema}
-                                onSubmit={(values, actions) => {
-                                    // Đây là nơi xử lý submit form sau khi đã validate thành công
-                                    console.log(values);
-                                    SignupCCDV.signupUserDetailProfile(values)
-                                        .then( async (response) => {
-                                            alert('Đăng kí thành công')
-                                        })
-                                        .finally(() => {
-                                            actions.setSubmitting(false);
-                                        });
-                                }}
-                            >
-                                {({ handleSubmit, isSubmitting }) => (
-                                    <form onSubmit={handleSubmit}>
+});
+const RegisterProfile =()=> {
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    };
+    const account = JSON.parse(localStorage.getItem("account"));
+
+    return (
+        <>
+            <div className={'wrapper'}>
+                <div className={'container'} style={{backgroundColor: 'whitesmoke'}}>
+                    <div style={{display: 'flex', width: '100%'}}>
+                        <div style={{width: '40%'}}>
+                            <div>
+                                <Formik
+                                    initialValues={{
+                                        firstName: '',
+                                        lastName: '',
+                                        country: '',
+                                        address: '',
+                                        height: '',
+                                        width: '',
+                                        phoneNumber: '',
+                                        idCard: '',
+                                        nickName: '',
+                                        price: '',
+                                        id: '',
+                                        basicRequest: '',
+                                        facebookLink: '',
+                                        birthday: ''
+                                    }}
+                                    validationSchema={validationSchema}
+                                    onSubmit={(values) => {
+                                        // Đây là nơi xử lý submit form sau khi đã validate thành công
+                                        console.log(values);
+                                        // Lấy ID tài khoản từ token ( ID được lưu trong localStorage)
+                                        const id = JSON.parse(localStorage.getItem("account")).id
+                                        SignupCCDV.signupUserDetailProfile(id, values)
+                                            .then(async (response) => {
+                                                console.log(response)
+                                                alert("thanh cong")
+                                            })
+                                    }}
+                                >
+                                    <Form>
                                         <tr>
                                             <td>
-                                        <div className="fieldGroup">
-                                            <Field
-                                                type="text"
-                                                name="firstName"
-                                                placeholder="Họ"
-                                                maxLength="5000"
-                                                autoComplete="false"
-                                                style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none' }}
-                                            />
-                                            <ErrorMessage name="firstName" component="div" className="error" />
-                                        </div>
+                                                <div className="fieldGroup">
+                                                    <Field
+                                                        type="text"
+                                                        name="firstName"
+                                                        placeholder="Họ"
+                                                        maxLength="5000"
+                                                        autoComplete="false"
+                                                        style={{
+                                                            textAlign: 'center',
+                                                            borderRadius: '7px',
+                                                            padding: '7px',
+                                                            margin: '10px',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                    <ErrorMessage name="firstName" component="div" className="error"/>
+                                                </div>
                                             </td>
                                             <td>
-                                        <div className="fieldGroup">
-                                            <Field
-                                                type="text"
-                                                name="lastName"
-                                                placeholder="Tên"
-                                                maxLength="5000"
-                                                autoComplete="false"
-                                                style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px',margin:'10px', outline: 'none'}}
-                                            />
-                                            <ErrorMessage name="lastName" component="div" className="error" />
-                                        </div>
+                                                <div className="fieldGroup">
+                                                    <Field
+                                                        type="text"
+                                                        name="lastName"
+                                                        placeholder="Tên"
+                                                        maxLength="5000"
+                                                        autoComplete="false"
+                                                        style={{
+                                                            textAlign: 'center',
+                                                            borderRadius: '7px',
+                                                            padding: '7px',
+                                                            margin: '10px',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                    <ErrorMessage name="lastName" component="div" className="error"/>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -90,9 +118,15 @@ return(
                                                         placeholder="Quốc tịch"
                                                         maxLength="5000"
                                                         autoComplete="false"
-                                                        style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
+                                                        style={{
+                                                            textAlign: 'center',
+                                                            borderRadius: '7px',
+                                                            padding: '7px',
+                                                            margin: '10px',
+                                                            outline: 'none'
+                                                        }}
                                                     />
-                                                    <ErrorMessage name="country" component="div" className="error" />
+                                                    <ErrorMessage name="country" component="div" className="error"/>
                                                 </div>
                                             </td>
                                             <td>
@@ -215,32 +249,78 @@ return(
                                                        placeholder="Mức giá cho thuê theo giờ"
                                                        maxLength="5000"
                                                        autoComplete="false"
-                                                       style={{ textAlign: 'center',borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none'}}
+                                                       style={{
+                                                           textAlign: 'center',
+                                                           borderRadius: '7px',
+                                                           padding: '7px',
+                                                           margin: '10px',
+                                                           outline: 'none'
+                                                       }}
                                                    />
-                                                   <ErrorMessage name="price" component="div" className="error" />
+                                                   <ErrorMessage name="price" component="div" className="error"/>
                                                </div>
                                            </td>
                                        </tr>
+
                                         <tr>
                                             <td>
-                                                <span>Chọn vùng </span>
-                                                <select key={'id'}>
-                                                    <option value={1}>Miền bắc</option>
-                                                    <option value={2}>Miền trung</option>
-                                                    <option value={3}>Miền nam</option>
-                                                </select>
+                                                <div className="fieldGroup"
+
+                                                >
+                                                    <select key={'id'}   style={{
+                                                        textAlign: 'center',
+                                                        borderRadius: '7px',
+                                                        padding: '7px',
+                                                        margin: '10px',
+                                                        outline: 'none'
+                                                    }}>
+                                                        <option value={1}>Miền bắc</option>
+                                                        <option value={2}>Miền trung</option>
+                                                        <option value={3}>Miền nam</option>
+                                                    </select>
+                                                </div>
+
                                             </td>
                                             <td>
-                                                <link to={''}/>
+                                                <div className="fieldGroup" style={{marginLeft: '10px'}}>
+                                                    <DatePicker
+                                                        selected={selectedDate}
+                                                        onChange={handleDateChange}
+                                                        dateFormat="dd/MM/yyyy" // Định dạng ngày tháng năm
+                                                        placeholderText="Sinh nhật"
+                                                        style={{
+                                                            textAlign: 'center',
+                                                            borderRadius: '7px',
+                                                            padding: '7px',
+                                                            margin: '10px',
+                                                            outline: 'none'
+                                                        }}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
-                                    </form>
-                                )}
-                            </Formik>
+                                        <tr>
+                                            <td>
+                                                <div className="fieldGroup" style={{marginLeft: '70px'}}>
+                                                    <button type={"submit"} style={{width: '100px'}}
+                                                    >Lưu
+                                                    </button>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </Form>
+
+                                </Formik>
+
+                            </div>
+
 
                         </div>
+                        <div className="fieldGroup" style={{width: '60%', marginTop: '10px'}}>
+                         <img src={account} alt="Avatar" />
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </>

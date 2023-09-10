@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
-function Top6ServiceCCDV() {
+function TopServiceCCDV() {
     const [userProfile, setUserProfile] = useState([]);
 
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function Top6ServiceCCDV() {
 
 
             <div class="box vip-player">
-                <header class="title-header vip"><h5 class="title-header-left">TOP 6 VIEWS HOT
+                <header class="title-header vip"><h5 class="title-header-left">TOP 5 VIEWS NHIỀU
                     NHẤT</h5>
                     <p class="title-header-right"><span>Làm mới</span><i
                         class="fas fa-sync false"></i></p>
@@ -44,7 +44,7 @@ function Top6ServiceCCDV() {
                                         <a target="_blank"
                                            href="#">
                                             <img src={user.account.avatar} class=""
-                                                 style={{height: "100%"}} alt="PD"
+                                                  alt="PD"
                                                  id="avt-img-reponsiver"/>
                                         </a>
                                     </Link>
@@ -83,4 +83,4 @@ function Top6ServiceCCDV() {
         </>
     )
 };
-export default Top6ServiceCCDV;
+export default TopServiceCCDV;

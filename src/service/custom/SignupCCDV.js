@@ -20,6 +20,9 @@ import axios from "axios";
              }
          });
      }
+     static async checkProfile(id){
+         return await axios.get("http://localhost:8080/accounts/checkProfileExists/"+id)
+     }
 
      //call api đăng kí ccdv userprofile
 

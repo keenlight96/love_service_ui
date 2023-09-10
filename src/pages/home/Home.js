@@ -1,17 +1,34 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {getNewestCCDVs, getTopFemale, getTopMale} from "../../service/CCDVsService";
+import {
+    getCCDVProperGender,
+    getNewestCCDVs,
+    getSupplyByUserID,
+    getTopFemale,
+    getTopMale
+} from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
-import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
 import {getAllActiveSupplies} from "../../service/SupplyService";
-import Top6ServiceCCDV from "./Top6ServiceCCDV";
-import SreachByFilter from "./SearchByFilter";
+import TopServiceCCDV from "./TopServiceCCDV";
 import TopMaleAndFemale from "./TopMaleAndFemale";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
+import CCDVProperGender from "./CCDVProperGender";
 
 const Home = () => {
     const dispatch = useDispatch();
+    const iduser = () => {
+        if (localStorage.getItem("account") == "") {
+            return null
+        } else {
+            try {
+                return JSON.parse(localStorage.getItem("account")).id;
+            }catch (e){
+                return null;
+            }
+        }
+    }
+
 
     const chosenSupplies = useSelector(state => {
         return state.supplies.supplies.chosen;
@@ -24,8 +41,10 @@ const Home = () => {
     useEffect(() => {
         dispatch(getNewestCCDVs(10));
         dispatch(getAllActiveSupplies());
-        dispatch(getTopMale(4));
-        dispatch(getTopFemale(8));
+        dispatch(getTopMale(5));
+        dispatch(getTopFemale(5));
+        dispatch(getSupplyByUserID(iduser()));
+        dispatch(getCCDVProperGender(iduser()));
     }, [])
     return (
         <>
@@ -226,9 +245,10 @@ const Home = () => {
 
                                 {chosenSupplies.length > 0 ? <CcdVsByChosenSupplies/> : <div></div>}
 
-                                <Top6ServiceCCDV/>
+                                <TopServiceCCDV/>
                                 <NewCcdVs/>
                                 <TopMaleAndFemale/>
+                                {localStorage.getItem("account") !=null && localStorage.getItem("account") != "" ? <CCDVProperGender/> : <div></div>}
                             </div>
                         </div>
                     </div>
