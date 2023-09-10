@@ -1,35 +1,51 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {cancelBill, completes, getAllBillByIdCCDV, getAllBillByIdUser, receivedBill} from "../../service/BillsService";
-import CancelBill from "./CancelBill";
 import {Link} from "react-router-dom";
+import Bills from "./Bills";
 const AllBillByOfCCDV = () => {
-    let id = JSON.parse(localStorage.getItem("account")).id;
+
+    let idAccount = JSON.parse(localStorage.getItem("account")).id;
+
     const dispatch = useDispatch();
+
     const allBillOfCCDV = useSelector((state) => {
         return state.BillByAccount.BillByAccount.allBillByCCDV;
     });
+
     const stringReceivedBill = useSelector((state) => {
         return state.BillByAccount.BillByAccount.receivedBill;
     });
-    const [idBillRe, setBill] = useState(undefined);
+
+    const stringCancelBill = useSelector((state) => {
+        return state.BillByAccount.BillByAccount.cancelBill;
+    });
+
+    console.log(stringCancelBill);
+    console.log(stringReceivedBill + 1)
+    const [idBillRecevied, setBillRecevied] = useState(undefined);
+
     const [idBill, setIdBill] = useState(undefined);
 
     const [currentPage, setCurrentPage] = useState(1);
+
     const billsPerPage = 5;
 
-
     const indexOfLastBill = currentPage * billsPerPage;
+
     const indexOfFirstBill = indexOfLastBill - billsPerPage;
+
     const currentBills = allBillOfCCDV.slice(indexOfFirstBill, indexOfLastBill);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const [modal, setModal] = useState(false);
+
     const [objects, setObjects] = useState(null);
+
+    const [message, setMessage] = useState('')
     const openModal = (object) => {
         setObjects(object);
         setModal(true);
-        console.log(object);
     };
 
     const closeModal = () => {
@@ -37,21 +53,21 @@ const AllBillByOfCCDV = () => {
     };
 
     const  receivedBills = (idBill) =>{
-        setBill(idBill)
+        setBillRecevied(idBill)
     }
     useEffect(() =>{
-        dispatch(receivedBill(idBillRe))
-    },[idBillRe])
+        dispatch(receivedBill(idBillRecevied))
+    },[idBillRecevied]);
 
-    const [message, setMessage] = useState('')
-
-    const handleConfirmClick = (idBill) => {
+    const confirmCancelBill = (idBill) => {
         setIdBill(idBill);
-        const url = "/cancelBill/"
+        setModal(false);
     };
-    // useEffect(() => {
-    //     dispatch(cancelBill(idBill, id, message))
-    // },[idBill]);
+
+    useEffect(() => {
+        dispatch(cancelBill({ idBill, idAccount, message }));
+    },[idBill,idAccount,message]);
+
     return (
         <>
             <div className="setting__main row" style={{marginTop: "70px"}}>
@@ -178,8 +194,8 @@ const AllBillByOfCCDV = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Người cung cấp dịch vụ :</td>
-                                                <td>{objects.accountCCDV.nickname}</td>
+                                                <td>Nick name ngừoi thuê:</td>
+                                                <td>{objects.accountUser.nickname}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -214,7 +230,7 @@ const AllBillByOfCCDV = () => {
                                         </table>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn-fill btn btn-danger"onClick={() => handleConfirmClick(objects.id)}>
+                                        <button type="button" className="btn-fill btn btn-danger" onClick={() => confirmCancelBill(objects.id)}>
                                             <span>Xác nhận</span>
                                         </button>
                                         <button type="button" className="btn btn-default"onClick={closeModal}>
@@ -227,6 +243,8 @@ const AllBillByOfCCDV = () => {
                     </div>
                 </>
             )}
+            {stringReceivedBill && alert(stringReceivedBill)}
+            {stringCancelBill && alert(stringCancelBill)}
         </>
     );
 };

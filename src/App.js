@@ -11,7 +11,6 @@ import Home from "./pages/home/Home";
 import CCDVUserProfile from "./pages/home/CCDVUserProfile";
 import AllBillByOfCCDV from "./pages/information/AllBillOfCCDV";
 import Bills from "./pages/information/Bills";
-import CancelBill from "./pages/information/CancelBill";
 
 function App() {
     return (

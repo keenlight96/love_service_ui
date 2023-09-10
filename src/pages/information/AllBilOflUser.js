@@ -1,27 +1,46 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import {completes} from "../../service/BillsService";
+import {cancelBill, completes} from "../../service/BillsService";
 
 const AllBillOfUser = () => {
+
+    let idAccount = JSON.parse(localStorage.getItem("account")).id;
+
     const dispatch = useDispatch();
+
     const allBillOfUser = useSelector((state) => {
         return state.BillByAccount.BillByAccount.allBillByUser;
     });
+
     const stringComplete = useSelector((state) => {
         return state.BillByAccount.BillByAccount.completeString;
     });
 
+    const stringCancelBill = useSelector((state) => {
+        return state.BillByAccount.BillByAccount.cancelBill;
+    });
+
+    const [message, setMessage] = useState('')
+
+    const [idBillComplete, setBillComplete] = useState(undefined);
+
+    const [idBill, setIdBill] = useState(undefined);
 
     const [currentPage, setCurrentPage] = useState(1);
+
     const billsPerPage = 5;
+
     const indexOfLastBill = currentPage * billsPerPage;
+
     const indexOfFirstBill = indexOfLastBill - billsPerPage;
+
     const currentBills = allBillOfUser.slice(indexOfFirstBill, indexOfLastBill);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const [modal, setModal] = useState(false);
+
     const [objects, setObjects] = useState(null);
-    const [idBill, setBill] = useState(undefined);
+
     const openModal = (object) => {
         setObjects(object);
         setModal(true);
@@ -30,11 +49,23 @@ const AllBillOfUser = () => {
         setModal(false);
     };
     const  complete = (idBill) =>{
-        setBill(idBill)
+        setBillComplete(idBill)
     }
     useEffect(() =>{
-        dispatch(completes(idBill))
-    },[idBill])
+        dispatch(completes(idBillComplete))
+    },[idBillComplete])
+
+    const confirmCancelBill = (idBill) => {
+        setIdBill(idBill);
+        setModal(false);
+    };
+
+    useEffect(() => {
+        console.log(12345)
+        console.log(idAccount)
+        dispatch(cancelBill({ idBill, idAccount, message }));
+    },[idBill,idAccount,message]);
+
     return (
         <>
             <div class="setting__main row" style={{ marginTop: '70px' }}>
@@ -46,7 +77,7 @@ const AllBillOfUser = () => {
                                 <table className="table table-striped table-bordered table-condensed table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Tên người CCDV </th>
+                                        <th>Nick name người CCDV</th>
                                         <th>Địa chỉ</th>
                                         <th>Số giờ thuê</th>
                                         <th>Ngày bắt đầu</th>
@@ -155,7 +186,7 @@ const AllBillOfUser = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Người cung cấp dịch vụ :</td>
+                                                <td>Nick name nguời cung cấp dịch vụ :</td>
                                                 <td>{objects.accountCCDV.nickname}</td>
                                             </tr>
                                             <tr>
@@ -182,15 +213,16 @@ const AllBillOfUser = () => {
                                             </tr>
                                             <tr>
                                                 <td colSpan={2}>
-                                                    <textarea required="không được để trống" placeholder="Lý do hủy" name="message" maxLength={255} type="text" className="form-control" defaultValue={""}/>
-                                                    <p className="err-message"/>
+                                                    <textarea required="không được để trống" placeholder="Lý do hủy" name="message"
+                                                              maxLength={255} type="text" className="form-control" defaultValue={""}  value={message}
+                                                              onChange={(e) => setMessage(e.target.value)}/>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn-fill btn btn-danger">
+                                        <button type="button" className="btn-fill btn btn-danger" onClick={() => confirmCancelBill(objects.id)}>
                                             <span>Xác nhận</span>
                                         </button>
                                         <button type="button" className="btn btn-default" onClick={closeModal}>
@@ -203,6 +235,8 @@ const AllBillOfUser = () => {
                     </div>
                 </>
             )}
+            {stringComplete && alert(stringComplete)}
+            {stringCancelBill && alert(stringCancelBill)}
         </>
     );
 }

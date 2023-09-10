@@ -21,8 +21,8 @@ export const getAllBillByIdUser = createAsyncThunk(
 
 export const cancelBill = createAsyncThunk(
     "cancelBill",
-    async (idBill, idAccount, message) => {
-        const res = await customAxios.post("bills/cancelBill" + idBill + "/" + idAccount + "/" + message, {Authorization: "Bearer " + localStorage.getItem("token")});
+    async ({idBill, idAccount, message}) => {
+        const res = await customAxios.post( `bills/cancelBill/${idBill}/${idAccount}/${message}`, {Authorization: "Bearer " + localStorage.getItem("token")});
         return res.data
     }
 )
@@ -38,6 +38,7 @@ export const receivedBill = createAsyncThunk(
     "receivedBill",
     async (idBill) => {
         const res = await customAxios.post("bills/receivedBill/" + idBill, {Authorization: "Bearer " + localStorage.getItem("token")});
+        console.log(res)
         return res.data;
     }
 )

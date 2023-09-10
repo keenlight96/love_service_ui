@@ -11,7 +11,6 @@ const Bills =() =>{
     useEffect(() => {
         dispatch(getAllBillByIdCCDV(id));
         dispatch(getAllBillByIdUser(id));
-
     }, []);
     return (
         <>
