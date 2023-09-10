@@ -30,7 +30,7 @@ const TopMaleAndFemale = () =>{
                                     </div>
                                     <a target="_blank" className="player-information" href={"/profile/" + item.userProfile.account.username}>
                                         <h3 className="player-name">
-                                            <a target="_blank" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.account.nickname}</a>
+                                            <a target="_blank" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.firstName}  {item.userProfile.lastName}</a>
                                             {/*<i className="fas fa-check-circle kyc" aria-hidden="true" />*/}
                                             {/*<div className="player-status ready">*/}
                                             {/*</div>*/}
@@ -66,7 +66,7 @@ const TopMaleAndFemale = () =>{
                                 </div>
                                 <a target="_blank" className="player-information" href={"/profile/" + item.userProfile.account.username}>
                                     <h3 className="player-name">
-                                        <a target="_blank" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.account.nickname}</a>
+                                        <a target="_blank" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.firstName}  {item.userProfile.lastName}</a>
                                         {/*<i className="fas fa-check-circle kyc" aria-hidden="true" />*/}
                                         {/*<div className="player-status ready">*/}
                                         {/*</div>*/}
