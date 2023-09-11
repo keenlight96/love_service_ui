@@ -1,7 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Stomp, Client} from "@stomp/stompjs";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllChatReceivers, getChatWithReceiver, setActiveReceiver, setChatWithReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import {
+    addChatWithReceiver,
+    getAllChatReceivers,
+    getChatWithReceiver,
+    setActiveReceiver,
+    setChatWithReceiver,
+    setMsgBoxToggle
+} from "../../service/ChattingService";
 
 const Chat = () => {
     const msgBoxToggle = useSelector(state => {
@@ -99,40 +106,41 @@ const Chat = () => {
     }
 
     const showMessage = (message) => {
-        let str = "";
-        str = message.sender.id == activeReceiver.id ?
-            `
-            <div class="msg-wrap new-message">
-                <div class="msg-body  radius">
-                    <div class="msg-detail" style="position: relative">
-                        <div>
-                            <div class="msg null"><p>${message.message}</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `
-            :
-            `
-            <div class="msg-wrap new-message">
-                <div class="msg-body msg-fill radius">
-                    <div class="msg-detail" style="position: relative">
-                        <div>
-                            <div class="msg null"><p>${message.message}</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
+        dispatch(addChatWithReceiver(message));
+        // let str = "";
+        // str = message.sender.id == activeReceiver.id ?
+        //     `
+        //     <div class="msg-wrap new-message">
+        //         <div class="msg-body  radius">
+        //             <div class="msg-detail" style="position: relative">
+        //                 <div>
+        //                     <div class="msg null"><p>${message.message}</p></div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `
+        //     :
+        //     `
+        //     <div class="msg-wrap new-message">
+        //         <div class="msg-body msg-fill radius">
+        //             <div class="msg-detail" style="position: relative">
+        //                 <div>
+        //                     <div class="msg null"><p>${message.message}</p></div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        //     `;
 
         document.querySelector("#textMessage").value = "";
 
-        let newDiv = document.createElement("div");
-        newDiv.innerHTML = str;
-        let tempAr = newMessages;
-        tempAr.push(newDiv);
-        setNewMessages([...tempAr]);
-        document.querySelector("#chat-content").appendChild(newDiv);
+        // let newDiv = document.createElement("div");
+        // newDiv.innerHTML = str;
+        // let tempAr = newMessages;
+        // tempAr.push(newDiv);
+        // setNewMessages([...tempAr]);
+        // document.querySelector("#chat-content").appendChild(newDiv);
         scrollToBottom();
     }
 
@@ -155,13 +163,13 @@ const Chat = () => {
         setActiveReceiverElement(element);
         dispatch(setActiveReceiver(item));
 
-        for (let i = 0; i < newMessages.length; i++) {
-            try {
-                document.querySelector("#chat-content").removeChild(newMessages[i]);
-            } catch (e) {
-            }
-        }
-        setNewMessages([]);
+        // for (let i = 0; i < newMessages.length; i++) {
+        //     try {
+        //         document.querySelector("#chat-content").removeChild(newMessages[i]);
+        //     } catch (e) {
+        //     }
+        // }
+        // setNewMessages([]);
 
         dispatch(getChatWithReceiver(item.id));
     }

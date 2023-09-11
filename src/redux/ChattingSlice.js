@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
-    addChatReceivers,
+    addChatReceivers, addChatWithReceiver,
     getAllChatReceivers,
     getChatWithReceiver,
     setActiveReceiver,
@@ -34,6 +34,9 @@ const ChattingSlice = createSlice({
         })
         builder.addCase(setChatWithReceiver.fulfilled, (state, action) => {
             state.chatting.chatContent = action.payload;
+        })
+        builder.addCase(addChatWithReceiver.fulfilled, (state, action) => {
+            state.chatting.chatContent.push(action.payload);
         })
         builder.addCase(setMsgBoxToggle.fulfilled, (state, action) => {
             state.chatting.msgBoxToggle = !state.chatting.msgBoxToggle;

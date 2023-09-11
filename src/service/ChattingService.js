@@ -31,6 +31,13 @@ export const setChatWithReceiver = createAsyncThunk(
     }
 )
 
+export const addChatWithReceiver = createAsyncThunk(
+    "addChatWithReceiver",
+    async (newMessage) => {
+        return newMessage;
+    }
+)
+
 export const setMsgBoxToggle = createAsyncThunk(
     "setMsgBoxToggle",
     async () => {
