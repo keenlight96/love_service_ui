@@ -9,10 +9,38 @@ export const getAllChatReceivers = createAsyncThunk(
     }
 )
 
+export const addChatReceivers = createAsyncThunk(
+    "addChatReceivers",
+    async (receivers) => {
+        return receivers;
+    }
+)
+
 export const getChatWithReceiver = createAsyncThunk(
     "getChatWithReceiver",
     async (id) => {
         const res = await customAxios.get("message/allBySenderAndReceiver/" + id, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return res.data;
+    }
+)
+
+export const setChatWithReceiver = createAsyncThunk(
+    "setChatWithReceiver",
+    async (chatContent) => {
+        return chatContent;
+    }
+)
+
+export const setMsgBoxToggle = createAsyncThunk(
+    "setMsgBoxToggle",
+    async () => {
+        return null;
+    }
+)
+
+export const setActiveReceiver = createAsyncThunk(
+    "setActiveReceiver",
+    async (activeReceiver) => {
+        return activeReceiver;
     }
 )

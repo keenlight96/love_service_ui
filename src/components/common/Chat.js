@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Stomp, Client} from "@stomp/stompjs";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllChatReceivers, getChatWithReceiver} from "../../service/ChattingService";
+import {getAllChatReceivers, getChatWithReceiver, setActiveReceiver, setChatWithReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 
 const Chat = () => {
-    const [msgBoxToggle, setMsgBoxToggle] = useState(false);
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    })
     const [activeReceiverElement, setActiveReceiverElement] = useState({});
-    const [activeReceiver, setActiveReceiver] = useState({});
+    const activeReceiver = useSelector(state => {
+        return state.chatting.chatting.activeReceiver;
+    })
     const [newMessages, setNewMessages] = useState([]);
     const dispatch = useDispatch();
     const allReceivers = useSelector((state) => {
@@ -16,8 +20,16 @@ const Chat = () => {
         return state.chatting.chatting.chatContent;
     })
 
-    const messageBoxToggle = (e) => {
-        setMsgBoxToggle(!msgBoxToggle);
+    const messageBoxOpen = (e) => {
+        dispatch(setMsgBoxToggle());
+    }
+
+    const messageBoxClose = (e) => {
+        let nonReceiver = {};
+        dispatch(setActiveReceiver(nonReceiver));
+        dispatch(getAllChatReceivers());
+        dispatch(setChatWithReceiver([]));
+        dispatch(setMsgBoxToggle());
     }
 
     const [stompClient, setStompClient] = useState(null);
@@ -115,7 +127,6 @@ const Chat = () => {
 
         document.querySelector("#textMessage").value = "";
 
-        // document.querySelector("#chat-content").innerHTML += str;
         let newDiv = document.createElement("div");
         newDiv.innerHTML = str;
         let tempAr = newMessages;
@@ -123,12 +134,10 @@ const Chat = () => {
         setNewMessages([...tempAr]);
         document.querySelector("#chat-content").appendChild(newDiv);
         scrollToBottom();
-
     }
 
     function scrollToBottom() {
-        const chatMessages = document.getElementById('chat-content');
-        console.log(chatMessages);
+        const chatMessages = document.querySelector(".mess-detail-room");
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -144,10 +153,13 @@ const Chat = () => {
         } catch (e) {
         }
         setActiveReceiverElement(element);
-        setActiveReceiver(item);
+        dispatch(setActiveReceiver(item));
 
         for (let i = 0; i < newMessages.length; i++) {
-            document.querySelector("#chat-content").removeChild(newMessages[i]);
+            try {
+                document.querySelector("#chat-content").removeChild(newMessages[i]);
+            } catch (e) {
+            }
         }
         setNewMessages([]);
 
@@ -158,6 +170,13 @@ const Chat = () => {
         connect();
     }, [activeReceiver])
 
+    useEffect(() => {
+        try {
+            scrollToBottom();
+        } catch (e) {
+        }
+    }, [chatContent]);
+
     return (
         <>
             {msgBoxToggle ?
@@ -166,7 +185,7 @@ const Chat = () => {
                         <div className="message__popup--box-header">
                             <div className="media"><i className="fas fa-comment-dots fa-2x media-left"/><p className="media-body media-middle">Tin
                                 nhắn</p></div>
-                            <div className="pl-btn" onClick={(e) => messageBoxToggle(e)}>
+                            <div className="pl-btn" onClick={(e) => messageBoxClose(e)}>
                                 <i className="fas fa-minus"/><i className="fas fa-sync false"/>
                                 <div className="messs-tarnger"><span>Nhận tin nhắn từ người lạ</span>
                                     <div className="react-switch" style={{
@@ -220,8 +239,10 @@ const Chat = () => {
                                     <div className="list-message-content">
                                         {
                                             allReceivers && allReceivers.map((item, key) => (
-                                                <div className={item.id == activeReceiver.id ? "active media" : "media"} key={key}
+                                                <div className={"media"} key={key}
                                                      onClick={(e)  => {activateCurrentReceiver(e, item)}}>
+                                                {/*<div className={item.id == activeReceiver.id ? "active media" : "media"} key={key}*/}
+                                                {/*     onClick={(e)  => {activateCurrentReceiver(e, item)}}>*/}
                                                     <div className="media-left">
                                                         <div className="avt avt-sm"><img src={item.avatar} className="avt-img" alt="PD"/>
                                                             {/*<div className="stt stt-ready"/>*/}
@@ -302,28 +323,37 @@ const Chat = () => {
                                             </div>
                                         </div>
                                         <div className="main-footer">
-                                            <div className="gif-area" style={{display: 'none'}}>
-                                                <div className="search-gif"><span className="search room-search input-group"><input
-                                                    placeholder="Search for GIFs" name="searchValue" autoCapitalize="none" autoComplete="off"
-                                                    autoCorrect="off" type="text" className="form-control" defaultValue/><span
-                                                    className="input-group-addon"><i className="fa fa-search" aria-hidden="true"/></span></span></div>
-                                                <div className="content-gif">
-                                                    <div/>
-                                                </div>
-                                            </div>
-                                            <span className="send-message input-group">
-                                                <textarea className="form-control" id={"textMessage"} placeholder="Type a message ..." type="text"
-                                                          name="message" maxLength={255} defaultValue={""}/>
-                                                <span className="input-group-addon"><i className="far fa-grin"/></span>
-                                                <span className="input-group-addon">
-                                                    <input className="hidden" type="file" multiple accept="image/png, image/jpeg, image/jpg"/>
-                                                    <i className="icon image-icon"/>
-                                                </span>
-                                                <span className="input-group-addon"><i className="icon gif-icon"/></span>
-                                                <span className="input-group-addon" onClick={() => {sendMessage()}}>
-                                                    <i className="fa fa-paper-plane" aria-hidden="true"/>
-                                                </span>
-                                            </span>
+                                            {
+                                                activeReceiver.id ?
+                                                    <>
+                                                        <div className="gif-area" style={{display: 'none'}}>
+                                                            <div className="search-gif"><span className="search room-search input-group"><input
+                                                                placeholder="Search for GIFs" name="searchValue" autoCapitalize="none" autoComplete="off"
+                                                                autoCorrect="off" type="text" className="form-control" defaultValue/><span
+                                                                className="input-group-addon"><i className="fa fa-search" aria-hidden="true"/></span></span>
+                                                            </div>
+                                                            <div className="content-gif">
+                                                                <div/>
+                                                            </div>
+                                                        </div>
+                                                        <span className="send-message input-group">
+                                                            <textarea className="form-control" id={"textMessage"} placeholder="Type a message ..." type="text"
+                                                                      name="message" maxLength={255} defaultValue={""}/>
+                                                                        {/*<span className="input-group-addon"><i className="far fa-grin"/></span>*/}
+                                                                        {/*<span className="input-group-addon">*/}
+                                                                        {/*    <input className="hidden" type="file" multiple accept="image/png, image/jpeg, image/jpg"/>*/}
+                                                                        {/*    <i className="icon image-icon"/>*/}
+                                                                        {/*</span>*/}
+                                                                        {/*<span className="input-group-addon"><i className="icon gif-icon"/></span>*/}
+                                                                        <span className="input-group-addon" onClick={() => {sendMessage()}}>
+                                                                <i className="fa fa-paper-plane" aria-hidden="true"/>
+                                                            </span>
+                                                        </span>
+                                                    </>
+                                                    :
+                                                    <div></div>
+                                            }
+
                                         </div>
                                     </div>
                                 </div>
@@ -332,7 +362,7 @@ const Chat = () => {
                     </div>
                 </div>
                 :
-                <div className="message__popup  false" onClick={(e) => messageBoxToggle()}>
+                <div className="message__popup  false" onClick={(e) => messageBoxOpen(e)}>
                     <div className="message__popup--icon"><img src="../resources/raw/popup-chat.png" className alt="PD"/></div>
                 </div>
             }
