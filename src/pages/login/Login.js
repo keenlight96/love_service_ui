@@ -50,6 +50,9 @@ function Login() {
                     console.log("1")
                     navigate("/");
                 }
+            } else if (data.status.nameStatus === "emailverify") {
+                navigate("/login");
+                setMessage("tài khoản xác nhận email");
             } else if (data.status.nameStatus === "register") {
                 navigate("/login");
                 setMessage("tài khoản chưa được chấp nhận");
