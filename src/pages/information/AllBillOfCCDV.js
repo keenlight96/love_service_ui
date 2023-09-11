@@ -1,8 +1,16 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {cancelBill, completes, getAllBillByIdCCDV, getAllBillByIdUser, receivedBill} from "../../service/BillsService";
+import {
+    cancelBill,
+    completes,
+    getAllBillByIdCCDV,
+    getAllBillByIdUser,
+    receivedBill,
+    setCancelBill
+} from "../../service/BillsService";
 import {Link} from "react-router-dom";
 import Bills from "./Bills";
+
 const AllBillByOfCCDV = () => {
 
     let idAccount = JSON.parse(localStorage.getItem("account")).id;
@@ -10,6 +18,7 @@ const AllBillByOfCCDV = () => {
     const dispatch = useDispatch();
 
     const allBillOfCCDV = useSelector((state) => {
+        console.log(state.BillByAccount.BillByAccount.allBillByCCDV);
         return state.BillByAccount.BillByAccount.allBillByCCDV;
     });
 
@@ -21,8 +30,6 @@ const AllBillByOfCCDV = () => {
         return state.BillByAccount.BillByAccount.cancelBill;
     });
 
-    console.log(stringCancelBill);
-    console.log(stringReceivedBill + 1)
     const [idBillRecevied, setBillRecevied] = useState(undefined);
 
     const [idBill, setIdBill] = useState(undefined);
@@ -39,6 +46,15 @@ const AllBillByOfCCDV = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const [modal, setModal] = useState(false);
+    const [billDetail, setBillDetail] = useState(false);
+    const openBillDetail = (object) => {
+        setObjects(object);
+        setBillDetail(true);
+    };
+
+    const closeBillDetail = () => {
+        setBillDetail(false);
+    };
 
     const [objects, setObjects] = useState(null);
 
@@ -52,21 +68,24 @@ const AllBillByOfCCDV = () => {
         setModal(false);
     };
 
-    const  receivedBills = (idBill) =>{
-        setBillRecevied(idBill)
+    const receivedBills = (idBill1) => {
+        setBillRecevied(idBill1)
+        alert(stringReceivedBill)
     }
-    useEffect(() =>{
+    useEffect(() => {
         dispatch(receivedBill(idBillRecevied))
-    },[idBillRecevied]);
+    }, [idBillRecevied]);
 
-    const confirmCancelBill = (idBill) => {
-        setIdBill(idBill);
+    const confirmCancelBill = (idBill1) => {
+        setIdBill(idBill1);
         setModal(false);
     };
 
     useEffect(() => {
-        dispatch(cancelBill({ idBill, idAccount, message }));
-    },[idBill,idAccount,message]);
+        dispatch(cancelBill({idBill, idAccount, message})).then(() => {
+            dispatch(getAllBillByIdCCDV(idAccount))
+        });
+    }, [idBill, idAccount, message]);
 
     return (
         <>
@@ -112,24 +131,29 @@ const AllBillByOfCCDV = () => {
                                                 </td>
                                                 <td style={{width: "150px"}}>
                                                     <button className="action-button detail-button"
-                                                            style={{width: "auto"}}>
+                                                            style={{width: "auto"}}
+                                                            onClick={() => openBillDetail(item)}>
                                                         xem chi tiết
                                                     </button>
                                                 </td>
                                                 <td className="actions" style={{width: "200px"}}>
                                                     {item.status.nameStatus === "wait" && (
                                                         <>
-                                                            <button type="button" className="action-button cancel-button" onClick={() => openModal(item)}>
+                                                            <button type="button"
+                                                                    className="action-button cancel-button"
+                                                                    onClick={() => openModal(item)}>
                                                                 Hủy đơn
                                                             </button>
-                                                            <button className="action-button confirm-button" onClick={() => receivedBills(item.id)}>
+                                                            <button className="action-button confirm-button"
+                                                                    onClick={() => receivedBills(item.id)}>
                                                                 Xác nhận
                                                             </button>
                                                         </>
                                                     )}
                                                     {item.status.nameStatus === "recevied" && (
                                                         <>
-                                                            <button className="action-button cancel-button"  onClick={() => openModal(item)}>
+                                                            <button className="action-button cancel-button"
+                                                                    onClick={() => openModal(item)}>
                                                                 Hủy đơn
                                                             </button>
                                                         </>
@@ -172,13 +196,14 @@ const AllBillByOfCCDV = () => {
                     </div>
                 </div>
             </div>
-            {objects && modal &&  (
+            {objects && modal && (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
                     <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
                     <div role="dialog">
                         <div className="fade modal-backdrop in"/>
-                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal" style={{display: "block"}}>
+                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"
+                             style={{display: "block"}}>
                             <div className="modal-dialog">
                                 <div className="modal-content" role="document">
                                     <div className="modal-header">
@@ -187,7 +212,7 @@ const AllBillByOfCCDV = () => {
                                             <span className="sr-only">Close</span>
                                         </button>
                                         <h4 className="modal-title">
-                                            <span>Thuê player</span>
+                                            <span>Hủy đơn</span>
                                         </h4>
                                     </div>
                                     <div className="modal-body">
@@ -208,7 +233,8 @@ const AllBillByOfCCDV = () => {
                                                     <span>Ngày tạo đơn </span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
+                                                    <span
+                                                        className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -221,8 +247,10 @@ const AllBillByOfCCDV = () => {
                                             </tr>
                                             <tr>
                                                 <td colSpan={2}>
-                                                    <textarea required="không được để trống" placeholder="Lý do hủy" name="message"
-                                                              maxLength={255} type="text" className="form-control" defaultValue={""}  value={message}
+                                                    <textarea required="không được để trống" placeholder="Lý do hủy"
+                                                              name="message"
+                                                              maxLength={255} type="text" className="form-control"
+                                                              defaultValue={""} value={message}
                                                               onChange={(e) => setMessage(e.target.value)}/>
                                                 </td>
                                             </tr>
@@ -230,10 +258,11 @@ const AllBillByOfCCDV = () => {
                                         </table>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn-fill btn btn-danger" onClick={() => confirmCancelBill(objects.id)}>
+                                        <button type="button" className="btn-fill btn btn-danger"
+                                                onClick={() => confirmCancelBill(objects.id)}>
                                             <span>Xác nhận</span>
                                         </button>
-                                        <button type="button" className="btn btn-default"onClick={closeModal}>
+                                        <button type="button" className="btn btn-default" onClick={closeModal}>
                                             <span>Đóng</span>
                                         </button>
                                     </div>
@@ -243,8 +272,140 @@ const AllBillByOfCCDV = () => {
                     </div>
                 </>
             )}
-            {stringReceivedBill && alert(stringReceivedBill)}
-            {stringCancelBill && alert(stringCancelBill)}
+
+            {/*modal bill chi tiết*/}
+            {objects && billDetail && (
+                <>
+                    <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
+                    <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
+                    <div role="dialog">
+                        <div className="fade modal-backdrop in"/>
+                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"
+                             style={{display: "block"}}>
+                            <div className="modal-dialog">
+                                <div className="modal-content" role="document">
+                                    <div className="modal-header">
+                                        <button type="button" className="close" onClick={closeBillDetail}>
+                                            <span aria-hidden="true">×</span>
+                                            <span className="sr-only">Close</span>
+                                        </button>
+                                        <h4 className="modal-title">
+                                            <span>Chi tiết hóa đơn</span>
+                                        </h4>
+                                    </div>
+                                    <div className="modal-body">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>Nick name ngừoi thuê:</td>
+                                                <td>{objects.accountUser.nickname}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span>Số giờ thuê</span>:
+                                                </td>
+                                                <td>{objects.hour}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span>Ngày tạo đơn </span>:
+                                                </td>
+                                                <td>
+                                                <span
+                                                    className="price">{new Date(objects.dateCreate).toLocaleString()}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span>Tổng tiền</span>:
+                                                </td>
+                                                <td>
+                                                    <span className="price">{objects.total}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span>Ngày Bắt đầu </span>:
+                                                </td>
+                                                <td>
+                                                <span
+                                                    className="price">{new Date(objects.dateStart).toLocaleString()}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span>Ngày kết thúc </span>:
+                                                </td>
+                                                <td>
+                                                <span
+                                                    className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span>Lời nhắn </span>:
+                                                </td>
+                                                <td>
+                                                    <span className="price">{objects.firstMessage}</span>
+                                                </td>
+                                            </tr>
+                                            {(
+                                                (objects.status.nameStatus === "cancel from wait by user" || objects.status.nameStatus === "cancel from recevied by user") && (
+                                                    <tr>
+                                                        <td>
+                                                            <span>Lý do người thuê hủy </span>:
+                                                        </td>
+                                                        <td>
+                                                            <span className="price">{objects.userMessage}</span>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            ) || (
+                                                (objects.status.nameStatus === "cancel from wait by ccdv" || objects.status.nameStatus === "cancel from recevied by ccdv") && (
+                                                    <tr>
+                                                        <td>
+                                                            <span>Lý do người CCDV hủy </span>:
+                                                        </td>
+                                                        <td>
+                                                            <span className="price">{objects.ccdvMessage}</span>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            )}
+
+                                            <tr>
+                                                <td>
+                                                    <span>Nhận xét admin nếu có </span>:
+                                                </td>
+                                                <td>
+                                                    <span className="price">{objects.adminMessage}</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-default" onClick={closeBillDetail}>
+                                            <span>Đóng</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+            {/*{*/}
+            {/*    stringCancelBill ?*/}
+            {/*        () => {*/}
+            {/*            console.log("-----------------------")*/}
+            {/*            alert(stringCancelBill);*/}
+            {/*            dispatch(setCancelBill(""));*/}
+            {/*        }*/}
+            {/*        :*/}
+            {/*        <></>*/}
+            {/*}*/}
+            {stringCancelBill ? alert(stringCancelBill) : <div></div>}
         </>
     );
 };
