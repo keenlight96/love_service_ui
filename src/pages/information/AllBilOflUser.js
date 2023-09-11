@@ -269,7 +269,7 @@ const AllBillOfUser = () => {
                                             <tbody>
                                             <tr>
                                                 <td>Nick name ngừoi thuê:</td>
-                                                <td>{objects.accountUser.nickname}</td>
+                                                <td>{objects.accountUser.username}</td>
                                             </tr>
                                             <tr>
                                                 <td>
