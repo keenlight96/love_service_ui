@@ -14,11 +14,9 @@ const Chat = () => {
     const msgBoxToggle = useSelector(state => {
         return state.chatting.chatting.msgBoxToggle;
     })
-    const [activeReceiverElement, setActiveReceiverElement] = useState({});
     const activeReceiver = useSelector(state => {
         return state.chatting.chatting.activeReceiver;
     })
-    const [newMessages, setNewMessages] = useState([]);
     const dispatch = useDispatch();
     const allReceivers = useSelector((state) => {
         return state.chatting.chatting.receivers;
@@ -29,6 +27,7 @@ const Chat = () => {
 
     const messageBoxOpen = (e) => {
         dispatch(setMsgBoxToggle());
+        dispatch(getAllChatReceivers());
     }
 
     const messageBoxClose = (e) => {
@@ -107,6 +106,12 @@ const Chat = () => {
 
     const showMessage = (message) => {
         dispatch(addChatWithReceiver(message));
+        try {
+            if (activeReceiver.id != allReceivers[0]) {
+                dispatch(getAllChatReceivers());
+            }
+        } catch (e) {
+        }
         document.querySelector("#textMessage").value = "";
         scrollToBottom();
     }
@@ -121,13 +126,6 @@ const Chat = () => {
     }, [])
 
     const activateCurrentReceiver = (e, item) => {
-        const element = e.target.closest(".media");
-        element.classList.add("active");
-        try {
-            activeReceiverElement.classList.remove("active");
-        } catch (e) {
-        }
-        setActiveReceiverElement(element);
         dispatch(setActiveReceiver(item));
         dispatch(getChatWithReceiver(item.id));
     }
@@ -153,47 +151,6 @@ const Chat = () => {
                                 nhắn</p></div>
                             <div className="pl-btn" onClick={(e) => messageBoxClose(e)}>
                                 <i className="fas fa-minus"/>
-                                {/*<i className="fas fa-sync false"/>*/}
-                                {/*<div className="messs-tarnger"><span>Nhận tin nhắn từ người lạ</span>*/}
-                                {/*    <div className="react-switch" style={{*/}
-                                {/*        position: 'relative',*/}
-                                {/*        display: 'inline-block',*/}
-                                {/*        textAlign: 'left',*/}
-                                {/*        opacity: 1,*/}
-                                {/*        borderRadius: '8px',*/}
-                                {/*        transition: 'opacity 0.25s ease 0s',*/}
-                                {/*        touchAction: 'none',*/}
-                                {/*        WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',*/}
-                                {/*        userSelect: 'none'*/}
-                                {/*    }}>*/}
-                                {/*        <div className="react-switch-bg" style={{*/}
-                                {/*            height: '16px',*/}
-                                {/*            width: '35px',*/}
-                                {/*            margin: '1px',*/}
-                                {/*            position: 'relative',*/}
-                                {/*            background: 'rgb(226, 127, 118)',*/}
-                                {/*            borderRadius: '8px',*/}
-                                {/*            cursor: 'pointer',*/}
-                                {/*            transition: 'background 0.25s ease 0s'*/}
-                                {/*        }}/>*/}
-                                {/*        <div className="react-switch-handle" role="checkbox" tabIndex={0} id="material-switch" aria-checked="true"*/}
-                                {/*             aria-disabled="false" style={{*/}
-                                {/*            height: '18px',*/}
-                                {/*            width: '18px',*/}
-                                {/*            background: 'rgb(240, 86, 74)',*/}
-                                {/*            cursor: 'pointer',*/}
-                                {/*            display: 'inline-block',*/}
-                                {/*            borderRadius: '50%',*/}
-                                {/*            position: 'absolute',*/}
-                                {/*            transform: 'translateX(19px)',*/}
-                                {/*            top: '0px',*/}
-                                {/*            outline: '0px',*/}
-                                {/*            boxShadow: 'rgba(0, 0, 0, 0.6) 0px 1px 5px',*/}
-                                {/*            border: '0px',*/}
-                                {/*            transition: 'background-color 0.25s ease 0s, transform 0.25s ease 0s, box-shadow 0.15s ease 0s'*/}
-                                {/*        }}/>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
                             </div>
                         </div>
                         <div className="message__popup--box-content">
@@ -206,7 +163,7 @@ const Chat = () => {
                                     <div className="list-message-content">
                                         {
                                             allReceivers && allReceivers.map((item, key) => (
-                                                <div className={"media"} key={key}
+                                                <div className={activeReceiver.id == item.id ? "active media" : "media"} key={key}
                                                      onClick={(e)  => {activateCurrentReceiver(e, item)}}>
                                                 {/*<div className={item.id == activeReceiver.id ? "active media" : "media"} key={key}*/}
                                                 {/*     onClick={(e)  => {activateCurrentReceiver(e, item)}}>*/}
