@@ -11,6 +11,9 @@ import Home from "./pages/home/Home";
 import CCDVUserProfile from "./pages/home/CCDVUserProfile";
 import AllBillByOfCCDV from "./pages/information/AllBillOfCCDV";
 import Bills from "./pages/information/Bills";
+import LayoutAdmin from "./components/layoutAdmin/LayoutAdmin";
+import HomeAdmin from "./pages/admin/HomeAdmin";
+import AddNewAdmin from "./pages/admin/AddNewAdmin";
 
 function App() {
     return (
@@ -25,6 +28,10 @@ function App() {
                     <Route path={"/userDetail/:id"} element={<Detail/>}></Route>
                     <Route path={"/CCDV"} element={<CCDVUserProfile/>}></Route>
                     <Route path={"/bills"} element={<Bills/>}></Route>
+                </Route>
+                <Route path="/admin" element={<LayoutAdmin />}>
+                    <Route index element={<HomeAdmin />}/>
+                    {/*<Route path="/admin/homeadmin" index element={<AddNewAdmin />}/>*/}
                 </Route>
             </Routes>
         </>
