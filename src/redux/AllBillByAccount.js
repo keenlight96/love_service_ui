@@ -1,5 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {cancelBill, completes, getAllBillByIdCCDV, getAllBillByIdUser, receivedBill} from "../service/BillsService";
+import {
+    cancelBill,
+    completes,
+    getAllBillByIdCCDV,
+    getAllBillByIdUser,
+    receivedBill,
+    setCancelBill
+} from "../service/BillsService";
 
 const initialState = {
     BillByAccount: {
@@ -25,6 +32,9 @@ const  AllBillByAccount= createSlice({
             state.BillByAccount.completeString = action.payload;
         })
         builder.addCase(cancelBill.fulfilled, (state, action) => {
+            state.BillByAccount.cancelBill = action.payload;
+        })
+        builder.addCase(setCancelBill.fulfilled, (state, action) => {
             state.BillByAccount.cancelBill = action.payload;
         })
         builder.addCase(receivedBill.fulfilled, (state, action) => {

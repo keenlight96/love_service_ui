@@ -26,6 +26,14 @@ export const cancelBill = createAsyncThunk(
         return res.data
     }
 )
+
+export const setCancelBill = createAsyncThunk(
+    "setCancelBill",
+    async (string) => {
+        return string;
+    }
+)
+
 export const completes = createAsyncThunk(
     "completes",
     async (idBill) => {
@@ -42,3 +50,4 @@ export const receivedBill = createAsyncThunk(
         return res.data;
     }
 )
+

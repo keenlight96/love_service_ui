@@ -14,6 +14,7 @@ import Bills from "./pages/information/Bills";
 import LayoutAdmin from "./components/layoutAdmin/LayoutAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
 import AddNewAdmin from "./pages/admin/AddNewAdmin";
+import HistoryProvider from "./pages/home/HistoryProvider";
 
 function App() {
     return (
@@ -23,7 +24,7 @@ function App() {
                 <Route path={"/"} element={<Layout/>}>
                     <Route path={""} element={<Home/>}></Route>
                     <Route path={"register"} element={<Register/>}></Route>
-                    <Route path={"registerCCDV/:id"} element={<RegisterCCDV/>}></Route>
+                    <Route path={"registerCCDV"} element={<RegisterProfile/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
                     <Route path={"/userDetail/:id"} element={<Detail/>}></Route>
                     <Route path={"/CCDV"} element={<CCDVUserProfile/>}></Route>

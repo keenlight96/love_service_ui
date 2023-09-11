@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Outlet} from "react-router";
 import $ from "jquery";
+import {Link} from "react-router-dom";
 
 const Header = () => {
         const [isClicked, setIsClicked] = useState(true);
@@ -8,6 +9,7 @@ const Header = () => {
             console.log(e.target.classList)
             setIsClicked(!isClicked);
         };
+
 
 
         return (
@@ -123,9 +125,9 @@ const Header = () => {
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-user-lock"/> <span>Tạo khóa bảo vệ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                       <Link to={"/history"}> <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
-                                            className="fas fa-clock"/> <span>Lịch sử giao dịch</span></a></li>
+                                            className="fas fa-clock"/>   <span>Lịch sử giao dịch</span> </a></li></Link>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-users"/> <span>Danh sách theo dõi</span></a></li>
