@@ -10,7 +10,7 @@ const CcdVsByChosenSupplies = () => {
         <>
             <div className="box ccdvs-chosen-supplies">
                 <header className="title-header vip"><h5 className="title-header-left">Người CCDV có dịch vụ được lựa chọn</h5>
-                    <p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>
+                    {/*<p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>*/}
                 </header>
                 <div className="card-player row">
                     {CCDVsByChoseSupplies && CCDVsByChoseSupplies.map((item, key) => (
