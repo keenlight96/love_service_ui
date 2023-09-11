@@ -107,40 +107,7 @@ const Chat = () => {
 
     const showMessage = (message) => {
         dispatch(addChatWithReceiver(message));
-        // let str = "";
-        // str = message.sender.id == activeReceiver.id ?
-        //     `
-        //     <div class="msg-wrap new-message">
-        //         <div class="msg-body  radius">
-        //             <div class="msg-detail" style="position: relative">
-        //                 <div>
-        //                     <div class="msg null"><p>${message.message}</p></div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `
-        //     :
-        //     `
-        //     <div class="msg-wrap new-message">
-        //         <div class="msg-body msg-fill radius">
-        //             <div class="msg-detail" style="position: relative">
-        //                 <div>
-        //                     <div class="msg null"><p>${message.message}</p></div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        //     `;
-
         document.querySelector("#textMessage").value = "";
-
-        // let newDiv = document.createElement("div");
-        // newDiv.innerHTML = str;
-        // let tempAr = newMessages;
-        // tempAr.push(newDiv);
-        // setNewMessages([...tempAr]);
-        // document.querySelector("#chat-content").appendChild(newDiv);
         scrollToBottom();
     }
 
@@ -162,15 +129,6 @@ const Chat = () => {
         }
         setActiveReceiverElement(element);
         dispatch(setActiveReceiver(item));
-
-        // for (let i = 0; i < newMessages.length; i++) {
-        //     try {
-        //         document.querySelector("#chat-content").removeChild(newMessages[i]);
-        //     } catch (e) {
-        //     }
-        // }
-        // setNewMessages([]);
-
         dispatch(getChatWithReceiver(item.id));
     }
 
@@ -194,47 +152,48 @@ const Chat = () => {
                             <div className="media"><i className="fas fa-comment-dots fa-2x media-left"/><p className="media-body media-middle">Tin
                                 nhắn</p></div>
                             <div className="pl-btn" onClick={(e) => messageBoxClose(e)}>
-                                <i className="fas fa-minus"/><i className="fas fa-sync false"/>
-                                <div className="messs-tarnger"><span>Nhận tin nhắn từ người lạ</span>
-                                    <div className="react-switch" style={{
-                                        position: 'relative',
-                                        display: 'inline-block',
-                                        textAlign: 'left',
-                                        opacity: 1,
-                                        borderRadius: '8px',
-                                        transition: 'opacity 0.25s ease 0s',
-                                        touchAction: 'none',
-                                        WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
-                                        userSelect: 'none'
-                                    }}>
-                                        <div className="react-switch-bg" style={{
-                                            height: '16px',
-                                            width: '35px',
-                                            margin: '1px',
-                                            position: 'relative',
-                                            background: 'rgb(226, 127, 118)',
-                                            borderRadius: '8px',
-                                            cursor: 'pointer',
-                                            transition: 'background 0.25s ease 0s'
-                                        }}/>
-                                        <div className="react-switch-handle" role="checkbox" tabIndex={0} id="material-switch" aria-checked="true"
-                                             aria-disabled="false" style={{
-                                            height: '18px',
-                                            width: '18px',
-                                            background: 'rgb(240, 86, 74)',
-                                            cursor: 'pointer',
-                                            display: 'inline-block',
-                                            borderRadius: '50%',
-                                            position: 'absolute',
-                                            transform: 'translateX(19px)',
-                                            top: '0px',
-                                            outline: '0px',
-                                            boxShadow: 'rgba(0, 0, 0, 0.6) 0px 1px 5px',
-                                            border: '0px',
-                                            transition: 'background-color 0.25s ease 0s, transform 0.25s ease 0s, box-shadow 0.15s ease 0s'
-                                        }}/>
-                                    </div>
-                                </div>
+                                <i className="fas fa-minus"/>
+                                {/*<i className="fas fa-sync false"/>*/}
+                                {/*<div className="messs-tarnger"><span>Nhận tin nhắn từ người lạ</span>*/}
+                                {/*    <div className="react-switch" style={{*/}
+                                {/*        position: 'relative',*/}
+                                {/*        display: 'inline-block',*/}
+                                {/*        textAlign: 'left',*/}
+                                {/*        opacity: 1,*/}
+                                {/*        borderRadius: '8px',*/}
+                                {/*        transition: 'opacity 0.25s ease 0s',*/}
+                                {/*        touchAction: 'none',*/}
+                                {/*        WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',*/}
+                                {/*        userSelect: 'none'*/}
+                                {/*    }}>*/}
+                                {/*        <div className="react-switch-bg" style={{*/}
+                                {/*            height: '16px',*/}
+                                {/*            width: '35px',*/}
+                                {/*            margin: '1px',*/}
+                                {/*            position: 'relative',*/}
+                                {/*            background: 'rgb(226, 127, 118)',*/}
+                                {/*            borderRadius: '8px',*/}
+                                {/*            cursor: 'pointer',*/}
+                                {/*            transition: 'background 0.25s ease 0s'*/}
+                                {/*        }}/>*/}
+                                {/*        <div className="react-switch-handle" role="checkbox" tabIndex={0} id="material-switch" aria-checked="true"*/}
+                                {/*             aria-disabled="false" style={{*/}
+                                {/*            height: '18px',*/}
+                                {/*            width: '18px',*/}
+                                {/*            background: 'rgb(240, 86, 74)',*/}
+                                {/*            cursor: 'pointer',*/}
+                                {/*            display: 'inline-block',*/}
+                                {/*            borderRadius: '50%',*/}
+                                {/*            position: 'absolute',*/}
+                                {/*            transform: 'translateX(19px)',*/}
+                                {/*            top: '0px',*/}
+                                {/*            outline: '0px',*/}
+                                {/*            boxShadow: 'rgba(0, 0, 0, 0.6) 0px 1px 5px',*/}
+                                {/*            border: '0px',*/}
+                                {/*            transition: 'background-color 0.25s ease 0s, transform 0.25s ease 0s, box-shadow 0.15s ease 0s'*/}
+                                {/*        }}/>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                             </div>
                         </div>
                         <div className="message__popup--box-content">
