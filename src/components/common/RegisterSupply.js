@@ -20,7 +20,7 @@ function RegisterSupply() {
     const [hour, setHour] = useState('');
 
     useEffect(() => {
-        dispatch(getAllActiveSupplies);
+        dispatch(getAllActiveSupplies());
         dispatch(getSupplyByUserID(idUser))
     }, []);
 
@@ -62,8 +62,9 @@ function RegisterSupply() {
                 {supply.length > 0 && supply.map((s) => {
                     if (s.type === 1 && s.isActive === true) {
                         if (userSupply && userSupply.find(userSupply => userSupply.id === s.id)) {
-                            return (<div className="col-4">
-                                    <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
+                            return (
+                                <div className="col-4">
+                                        <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
                                     <label htmlFor={s.id}>{s.nameSupply}</label>
                                 </div>
                             );

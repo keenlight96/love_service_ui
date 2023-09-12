@@ -44,8 +44,10 @@ const Header = () => {
                 <link rel="stylesheet" href="../resources/css-home.css"/>
                 <div id="root">
                     <header className="menu__header fix-menu" id="header-menu">
-                        <div className="navbar-header"><a href className="logo"><img alt="logo playerduo"
-                                                                                     src="../resources/raw/logo.png"/></a>
+                        <div className="navbar-header">
+                            <Link to={"/"}>
+                                <a href className="logo"><img alt="logo playerduo" src="../resources/raw/logo.png"/></a>
+                            </Link>
                         </div>
                         <div className="navbar">
                             <ul className="nav navbar-nav navbar-left">
@@ -64,8 +66,13 @@ const Header = () => {
                                 </li>
                             </ul>
                             <ul className="nav navbar-nav navbar-center">
-                                <li className="item-icon"><a className="group-user active" href><i
-                                    className="fal fa-home-alt"/></a></li>
+                                <li className="item-icon">
+                                        <a className="group-user active" href>
+                                            <Link to={"/"}>
+                                                <i className="fal fa-home-alt"/>
+                                            </Link>
+                                        </a>
+                                </li>
                                 <li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i
                                     className="fal fa-camera-movie"/></a></li>
                                 <li className="item-icon group-fb"><a className="group-user" href="/#"><i
