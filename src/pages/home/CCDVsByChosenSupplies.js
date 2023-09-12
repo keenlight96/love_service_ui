@@ -1,5 +1,6 @@
 import React from 'react';
 import {useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 const CcdVsByChosenSupplies = () => {
     const CCDVsByChoseSupplies = useSelector(state => {
@@ -14,7 +15,8 @@ const CcdVsByChosenSupplies = () => {
                 </header>
                 <div className="card-player row">
                     {CCDVsByChoseSupplies && CCDVsByChoseSupplies.map((item, key) => (
-                        <div className="col-md-3" key={key}>
+                        <Link to={"/profile/" + item.userProfile.account.username}>
+                            <div className="col-md-3" key={key}>
                             <div className="player-information-card-wrap">
                                 <div className="player-avatar">
                                     <a target="_blank" href={"/profile/" + item.userProfile.account.username}>
@@ -45,6 +47,7 @@ const CcdVsByChosenSupplies = () => {
                                 </a>
                             </div>
                         </div>
+                        </Link>
                     ))}
 
                     {/*<div className="col-md-3">*/}
