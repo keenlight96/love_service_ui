@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import * as Yup from 'yup';
-import './cssRegister.css'
-import SignupCCDV from "../../services/SignupCCDV";
 import Swal from "sweetalert2";
 import '../../custom-css/cssRegister.css'
 import SignupCCDV from "../../service/custom/SignupCCDV";

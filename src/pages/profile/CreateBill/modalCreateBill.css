@@ -1,0 +1,112 @@
+
+/*.swiper-container {*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*    position: relative;*/
+/*    overflow: hidden;*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*    z-index: 1;*/
+/*}*/
+
+/*.box-time {*/
+/*    font-family: Oswald;*/
+/*    font-size: 18px;*/
+/*    color: #222;*/
+/*    margin-top: 15px;*/
+/*}*/
+
+/*.box-time .swiper-wrapper {*/
+/*    align-items: flex-end;*/
+/*}*/
+
+/*.swiper-wrapper {*/
+/*    transition-duration: 0ms;*/
+/*    transform: translate3d(0px, 0px, 0px);*/
+/*    position: relative;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    z-index: 1;*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*    transition-property: transform;*/
+/*    box-sizing: content-box;*/
+/*}*/
+
+/*.swiper-slide {*/
+/*    flex-shrink: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    position: relative;*/
+/*    transition-property: transform;*/
+/*}*/
+
+/*.box-time_gr {*/
+/*    width: 80.0769px;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.box-time .unavailable {*/
+/*    border: 1px solid #d1d1d1;*/
+/*    background: #e8e8e8;*/
+/*    color: #a3a3a3;*/
+/*    cursor: not-allowed;*/
+/*}*/
+
+/*.box-time .box-time_item {*/
+/*    background: #fff;*/
+/*    border: 1px solid #000;*/
+/*    border-radius: 4px;*/
+/*    padding-top: 10px;*/
+/*    padding-bottom: 10px;*/
+/*    text-align: center;*/
+/*    margin-bottom: 8px;*/
+/*    cursor: pointer;*/
+/*}*/
+/*.swiper-container swiper-container-initialized swiper-container-horizontal{*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*    justify-content: center;*/
+/*}*/
+/*.box-time_item {*/
+/*    flex: 0 0 200px;*/
+/*    margin: 10px;*/
+/*    padding: 20px;*/
+/*    background-color: lightblue;*/
+/*}*/
+.table-boxTime {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: normal;
+    justify-content: normal;
+    align-items: flex-end;
+    background-color: lightgray;
+    padding:8px 12px;
+    box-sizing: content-box;
+    transform: translate3d(0px, 0px, 0px);
+    width: 100%;
+    height: 100%;
+    transition-property: transform;
+    overflow: auto;
+    max-height: 250px;
+}
+
+.item-box {
+    flex: 0 0 150px;
+    margin: 10px;
+    padding: 20px;
+    background-color: lightblue;
+}
+.item-box-unavailable {
+    flex: 0 0 150px;
+    margin: 10px;
+    padding: 20px;
+    background-color: lightsalmon;
+}
+.item-box-pick {
+    flex: 0 0 150px;
+    margin: 10px;
+    padding: 20px;
+    background-color: yellow;
+}
