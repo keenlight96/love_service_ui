@@ -9,13 +9,14 @@ import {getSupplyByUserID} from "../../service/CCDVsService";
 function RegisterSupply() {
     const dispatch = useDispatch();
     const supply = useSelector(state => {
+        console.log(state)
         return state.supplies.supplies.all;
     });
     const userSupply = useSelector(state => {
         return state.supplies.supplies.user.supplies;
     });
     // const [userSupply, setUserSupply] = useState([]);
-    const idUser = localStorage.getItem("idUser");
+    const idUser = JSON.parse(localStorage.getItem("account")).id;
     const [cost, setCost] = useState('');
     const [hour, setHour] = useState('');
 
