@@ -12,6 +12,7 @@ import CCDVUserProfile from "./pages/home/CCDVUserProfile";
 import AllBillByOfCCDV from "./pages/information/AllBillOfCCDV";
 import Bills from "./pages/information/Bills";
 import HistoryProvider from "./pages/home/HistoryProvider";
+import ChangePrice from "./pages/profile/ChangePrice";
 
 
 
@@ -28,6 +29,7 @@ function App() {
                     <Route path={"/userDetail/:id"} element={<Detail/>}></Route>
                     <Route path={"/CCDV"} element={<CCDVUserProfile/>}></Route>
                     <Route path={"/bills"} element={<Bills/>}></Route>
+                    <Route path={"change-price/:id"} element={<ChangePrice/>}></Route>
                 </Route>
             </Routes>
         </>
