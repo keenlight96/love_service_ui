@@ -1,6 +1,7 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
 import SignupCCDV from "../../service/custom/SignupCCDV";
+// import React, {useState} from "react";
 import * as Yup from "yup";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -59,6 +60,7 @@ const RegisterProfile =()=> {
 
 
     const account = JSON.parse(localStorage.getItem("account"));
+
     return (
         <>
             <div className={'wrapper'}>
@@ -119,7 +121,6 @@ const RegisterProfile =()=> {
                                             })
                                     }}
                                 >
-
                                     <Form>
                                         <div style={{display: 'flex'}}>
                                             <div>

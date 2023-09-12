@@ -11747,3 +11747,55 @@ body.video-react-full-window .video-react-fullscreen {
     -webkit-transform: translateY(-30px);
     transform: translateY(-30px)
 }
+
+
+.table-bordered thead tr th {
+    border: none; /* Loại bỏ đường viền */
+    background-color: #f0f0f0; /* Màu nền tiêu đề */
+    color: #354052; /* Màu chữ */
+    text-transform: uppercase;
+    font-weight: bold; /* Đậm chữ */
+    font-size: 12px;
+    text-align: center;
+    padding: 10px; /* Khoảng cách giữa nội dung và biên */
+}
+
+/* Thiết lập màu nền cho các nút action */
+./* Căn giữa các nút action bằng flexbox */
+.actions {
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.action-button {
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 12px;
+    align-self: center; /* Căn giữa nút trong container .actions */
+}
+
+/* Các lựa chọn cụ thể cho các nút action */
+.confirm-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.receive-payment-button {
+    background-color: #2196F3;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #ff5656;
+    color: white;
+}
+
+.detail-button {
+    background-color: #999999;
+    color: white;
+}
+
+/*kết thúc css bill*/

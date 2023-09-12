@@ -4,6 +4,8 @@ import NewCcdVs from "../home/NewCCDVs";
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 
 function Detail(){
     const [userDetail, setUserDetail] = useState({});
@@ -12,6 +14,10 @@ function Detail(){
     const [bill, setBill] = useState([])
     const {id} = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    })
 
     useEffect(() => {
         axios.get(`http://localhost:8080/userDetail/` + id)
@@ -29,6 +35,30 @@ function Detail(){
     useLayoutEffect(() => {
         window.scrollTo(0, 0)
     });
+
+    const addNewChat = () => {
+        let newReceiver = {
+            id: userDetail.account.id,
+            username: userDetail.account.username,
+            nickname: userDetail.account.nickname,
+            avatar: userDetail.account.avatar,
+            role: {
+                id: userDetail.account.role.id,
+                nameRole: userDetail.account.role.nameRole,
+            },
+            status: {
+                id: userDetail.account.status.id,
+                nameStatus: userDetail.account.status.nameStatus,
+            },
+            isActive: userDetail.account.isActive
+        }
+        dispatch(addChatReceivers(newReceiver));
+        dispatch(setActiveReceiver(newReceiver));
+
+        if (!msgBoxToggle) {
+            dispatch(setMsgBoxToggle());
+        }
+    }
     return(
         <>
         <title>User Profile</title>
@@ -109,7 +139,7 @@ function Detail(){
                                 <div className="text-center">
                                     <button className="btn-my-style red">Thuê</button>
                                     <button className="btn-my-style white">Donate</button>
-                                    <button className="btn-my-style white"><i className="fas fa-comment-alt"></i>Chat
+                                    <button className="btn-my-style white" onClick={() => {addNewChat()}}><i className="fas fa-comment-alt"></i>Chat
                                     </button>
                                 </div>
                             </div>

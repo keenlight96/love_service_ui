@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 const NewCcdVs = () => {
 
     const newestCCDVs = useSelector(state => {
+        console.log(state);
         return state.CCDVs.CCDVs.newestCCDVs;
     })
     return (
