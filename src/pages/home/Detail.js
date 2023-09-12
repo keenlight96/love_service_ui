@@ -4,6 +4,7 @@ import NewCcdVs from "./NewCCDVs";
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function Detail(){
     const [userDetail, setUserDetail] = useState({});
@@ -86,7 +87,7 @@ function Detail(){
                             <div className="rent-time-wrap"><p className="ready">Đang sẵn sàng</p></div>
                             <div className="social-icon">
                                 <div className="icon-wrap user-page">
-                                    <a href="https://playerduo.net/rabbitnee" target="_blank" rel="noopener noreferrer">
+                                    <a href="" target="_blank" rel="noopener noreferrer">
                                         {userDetail.account && <img src={userDetail.account.avatar} style={{width:"50px",height:"50px"}} alt="PD" title="Trang cá nhân"
                                                                     className="option-icon img-rounded"/>}
                                     </a>
@@ -100,7 +101,7 @@ function Detail(){
                             </div>
                         </div>
                         <div className="player-profile-right-wrap col-md-3 col-md-push-6">
-                            <div className="right-player-profile"><p className="price-player-profile">75,000 đ/h</p>
+                            <div className="right-player-profile"><p className="price-player-profile">{userDetail.price}.000VND</p>
                                 <div className="rateting-style"><i className="fas fa-star"></i><i
                                     className="fas fa-star"></i><i
                                     className="fas fa-star"></i><i className="fas fa-star"></i><i
@@ -154,16 +155,15 @@ function Detail(){
                                         <div className="title-player-profile row">
                                             <div className="col-xs-6"><span>Thông tin</span></div>
                                         </div>
-                                        <div className="content-player-profile"><p>nhận all game, sv Na, Naraka</p>
+                                        <div className="content-player-profile"><p>Nhận tất cả các dịch vụ</p>
                                             <div className="album-of-player">
                                                 <div>
-                                                    <a href="https://playerduo.net/api/upload-service/images/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__ae016c20-4679-11ee-a657-a54d6be1d46a__player_album.jpg"
-                                                       style={{display: "block"}}>
-                                                        {image && image.map(image => (
-                                                            <img key={image.id} src={image.img}
-                                                                 alt={`Ảnh chân dung ${image.id}`}
-                                                                 style={{width: "50px", height: "50px"}}/>))}
+                                                    {image && image.map(image => (
+                                                    <a  href={image.img}
+                                                       style={{display: "block",borderRadius:"10px"}}>
+                                                        <img src={image.img} alt={`Ảnh chân dung ${image.id}`} style={{width: "100%", height: "100%"}}/>
                                                     </a>
+                                                    ))}
 
                                                     <div className="clearfix"></div>
                                                 </div>

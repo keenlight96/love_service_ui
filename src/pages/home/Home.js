@@ -86,7 +86,9 @@ const Home = () => {
                 </div>
                 <div className="notifications-wrapper" />
                 <div className="message__popup  false">
-                    <div className="message__popup--icon"><img src="../resources/raw/popup-chat.png" className alt="PD" /></div>
+                    <div className="message__popup--icon">
+                        <img src="../resources/raw/popup-chat.png" className alt="PD" />
+                    </div>
                 </div>
                 <div className="wrapper">
                     <div className="home-flex">
