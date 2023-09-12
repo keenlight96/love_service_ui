@@ -51,9 +51,9 @@ input[type=checkbox]:checked + label:before {
     transform-origin: center center;
 }
 
-input[type=checkbox] {
-    visibility: hidden;
-}
+/*input[type=checkbox] {*/
+/*    visibility: hidden;*/
+/*}*/
 
 .Cost{
     background: #fff;

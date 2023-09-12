@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import * as Yup from 'yup';
-import './cssRegister.css'
-import SignupCCDV from "../../services/SignupCCDV";
 import Swal from "sweetalert2";
 import '../../custom-css/cssRegister.css'
 import SignupCCDV from "../../service/custom/SignupCCDV";
 
 const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Tên đăng nhập là bắt buộc'),
-    password: Yup.string().required('Mật khẩu là bắt buộc'),
+    username: Yup.string()
+        .required('Tên đăng nhập là bắt buộc')
+        .min(8, 'Tên đăng nhập phải có ít nhất 8 ký tự'),
+    password: Yup.string()
+        .required('Mật khẩu là bắt buộc')
+        .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+        .matches(/(?=.*\d)/, 'Mật khẩu phải chứa ít nhất một chữ số'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không trùng khớp')
         .required('Nhập lại mật khẩu là bắt buộc'),
