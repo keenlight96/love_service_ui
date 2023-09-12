@@ -1,86 +1,53 @@
-import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router";
-import axios from "axios";
+import React from 'react';
+import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 
 function TopServiceCCDV() {
-    const [userProfile, setUserProfile] = useState([]);
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        axios.get("http://localhost:8080/userDetail/top6Service")
-            .then(response => {
-                setUserProfile(response.data);
-
-                console.log(response.data);
-
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }, []);
-    const filterUserProfile = () => {
-        let gender = document.getElementById("gender").value;
-        let dataToSend = {gender}
-
-    }
+    const topViews = useSelector(state => {
+        return state.CCDVs.CCDVs.topViews;
+    })
     return (
         <>
-
-
-            <div class="box vip-player">
-                <header class="title-header vip"><h5 class="title-header-left">TOP 5 VIEWS NHIỀU
-                    NHẤT</h5>
-                    <p class="title-header-right"><span>Làm mới</span><i
-                        class="fas fa-sync false"></i></p>
+            <div className="box newest-ccdvs">
+                <header className="title-header vip"><h5 className="title-header-left">Được quan tâm nhất</h5>
+                    {/*<p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>*/}
                 </header>
-                <div class="card-player row">
-                    {userProfile.map(user => (
-                        <div class="col-md-3">
-                            <div class="player-information-card-wrap ">
-                                <div class="player-avatar">
-                                    <Link to={"/userDetail/" + user.id}>
-                                        <a target="_blank"
-                                           href="#">
-                                            <img src={user.account.avatar} class=""
-                                                  alt="PD"
-                                                 id="avt-img-reponsiver"/>
+                <div className="card-player row">
+                    {topViews && topViews.map((item, key) => (
+                        <Link to={"/profile/" + item.userProfile.account.username}>
+                            <div className="col-md-3" key={key}>
+                                <div className="player-information-card-wrap">
+                                    <div className="player-avatar">
+                                        <a target="_blank" href={"/profile/" + item.userProfile.account.username}>
+                                            <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver"/>
                                         </a>
-                                    </Link>
-                                    <a target="_blank" class="player-price"
-                                       href="home/userProfile#"> {user.price}$/h</a>
-                                </div>
-                                <a target="_blank" class="player-information"
-                                   href="home/userProfile#">
-                                    <h3 class="player-name">
-                                        <a target="_blank"
-                                           href="https://playerduo.net/daotrangdai97"> {user.lastName} {user.firstName} ❤️</a>
-                                        <i class="fas fa-check-circle kyc" aria-hidden="true"></i>
-                                        <div class="player-status ready"></div>
-                                    </h3>
-                                    <p>
-                                        {user.supplies && user.supplies.map(sup => (
-                                            <span>{sup.nameSupply}</span>
-                                        ))}
+                                        <a target="_blank" className="player-price" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.price} đ/h</a>
+                                    </div>
+                                    <a target="_blank" className="player-information" href={"/profile/" + item.userProfile.account.username}>
+                                        <h3 className="player-name">
+                                            <a target="_blank" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.account.nickname}</a>
+                                        </h3>
+                                        <p className="player-title">{item.randomServices}</p>
                                         <div className="category">
                                             <div className="div--flex">
-                                                <div className="game-cate">
-                                                    <img src={user.account.avatar} alt=""/></div>
-                                                <div className="box-item-label">
-                                                    <p><i className="far fa-eye"> {user.views}</i>
-                                                    </p>
+                                                <div className="rate">
+                                                    <i className="fas fa-star" />
+                                                    <p>{item.rate == null ? 0 : item.rate.toFixed(1)} <i>({item.countRate})</i></p>
+                                                </div>
+                                                <div className="rate">
+                                                    <i className="fas fa-eye" />
+                                                    <p>{item.userProfile.views}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </p>
-                                </a>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
         </>
-    )
-};
+    );
+}
 export default TopServiceCCDV;

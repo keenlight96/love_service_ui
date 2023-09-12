@@ -4,19 +4,32 @@ import NewCcdVs from "../home/NewCCDVs";
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import ShowImages from "./ShowImages";
+import {convertToFormattedDate} from "../../service/custom/general.function";
 
 function Detail(){
     const [userDetail, setUserDetail] = useState({});
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
     const [bill, setBill] = useState([])
-    const {id} = useParams();
+    const {username} = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    })
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/userDetail/` + id)
+        axios.get(`http://localhost:8080/userDetail/` + username,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(response => {
-                console.log(response);
+                // console.log(response.data.userProfile);
+                // let {birthday} = response.data.userProfile;
+                // let newBirthday = convertToFormattedDate(birthday);
+                // console.log(newBirthday);
+                // let formattedUserProfile = {...response.data.userProfile, [birthday]: newBirthday};
+
                 setUserDetail(response.data.userProfile);
                 setImage(response.data.image)
                 setInterest(response.data.interests)
@@ -29,6 +42,33 @@ function Detail(){
     useLayoutEffect(() => {
         window.scrollTo(0, 0)
     });
+
+    const addNewChat = () => {
+        let newReceiver = {
+            id: userDetail.account.id,
+            username: userDetail.account.username,
+            nickname: userDetail.account.nickname,
+            avatar: userDetail.account.avatar,
+            role: {
+                id: userDetail.account.role.id,
+                nameRole: userDetail.account.role.nameRole,
+            },
+            status: {
+                id: userDetail.account.status.id,
+                nameStatus: userDetail.account.status.nameStatus,
+            },
+            isActive: userDetail.account.isActive
+        }
+        dispatch(addChatReceivers(newReceiver));
+        dispatch(setActiveReceiver(newReceiver));
+
+        if (!msgBoxToggle) {
+            dispatch(setMsgBoxToggle());
+        }
+    }
+
+    //Js function
+
     return(
         <>
         <title>User Profile</title>
@@ -52,7 +92,6 @@ function Detail(){
         <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
         <link href="../resources/all.css" rel="stylesheet" />
         <link href="../resources/css.css" rel="stylesheet" />
-        <title>PlayerDuo - Thuê người chơi</title>
         <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet" />
         <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="../resources/0.cbdbec7b.chunk.css" />
@@ -83,24 +122,24 @@ function Detail(){
                                     </div>
                                 </div>
                             </div>
-                            <div className="rent-time-wrap"><p className="ready">Đang sẵn sàng</p></div>
-                            <div className="social-icon">
-                                <div className="icon-wrap user-page">
-                                    <a href="https://playerduo.net/rabbitnee" target="_blank" rel="noopener noreferrer">
-                                        {userDetail.account && <img src={userDetail.account.avatar} style={{width:"50px",height:"50px"}} alt="PD" title="Trang cá nhân"
-                                                                    className="option-icon img-rounded"/>}
-                                    </a>
-                                </div>
-                            </div>
+                            {/*<div className="rent-time-wrap"><p className="ready">Đang sẵn sàng</p></div>*/}
+                            {/*<div className="social-icon">*/}
+                            {/*    <div className="icon-wrap user-page">*/}
+                            {/*        <a href="https://playerduo.net/rabbitnee" target="_blank" rel="noopener noreferrer">*/}
+                            {/*            {userDetail.account && <img src={userDetail.account.avatar} style={{width:"50px",height:"50px"}} alt="PD" title="Trang cá nhân"*/}
+                            {/*                                        className="option-icon img-rounded"/>}*/}
+                            {/*        </a>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                             <div className="member-since">
                                 <div>Ngày tham gia:</div>
                                 <span>
-                                {userDetail.dateCreate}
+                                {new Date(userDetail.dateCreate).toLocaleDateString()}
                             </span>
                             </div>
                         </div>
                         <div className="player-profile-right-wrap col-md-3 col-md-push-6">
-                            <div className="right-player-profile"><p className="price-player-profile">75,000 đ/h</p>
+                            <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
                                 <div className="rateting-style"><i className="fas fa-star"></i><i
                                     className="fas fa-star"></i><i
                                     className="fas fa-star"></i><i className="fas fa-star"></i><i
@@ -108,8 +147,9 @@ function Detail(){
                                 </div>
                                 <div className="text-center">
                                     <button className="btn-my-style red">Thuê</button>
-                                    <button className="btn-my-style white">Donate</button>
-                                    <button className="btn-my-style white"><i className="fas fa-comment-alt"></i>Chat
+                                    {/*<button className="btn-my-style white">Donate</button>*/}
+                                    <button className="btn-my-style white" onClick={() => {addNewChat()}}>
+                                        <i className="fas fa-comment-alt"></i>Chat
                                     </button>
                                 </div>
                             </div>
@@ -118,416 +158,112 @@ function Detail(){
                             <div>
                                 <div className="row">
                                     <div className="center-item col-md-12">
-                                    <span
-                                        className="name-player-profile hidden-over-name">{userDetail.firstName} {userDetail.lastName} 🐰🐰</span>
-                                        <button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;
-                                            <span
-                                                className="plus"><span>Theo dõi</span></span></button>
+                                        <span className="name-player-profile hidden-over-name">{userDetail.account && userDetail.account.nickname}</span>
+                                        {/*<button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;*/}
+                                        {/*    <span className="plus">*/}
+                                        {/*        <span>Theo dõi</span>*/}
+                                        {/*    </span>*/}
+                                        {/*</button>*/}
                                     </div>
                                 </div>
                                 <div className="nav-player-profile row">
-                                    <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Số người theo dõi</span></div>
-                                        <div className="item-nav-value">400 <span>người</span></div>
-                                    </div>
                                     <div className="col-md-3 col-xs-6">
                                         <div className="item-nav-name"><span>Đã được thuê</span></div>
                                         <div className="item-nav-value">{bill.length}&nbsp;<span> lần</span></div>
                                     </div>
                                     <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>
-                                        <div className="item-nav-value">100&nbsp;%</div>
+                                        <div className="item-nav-name"><span>Số lượt xem</span></div>
+                                        <div className="item-nav-value">{userDetail.views} <span> lượt</span></div>
                                     </div>
-                                    <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Tình trạng thiết bị</span></div>
-                                        <div className="item-nav-value"><i className="fas fa-microphone"></i></div>
-                                    </div>
+                                    {/*<div className="col-md-3 col-xs-6">*/}
+                                    {/*    <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>*/}
+                                    {/*    <div className="item-nav-value">100&nbsp;%</div>*/}
+                                    {/*</div>*/}
                                 </div>
                                 <div>
                                     <div className="game-category row">
-                                        <div className="choose-game"
-                                             style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
-                                            <p className="overlay">{interest.length > 0 ? interest[0].interest : 'no'}</p>
+                                        <div className="title-player-profile row">
+                                            <div className="col-xs-6"><span>Dịch vụ</span></div>
                                         </div>
+                                        {userDetail.supplies && userDetail.supplies.length > 0 && userDetail.supplies.map((item, key) => (
+                                            <div className="choose-game" style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
+                                                    <p className="overlay" key={key}>{item.nameSupply}</p>
+
+                                            </div>
+                                        ))}
+
                                     </div>
                                     <div>
                                         <div className="title-player-profile row">
                                             <div className="col-xs-6"><span>Thông tin</span></div>
                                         </div>
-                                        <div className="content-player-profile"><p>nhận all game, sv Na, Naraka</p>
+                                        <div className="content-player-profile">
                                             <div className="album-of-player">
-                                                <div>
-                                                    <a href="https://playerduo.net/api/upload-service/images/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__ae016c20-4679-11ee-a657-a54d6be1d46a__player_album.jpg"
-                                                       style={{display: "block"}}>
-                                                        {image && image.map(image => (
-                                                            <img key={image.id} src={image.img}
-                                                                 alt={`Ảnh chân dung ${image.id}`}
-                                                                 style={{width: "50px", height: "50px"}}/>))}
-                                                    </a>
+                                                {image.length > 0 && <ShowImages images={image}/>}
 
-                                                    <div className="clearfix"></div>
-                                                </div>
+                                                {/*<div>*/}
+                                                {/*    <a href="https://playerduo.net/api/upload-service/images/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__ae016c20-4679-11ee-a657-a54d6be1d46a__player_album.jpg"*/}
+                                                {/*       style={{display: "block"}}>*/}
+                                                {/*        {image && image.map(image => (*/}
+                                                {/*            <img key={image.id} src={image.img}*/}
+                                                {/*                 alt={`Ảnh chân dung ${image.id}`}*/}
+                                                {/*                 style={{width: "50px", height: "50px"}}/>))}*/}
+                                                {/*    </a>*/}
+
+                                                {/*    <div className="clearfix"></div>*/}
+                                                {/*</div>*/}
                                             </div>
-                                            <p>Tên: {userDetail.firstName} {userDetail.lastName}</p>
-                                            <p>Địa Chỉ: {userDetail.address}, {userDetail.country}</p>
-                                            <p>Năm Sinh: {userDetail.birthday} ♥ Không biết hát nha</p>
-                                            <p>Giới Tính: {userDetail.gender}</p>
-                                            <p>Chiều Cao: {userDetail.height}</p>
-                                            <p>Cân Nặng: {userDetail.weight}</p>
-                                            <p>Mô tả về bản thân: {userDetail.describes}</p>
-                                            <p>Yêu cầu với người thuê: {userDetail.basicRequest}</p>
-                                            <p>fb: <a href={userDetail.facebookLink} target="_blank"
-                                                      rel="noopener noreferrer">{userDetail.facebookLink}</a>
-                                            </p>
+                                            <table className={"table table-bordered"}>
+                                                <tbody>
+                                                <tr>
+                                                    <td>Họ tên</td>
+                                                    <td>{userDetail.firstName} {userDetail.lastName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Giới tính</td>
+                                                    <td>{userDetail.gender}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Năm sinh</td>
+                                                    <td>{new Date(userDetail.birthday).toLocaleDateString()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều cao</td>
+                                                    <td>{userDetail.height}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cân nặng</td>
+                                                    <td>{userDetail.weight}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Địa chỉ</td>
+                                                    <td>{userDetail.address}, {userDetail.country}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mô tả về bản thân</td>
+                                                    <td>{userDetail.describes}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Yêu cầu với người thuê</td>
+                                                    <td>{userDetail.basicRequest}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Facebook</td>
+                                                    <td><a href={userDetail.facebookLink} target="_blank"
+                                                           rel="noopener noreferrer">{userDetail.facebookLink}</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            {/*<p>Tên: {userDetail.firstName} {userDetail.lastName}</p>*/}
+                                            {/*<p>Địa Chỉ: {userDetail.address}, {userDetail.country}</p>*/}
+                                            {/*<p>Năm Sinh: {userDetail.birthday}</p>*/}
+                                            {/*<p>Giới Tính: {userDetail.gender}</p>*/}
+                                            {/*<p>Chiều Cao: {userDetail.height}</p>*/}
+                                            {/*<p>Cân Nặng: {userDetail.weight}</p>*/}
+                                            {/*<p>Mô tả về bản thân: {userDetail.describes}</p>*/}
+                                            {/*<p>Yêu cầu với người thuê: {userDetail.basicRequest}</p>*/}
                                         </div>
                                         <div>
-                                            <div id="top-donate">
-                                                <ul role="tablist" className="nav nav-tabs">
-                                                    <li role="presentation" className="active"><a id="top-donate-tab-1"
-                                                                                                  role="tab"
-                                                                                                  aria-controls="top-donate-pane-1"
-                                                                                                  aria-selected="true"
-                                                                                                  href="home/userProfile#">Top
-                                                        Donate</a></li>
-                                                    <li role="presentation" className=""><a id="top-donate-tab-2"
-                                                                                            role="tab"
-                                                                                            aria-controls="top-donate-pane-2"
-                                                                                            tabIndex="-1"
-                                                                                            aria-selected="false"
-                                                                                            href="home/userProfile#">Top Donate
-                                                        Tháng</a></li>
-                                                </ul>
-                                                <div className="tab-content">
-                                                    <div id="top-donate-pane-1" aria-labelledby="top-donate-tab-1"
-                                                         role="tabpanel"
-                                                         aria-hidden="false" className="fade tab-pane active in">
-                                                        <div className="mg-24">
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#1</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/2b0863d5-e2cb-4443-8aff-70327f5860f1__87172be0-0768-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/10.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-10">bun bun</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">297,651,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#2</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/477e90cb-6b84-42fa-b9a2-c2b8fc5a0f21__6d2688b0-f59b-11eb-9157-1d40c57aa487__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/8.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-6">Lỗi</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">23,120,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#3</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/17d6baa2-8102-41a9-84d1-d54828c6c45e__c94e1fc0-4573-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/14.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-14">Hoàng Mjn™️</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">20,940,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#4</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/69ecdfc8-4e52-47ae-ad94-7d07b349a510__777433c0-dc72-11ed-a19f-23a3b10d190e__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/10.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-10">Mlem</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">19,650,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#5</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/7cf12af4-a0c8-4c19-942d-0ad22b25fbea__eb2bb5a0-2a1a-11ed-92ac-1b8d2f5bc2b5__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/14.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-14">Lê Đức Nam 1</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">12,200,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#6</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/6be09225-9c6a-4334-a0f3-5bb74406f487__8121abb0-33ec-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/10.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-10">- ATM</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">12,053,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#7</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/37594339-d6a2-4bfd-9f61-fb75105fb9f0__1546dbb0-433f-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/14.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-14">Chaien</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">10,354,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#8</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/cd93c193-b5c6-4b0b-b09c-206d89668ab5__9c08f0a0-a3f5-11ed-a19f-23a3b10d190e__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/10.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-10">Loli Tử Nghiên</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">9,953,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#9</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/5e6d3dda-cb9c-490d-8a05-66d8d40fbae8__2dae96e0-a917-11ea-a951-25554c403ce6__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img
-                                                                            src="../resources/raw/9.png"
-                                                                            className="vip-avatar undefined" alt="PD"
-                                                                            style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-6">OFF</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">8,225,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#10</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/a95aebcb-606b-4c5d-ab51-c24209674fc8__70cbb490-4894-11eb-a34e-dd03c3a22289__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/7.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-6">[TOP] - GIA TỘC GIRL TOP Donate cho cả sever 10K</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">8,000,000 đ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="top-donate-pane-2" aria-labelledby="top-donate-tab-2"
-                                                         role="tabpanel"
-                                                         aria-hidden="true" className="fade tab-pane">
-                                                        <div className="mg-24">
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#1</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/17d6baa2-8102-41a9-84d1-d54828c6c45e__c94e1fc0-4573-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/14.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-14">Hoàng Mjn™️</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">15,640,000 đ
-                                                                </div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#2</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/2165c780-ac3b-4fe4-9f7f-1f14854b4b92__52ca3f30-3c15-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/6.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-6">Happybirthdayy me</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">5,000,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#3</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/3d2af408-b49a-4bc3-9be4-20f93cfa2c54__665f89f0-221c-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                            className="avt-img" alt="PD"/>
-                                                                        <img src="../resources/raw/9.png"
-                                                                             className="vip-avatar undefined" alt="PD"
-                                                                             style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-6">S1mple09</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">2,000,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#4</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs">
-                                                                        <img
-                                                                            src="../resources/raw/avatar23.png"
-                                                                            className="avt-img"
-                                                                            alt="PD"/><img src="../resources/raw/11.png"
-                                                                                           className="vip-avatar undefined"
-                                                                                           alt="PD"
-                                                                                           style={{
-                                                                                               height: "17px",
-                                                                                               width: "17px"
-                                                                                           }}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-10">Cam</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">715,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#5</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/19782b1f-b796-4185-a69b-c1a782379a26__a96a7860-2f8f-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/5-1.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-1">WildAsian</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">375,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#6</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/6d352f52-335d-4c89-8056-e6ca3f338d3e__2166e040-d998-11ed-a19f-23a3b10d190e__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/5-1.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-1">Tuấn April</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">170,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#7</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/660c6b83-6a8b-470f-962f-1a09a56f0381__425307b0-d485-11ed-a19f-23a3b10d190e__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/5-1.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-1">Trần Huy Tùng</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">150,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#8</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/517206b6-20e0-4d18-8b1b-22281fc2d370__f5954ea0-3b41-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/1-2.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span
-                                                                        className="name-player-review color-vip-1">Name</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">147,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#9</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/3aa2c4a6-25e0-4a7a-9f77-247453949a9d__00804540-3d6d-11ee-a657-a54d6be1d46a__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/3-1.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-1">Dan Pham</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">100,000 đ</div>
-                                                            </div>
-                                                            <div className="top-donate-player row">
-                                                                <div className="ky-1 col-xs-1">#10</div>
-                                                                <div className="col-xs-7">
-                                                                    <div className="avt avt-xs"><img
-                                                                        src="../resources/raw/0c28f031-fd10-44a2-a632-0d736608110a__49a14880-b322-11ed-a19f-23a3b10d190e__page_avatar.jpg"
-                                                                        className="avt-img" alt="PD"/><img
-                                                                        src="../resources/raw/1-2.png"
-                                                                        className="vip-avatar undefined" alt="PD"
-                                                                        style={{height: "17px", width: "17px"}}/>
-                                                                    </div>
-                                                                    <span className="name-player-review color-vip-1">Trần Hiền</span>
-                                                                </div>
-                                                                <div className="total-amount col-xs-4">50,000 đ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div>
                                                 <div className="title-player-profile row">
                                                     <div className="col-xs-6"><span>Đánh giá</span></div>

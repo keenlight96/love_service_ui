@@ -1,6 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {getAllActiveSupplies, setChosenSupplies} from "../service/SupplyService";
-import {getAllSupplies} from "../service/SupplyService";
 import {getSupplyByUserID} from "../service/CCDVsService";
 
 const initialState = {

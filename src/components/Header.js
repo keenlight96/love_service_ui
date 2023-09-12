@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Outlet} from "react-router";
 import $ from "jquery";
+import {Link} from "react-router-dom";
 
 const Header = () => {
         const [isClicked, setIsClicked] = useState(true);
@@ -8,6 +9,7 @@ const Header = () => {
             console.log(e.target.classList)
             setIsClicked(!isClicked);
         };
+
 
 
         return (
@@ -42,8 +44,10 @@ const Header = () => {
                 <link rel="stylesheet" href="../resources/css-home.css"/>
                 <div id="root">
                     <header className="menu__header fix-menu" id="header-menu">
-                        <div className="navbar-header"><a href className="logo"><img alt="logo playerduo"
-                                                                                     src="../resources/raw/logo.png"/></a>
+                        <div className="navbar-header">
+                            <Link to={"/"}>
+                                <a href className="logo"><img alt="logo playerduo" src="../resources/raw/logo.png"/></a>
+                            </Link>
                         </div>
                         <div className="navbar">
                             <ul className="nav navbar-nav navbar-left">
@@ -62,8 +66,13 @@ const Header = () => {
                                 </li>
                             </ul>
                             <ul className="nav navbar-nav navbar-center">
-                                <li className="item-icon"><a className="group-user active" href><i
-                                    className="fal fa-home-alt"/></a></li>
+                                <li className="item-icon">
+                                        <a className="group-user active" href>
+                                            <Link to={"/"}>
+                                                <i className="fal fa-home-alt"/>
+                                            </Link>
+                                        </a>
+                                </li>
                                 <li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i
                                     className="fal fa-camera-movie"/></a></li>
                                 <li className="item-icon group-fb"><a className="group-user" href="/#"><i
@@ -123,9 +132,9 @@ const Header = () => {
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-user-lock"/> <span>Tạo khóa bảo vệ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                       <Link to={"/history"}> <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
-                                            className="fas fa-clock"/> <span>Lịch sử giao dịch</span></a></li>
+                                            className="fas fa-clock"/>   <span>Lịch sử giao dịch</span> </a></li></Link>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-users"/> <span>Danh sách theo dõi</span></a></li>
