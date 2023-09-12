@@ -35,14 +35,22 @@ export const getTopFemale = createAsyncThunk(
 export const getSupplyByUserID = createAsyncThunk(
     "getSupplyByUserID",
     async (idUser) => {
-        const rs = await customAxios.get("supplies/getSupplyByUserID?id=" + idUser);
+        const rs = await customAxios.get("supplies/getSupplyByUserID?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return rs.data;
     }
 )
 export const getCCDVProperGender = createAsyncThunk(
     "getCCDVProperGender",
     async (idUser) => {
-        const rs = await customAxios.get("userDetail/listCCDVHaveProperGender?id=" + idUser);
+        const rs = await customAxios.get("userDetail/listCCDVHaveProperGender?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return rs.data;
+    }
+)
+
+export const getCCDVsByTopViews = createAsyncThunk(
+    "getCCDVsByTopViews",
+    async (qty) => {
+        const rs = await customAxios.get("userDetail/topService/" + qty,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return rs.data;
     }
 )

@@ -12,18 +12,20 @@ import CCDVUserProfile from "./pages/home/CCDVUserProfile";
 import AllBillByOfCCDV from "./pages/information/AllBillOfCCDV";
 import Bills from "./pages/information/Bills";
 import HistoryProvider from "./pages/home/HistoryProvider";
+import ShowImages from "./pages/profile/ShowImages";
 
 function App() {
     return (
         <>
             <Routes>
+                <Route path={"/test"} element={<ShowImages/>}></Route>
                 <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/"} element={<Layout/>}>
                     <Route path={""} element={<Home/>}></Route>
                     <Route path={"register"} element={<Register/>}></Route>
                     <Route path={"registerCCDV"} element={<RegisterProfile/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
-                    <Route path={"/userDetail/:id"} element={<Detail/>}></Route>
+                    <Route path={"/profile/:username"} element={<Detail/>}></Route>
                     <Route path={"/CCDV"} element={<CCDVUserProfile/>}></Route>
                     <Route path={"/bills"} element={<Bills/>}></Route>
                 </Route>
