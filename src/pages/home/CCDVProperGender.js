@@ -3,7 +3,6 @@ import React from "react";
 
 const CCDVProperGender = () => {
     const properCCDV = useSelector(state => {
-        console.log(state.CCDVs.CCDVs.properGender)
         return state.CCDVs.CCDVs.properGender;
     })
 

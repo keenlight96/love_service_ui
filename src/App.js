@@ -21,8 +21,11 @@ function App() {
         <>
             <Routes>
                 <Route path={"/test"} element={<SidebarInformation/>}></Route>
-                <Route path={"/login"} element={<Login/>}></Route>
                 <Route path={"/"} element={<Layout/>}>
+                    {/*Page Login*/}
+                    <Route path={"/login"} element={<Login/>}></Route>
+
+                    {/*Page Home*/}
                     <Route path={""} element={<Home/>}></Route>
                     <Route path={"register"} element={<Register/>}></Route>
                     <Route path={"registerCCDV"} element={<RegisterProfile/>}></Route>
