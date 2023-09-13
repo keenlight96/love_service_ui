@@ -3,7 +3,7 @@ import {checkToken, setUser} from "../service/UserService";
 
 const initialState = {
     user: {
-        current: {}
+        current: null
     }
 }
 
