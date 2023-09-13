@@ -2,9 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {useLocation} from "react-router";
 import {Link} from "react-router-dom";
 import {forEach} from "react-bootstrap/ElementChildren";
+import {useDispatch, useSelector} from "react-redux";
+import {checkToken} from "../../service/UserService";
 
 const SidebarInformation = (current) => {
     const location = useLocation();
+    const storeUser = useSelector(state => {
+        return state.user.user.current
+    });
+
     useEffect(() => {
         let elements = document.querySelectorAll(".panel-title");
         for (let i = 0; i < elements.length; i++) {
@@ -13,33 +19,35 @@ const SidebarInformation = (current) => {
             } catch (e){}
         }
         let element;
-        switch (location.pathname) {
-            case "/information/info":
-                element = document.querySelector("#id1-1");
-                element.classList.add("active");
-                break;
-            case "/information/bills":
-                element = document.querySelector("#id1-2");
-                element.classList.add("active");
-                break;
-            case "/information/topup":
-                element = document.querySelector("#id1-3");
-                element.classList.add("active");
-                break;
-            case "/information/summary":
-                element = document.querySelector("#id2-1");
-                element.classList.add("active");
-                break;
-            case "/information/supplies":
-                element = document.querySelector("#id2-2");
-                element.classList.add("active");
-                break;
-            case "/information/album":
-                element = document.querySelector("#id2-3");
-                element.classList.add("active");
-                break;
-        }
-    }, [location.pathname])
+        try {
+            switch (location.pathname) {
+                case "/information/info":
+                    element = document.querySelector("#id1-1");
+                    element.classList.add("active");
+                    break;
+                case "/information/bills":
+                    element = document.querySelector("#id1-2");
+                    element.classList.add("active");
+                    break;
+                case "/information/topup":
+                    element = document.querySelector("#id1-3");
+                    element.classList.add("active");
+                    break;
+                case "/information/summary":
+                    element = document.querySelector("#id2-1");
+                    element.classList.add("active");
+                    break;
+                case "/information/supplies":
+                    element = document.querySelector("#id2-2");
+                    element.classList.add("active");
+                    break;
+                case "/information/album":
+                    element = document.querySelector("#id2-3");
+                    element.classList.add("active");
+                    break;
+            }
+        } catch (e) {}
+    }, [location.pathname, storeUser])
     return (
         <>
             <title>Game Community</title>
@@ -90,374 +98,146 @@ const SidebarInformation = (current) => {
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link to={"/information/bills"}>
-                                            <div className="menu__setting--sub panel panel-default">
-                                                <div className="panel-heading">
-                                                    <div className="  panel-title" id={"id1-2"}><i className="fas fa-history" /> Lịch sử đơn thuê
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link to={"/information/topup"}>
-                                            <div className="menu__setting--sub panel panel-default">
-                                                <div className="panel-heading">
-                                                    <div className="  panel-title" id={"id1-3"}><i className="fas fa-wallet" /> Nạp tiền</div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-cog" /> Cài đặt <i className="fas fa-chevron-right" /></a></div>*/}
-                                        {/*    </div>*/}
-                                        {/*    <div className="panel-collapse collapse">*/}
-                                        {/*        <div className="panel-body">*/}
-                                        {/*            <div className="panel-group">*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Email</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Tài khoản và mật khẩu</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Khoá bảo vệ</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Vip</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Hiển thị</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-history" /> Lịch sử giao dịch <i className="fas fa-chevron-right" /></a></div>*/}
-                                        {/*    </div>*/}
-                                        {/*    <div className="panel-collapse collapse">*/}
-                                        {/*        <div className="panel-body">*/}
-                                        {/*            <div className="panel-group">*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Lịch sử donate</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Lịch sử duo</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Lịch sử tạo code</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Biến động số dư</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Lịch sử mua thẻ</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="  panel-title"><i className="fas fa-credit-card" /> Thanh toán*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
+                                        {
+                                            storeUser && storeUser.account.role.id != 1 ?
+                                                <>
+                                                    <Link to={"/information/bills"}>
+                                                        <div className="menu__setting--sub panel panel-default">
+                                                            <div className="panel-heading">
+                                                                <div className="  panel-title" id={"id1-2"}><i className="fas fa-history"/> Lịch sử
+                                                                    đơn thuê
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                    <Link to={"/information/topup"}>
+                                                        <div className="menu__setting--sub panel panel-default">
+                                                            <div className="panel-heading">
+                                                                <div className="  panel-title" id={"id1-3"}><i className="fas fa-wallet"/> Nạp tiền
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                </>
+                                                :
+                                                <></>
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="menu__setting--main panel panel-default">
-                            <div className="panel-heading">
-                                <div className="panel-title">
-                                    <a aria-expanded="true" className role="button" href="src/components/common/SidebarInformation#">
-                                        NGƯỜI CUNG CẤP DỊCH VỤ <i className="fas fa-chevron-down" /></a>
-                                </div>
-                            </div>
-                            <div className="panel-collapse collapse in" style={{}}>
-                                <div className="panel-body">
-                                    <div className="panel-group">
-                                        <Link to={"/information/summary"}>
-                                            <div className="menu__setting--sub panel panel-default">
-                                                <div className="panel-heading">
-                                                    <div className="  panel-title" id={"id2-1"}><i className="fas fa-user-tie" /> Tổng quan
+                        {
+                            storeUser && storeUser.account.role.id == 3 ?
+                                <div className="menu__setting--main panel panel-default">
+                                    <div className="panel-heading">
+                                        <div className="panel-title">
+                                            <a aria-expanded="true" className role="button" href="src/components/common/SidebarInformation#">
+                                                NGƯỜI CUNG CẤP DỊCH VỤ <i className="fas fa-chevron-down" /></a>
+                                        </div>
+                                    </div>
+                                    <div className="panel-collapse collapse in" style={{}}>
+                                        <div className="panel-body">
+                                            <div className="panel-group">
+                                                <Link to={"/information/summary"}>
+                                                    <div className="menu__setting--sub panel panel-default">
+                                                        <div className="panel-heading">
+                                                            <div className="  panel-title" id={"id2-1"}><i className="fas fa-user-tie" /> Tổng quan
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link to={"/information/supplies"}>
-                                            <div className="menu__setting--sub panel panel-default">
-                                                <div className="panel-heading">
-                                                    <div className="  panel-title" id={"id2-2"}><i className="fas fa-link" /> Thông tin dịch vụ
+                                                </Link>
+                                                <Link to={"/information/supplies"}>
+                                                    <div className="menu__setting--sub panel panel-default">
+                                                        <div className="panel-heading">
+                                                            <div className="  panel-title" id={"id2-2"}><i className="fas fa-link" /> Thông tin dịch vụ
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link to={"/information/album"}>
-                                            <div className="menu__setting--sub panel panel-default">
-                                                <div className="panel-heading">
-                                                    <div className="  panel-title" id={"id2-3"}><i className="fas fa-book" /> Album ảnh
+                                                </Link>
+                                                <Link to={"/information/album"}>
+                                                    <div className="menu__setting--sub panel panel-default">
+                                                        <div className="panel-heading">
+                                                            <div className="  panel-title" id={"id2-3"}><i className="fas fa-book" /> Album ảnh
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </Link>
+                                                {/*<div className="menu__setting--sub panel panel-default">*/}
+                                                {/*    <div className="panel-heading">*/}
+                                                {/*        <div className="  panel-title"><i className="fas fa-ban" /> Danh sách chặn*/}
+                                                {/*            User*/}
+                                                {/*        </div>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="menu__setting--sub panel panel-default">*/}
+                                                {/*    <div className="panel-heading">*/}
+                                                {/*        <div className="  panel-title"><i className="fas fa-link" /> Link Player</div>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="menu__setting--sub panel panel-default">*/}
+                                                {/*    <div className="panel-heading">*/}
+                                                {/*        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-cog" /> Cài đặt <i className="fas fa-chevron-right" /></a></div>*/}
+                                                {/*    </div>*/}
+                                                {/*    <div className="panel-collapse collapse">*/}
+                                                {/*        <div className="panel-body">*/}
+                                                {/*            <div className="panel-group">*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Url</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Thông tin Player</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Albums Player</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Cài đặt Duo</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Khác</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*            </div>*/}
+                                                {/*        </div>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="menu__setting--sub panel panel-default">*/}
+                                                {/*    <div className="panel-heading">*/}
+                                                {/*        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="far fa-calendar-alt" /> Lịch sử nhận Duo, Donate <i className="fas fa-chevron-right" /></a></div>*/}
+                                                {/*    </div>*/}
+                                                {/*    <div className="panel-collapse collapse">*/}
+                                                {/*        <div className="panel-body">*/}
+                                                {/*            <div className="panel-group">*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Lịch sử nhận duo</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*                <div className="menu__setting--last panel panel-default">*/}
+                                                {/*                    <div className="panel-heading">*/}
+                                                {/*                        <div className="panel-title">Lịch sử nhận donate</div>*/}
+                                                {/*                    </div>*/}
+                                                {/*                </div>*/}
+                                                {/*            </div>*/}
+                                                {/*        </div>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
                                             </div>
-                                        </Link>
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="  panel-title"><i className="fas fa-ban" /> Danh sách chặn*/}
-                                        {/*            User*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="  panel-title"><i className="fas fa-link" /> Link Player</div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-cog" /> Cài đặt <i className="fas fa-chevron-right" /></a></div>*/}
-                                        {/*    </div>*/}
-                                        {/*    <div className="panel-collapse collapse">*/}
-                                        {/*        <div className="panel-body">*/}
-                                        {/*            <div className="panel-group">*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Url</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Thông tin Player</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Albums Player</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Cài đặt Duo</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Khác</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="menu__setting--sub panel panel-default">*/}
-                                        {/*    <div className="panel-heading">*/}
-                                        {/*        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="far fa-calendar-alt" /> Lịch sử nhận Duo, Donate <i className="fas fa-chevron-right" /></a></div>*/}
-                                        {/*    </div>*/}
-                                        {/*    <div className="panel-collapse collapse">*/}
-                                        {/*        <div className="panel-body">*/}
-                                        {/*            <div className="panel-group">*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Lịch sử nhận duo</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="menu__setting--last panel panel-default">*/}
-                                        {/*                    <div className="panel-heading">*/}
-                                        {/*                        <div className="panel-title">Lịch sử nhận donate</div>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        {/*<div className="menu__setting--main panel panel-default">*/}
-                        {/*    <div className="panel-heading">*/}
-                        {/*        <div className="panel-title"><a aria-expanded="true" className role="button" href="src/components/common/SidebarInformation#">TRANG*/}
-                        {/*            CÁ NHÂN <i className="fas fa-chevron-down" /></a></div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="panel-collapse collapse in" style={{}}>*/}
-                        {/*        <div className="panel-body">*/}
-                        {/*            <div className="panel-group">*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-tags" /> Hashtags <i className="fas fa-chevron-right" /></a></div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="panel-collapse collapse">*/}
-                        {/*                        <div className="panel-body">*/}
-                        {/*                            <div className="panel-group">*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Dành cho sáng tạo nội dung*/}
-                        {/*                                        </div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-cog" /> Cài đặt <i className="fas fa-chevron-right" /></a></div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="panel-collapse collapse">*/}
-                        {/*                        <div className="panel-body">*/}
-                        {/*                            <div className="panel-group">*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Url</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Mạng xã hội</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Hiển thị</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-users" /> Thành viên <i className="fas fa-chevron-right" /></a></div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="panel-collapse collapse">*/}
-                        {/*                        <div className="panel-body">*/}
-                        {/*                            <div className="panel-group">*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Bậc</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Danh sách thành viên</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Lịch sử đã đăng ký</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="far fa-dot-circle" /> Mục tiêu <i className="fas fa-chevron-right" /></a></div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="panel-collapse collapse">*/}
-                        {/*                        <div className="panel-body">*/}
-                        {/*                            <div className="panel-group">*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Cài đặt</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Lịch sử</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="  panel-title"><i className="fas fa-ban" /> Danh sách chặn*/}
-                        {/*                            comment*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-                        {/*<div className="menu__setting--main panel panel-default">*/}
-                        {/*    <div className="panel-heading">*/}
-                        {/*        <div className="panel-title"><a aria-expanded="true" className role="button" href="src/components/common/SidebarInformation#">VÍ ĐIỆN*/}
-                        {/*            TỬ <i className="fas fa-chevron-down" /></a></div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="panel-collapse collapse in" style={{}}>*/}
-                        {/*        <div className="panel-body">*/}
-                        {/*            <div className="panel-group">*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="title-sub  panel-title"><a aria-expanded="false" className="collapsed" role="button" href="src/components/common/SidebarInformation#"><i className="fas fa-credit-card" /> Cài đặt <i className="fas fa-chevron-right" /></a></div>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className="panel-collapse collapse">*/}
-                        {/*                        <div className="panel-body">*/}
-                        {/*                            <div className="panel-group">*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Thông tin</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                                <div className="menu__setting--last panel panel-default">*/}
-                        {/*                                    <div className="panel-heading">*/}
-                        {/*                                        <div className="panel-title">Lịch sử</div>*/}
-                        {/*                                    </div>*/}
-                        {/*                                </div>*/}
-                        {/*                            </div>*/}
-                        {/*                        </div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="  panel-title"><i className="fas fa-link" /> Link Pay</div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-                        {/*<div className="menu__setting--main panel panel-default">*/}
-                        {/*    <div className="panel-heading">*/}
-                        {/*        <div className="panel-title"><a aria-expanded="true" className role="button" href="src/components/common/SidebarInformation#">DONATE*/}
-                        {/*            <i className="fas fa-chevron-down" /></a></div>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="panel-collapse collapse in" style={{}}>*/}
-                        {/*        <div className="panel-body">*/}
-                        {/*            <div className="panel-group">*/}
-                        {/*                <div className="menu__setting--sub panel panel-default">*/}
-                        {/*                    <div className="panel-heading">*/}
-                        {/*                        <div className="  panel-title"><i className="fas fa-cog" /> Cài đặt</div>*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
+                                :
+                                <></>
+                        }
                     </div>
                     <div className="btn-drawer-setting visible-xs"><i className="fas fa-chevron-right" /></div>
                 </div>

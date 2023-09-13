@@ -16,7 +16,9 @@ const Header = () => {
                 return {};
             }
         });
-        const storeUser = useSelector(state => (state.user.user.current));
+        const storeUser = useSelector(state => {
+            return state.user.user.current
+        });
         const handleClick = (e) => {
             setIsClicked(!isClicked);
         };
@@ -32,6 +34,10 @@ const Header = () => {
                 dispatch(checkToken());
             }
         }
+
+        useEffect(() => {
+            dispatch(checkToken());
+        }, [])
 
         useEffect(() => {
             try {
