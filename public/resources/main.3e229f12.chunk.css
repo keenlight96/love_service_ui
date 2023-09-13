@@ -20539,3 +20539,11 @@ table tr td {
 .dark-mode .new-year .sound-player {
     box-shadow: 0 0 5px 0 #fff
 }
+
+.wrapper .sidebar::after {
+    content: initial;
+}
+
+.wrapper .sidebar::before {
+    content: initial;
+}

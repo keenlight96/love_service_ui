@@ -13,7 +13,6 @@ import AllBillByOfCCDV from "./pages/information/AllBillOfCCDV";
 import Bills from "./pages/information/Bills";
 import LayoutAdmin from "./components/layoutAdmin/LayoutAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
-import AddNewAdmin from "./pages/admin/AddNewAdmin";
 import HistoryProvider from "./pages/home/HistoryProvider";
 
 function App() {
@@ -30,9 +29,8 @@ function App() {
                     <Route path={"/CCDV"} element={<CCDVUserProfile/>}></Route>
                     <Route path={"/bills"} element={<Bills/>}></Route>
                 </Route>
-                <Route path="/admin" element={<LayoutAdmin />}>
-                    <Route index element={<HomeAdmin />}/>
-                    {/*<Route path="/admin/homeadmin" index element={<AddNewAdmin />}/>*/}
+                <Route path="/" element={<LayoutAdmin />}>
+                    <Route path="/homeAdmin" index element={<HomeAdmin />}/>
                 </Route>
             </Routes>
         </>
