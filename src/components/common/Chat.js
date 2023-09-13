@@ -14,11 +14,9 @@ const Chat = () => {
     const msgBoxToggle = useSelector(state => {
         return state.chatting.chatting.msgBoxToggle;
     })
-    const [activeReceiverElement, setActiveReceiverElement] = useState({});
     const activeReceiver = useSelector(state => {
         return state.chatting.chatting.activeReceiver;
     })
-    const [newMessages, setNewMessages] = useState([]);
     const dispatch = useDispatch();
     const allReceivers = useSelector((state) => {
         return state.chatting.chatting.receivers;
@@ -30,7 +28,6 @@ const Chat = () => {
     const messageBoxOpen = (e) => {
         dispatch(setMsgBoxToggle());
         dispatch(getAllChatReceivers());
-
     }
 
     const messageBoxClose = (e) => {
@@ -109,6 +106,12 @@ const Chat = () => {
 
     const showMessage = (message) => {
         dispatch(addChatWithReceiver(message));
+        try {
+            if (activeReceiver.id != allReceivers[0]) {
+                dispatch(getAllChatReceivers());
+            }
+        } catch (e) {
+        }
         document.querySelector("#textMessage").value = "";
         scrollToBottom();
     }
@@ -123,13 +126,6 @@ const Chat = () => {
     }, [])
 
     const activateCurrentReceiver = (e, item) => {
-        const element = e.target.closest(".media");
-        element.classList.add("active");
-        try {
-            activeReceiverElement.classList.remove("active");
-        } catch (e) {
-        }
-        setActiveReceiverElement(element);
         dispatch(setActiveReceiver(item));
         dispatch(getChatWithReceiver(item.id));
     }
@@ -208,7 +204,7 @@ const Chat = () => {
                                     <div className="list-message-content">
                                         {
                                             allReceivers && allReceivers.map((item, key) => (
-                                                <div className={"media"} key={key}
+                                                <div className={activeReceiver.id == item.id ? "active media" : "media"} key={key}
                                                      onClick={(e)  => {activateCurrentReceiver(e, item)}}>
                                                 {/*<div className={item.id == activeReceiver.id ? "active media" : "media"} key={key}*/}
                                                 {/*     onClick={(e)  => {activateCurrentReceiver(e, item)}}>*/}
