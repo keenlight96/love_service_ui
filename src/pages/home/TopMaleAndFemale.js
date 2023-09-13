@@ -3,11 +3,9 @@ import {Link} from "react-router-dom";
 
 const TopMaleAndFemale = () =>{
     const topMaleCCDVs = useSelector(state => {
-        console.log(state);
         return state.CCDVs.CCDVs.topMaleCCDV;
     })
     const topFemaleCCDVs = useSelector(state => {
-        console.log(state);
         return state.CCDVs.CCDVs.topFemaleCCDV;
     })
     return (
