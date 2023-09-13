@@ -18,14 +18,12 @@ function Detail() {
     useEffect(() => {
         axios.get(`http://localhost:8080/userDetail/` + id)
             .then(response => {
-                console.log(response);
                 setUserDetail(response.data.userProfile);
                 setImage(response.data.image)
                 setInterest(response.data.interests)
                 setBill(response.data.bills)
             })
             .catch(error => {
-                console.log(error);
             });
     }, []);
     useLayoutEffect(() => {

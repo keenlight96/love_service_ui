@@ -2,14 +2,16 @@ import ReactDOM from 'react-dom';
 import React, {useEffect, useState} from "react";
 import "./modalCreateBill.css"
 import axios from "axios";
+import $ from 'jquery'
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
+    const [message,setMessage]=useState('');
     const currentTime = new Date();
     const [hourRent, setHourRent] = useState([]);
     const [test, setTest] = useState(new Array(72).fill(0))
     const [bill, setBill] = useState({
         address: '',
-        dateCreate: currentTime.getTime(),
+        dateCreate: '',
         dateStart: '',
         dateEnd: '',
         price: userDetail.price,
@@ -26,14 +28,17 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const [total, setTotal] = useState('');
     const [day, setDay] = useState((new Date()).getDate());
     const [hour, setHour] = useState(1)
+
     useEffect(() => {
         setTotal(userDetail.price);
-        axios.get(`http://localhost:8080/bills/getAllBill3DayByIDCCDV?id=` + userDetail.id).then(data => {
+        axios.get(`http://localhost:8080/bills/getAllBill7DayByIDCCDV?id=` + userDetail.id).then(data => {
             fillData(data.data);
+            console.log("nạp");
+            console.log(data.data);
         }).catch(() => {
             console.log("check api")
         })
-    }, []);
+    }, [message]);
     const pricing = (valueTag) => {
         setTotal(userDetail.price * valueTag.target.value);
         setBill({...bill, total: userDetail.price * valueTag.target.value});
@@ -49,26 +54,56 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setDay(e.target.value);
     }
     const submit = () => {
-        setBill({...bill, total: total})
-        // axios.post("http://localhost:8080/bills/createBill", bill).then(data => {
-        //     console.log(data)
-        // }).catch()
-        // console.log(new Date(hourRent[0].dateStart).getHours())
-        // for (const item of hourRent) {
-        //     console.log(new Date(item.dateStart).getHours())
-        // }
+        let check = false;
+        let start = new Date()
+        start.setDate(start.getDate() + (parseInt(day) - parseInt(start.getDate())));
+        for (let i = 0; i < hourRent.length; i++) {
+            if (hourRent[i] === 2) {
+                start.setHours(i)
+                check = true;
+                break
+            }
+        }
+        start.setMinutes(0);
+        start.setSeconds(0);
+        const end = new Date(start.getTime());
+        end.setHours((end.getHours() + parseInt(hour)))
+        console.log(start)
+        console.log(end)
+        if (check) {
+            setBill({
+                ...bill,
+                total: total,
+                hour: hour,
+                dateCreate: ((new Date().getTime())),
+                dateStart: (start),
+                dateEnd: (end),
+                firstMessage: $("[name='MessageBills']").val(),
+                address: $("[name='address']").val(),
+            })
+            axios.post("http://localhost:8080/bills/createBill",  bill,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
+                console.log(bill);
+                console.log("done")
+                hide();
+                setMessage("done")
+            }).catch(
+                (e) => {
+                    console.log(e);
+                    console.log("méo")
+                }
+            )
+        }
     }
     const fillData = (data) => {
-        const day = (new Date());
         const tempTest = [...test];
         for (const item of data) {
-            const number = (new Date(item.dateStart)).getHours() + ((new Date(item.dateStart)).getDate() - day.getDate()) * 24;
+            const number = (new Date(item.dateStart)).getHours() + ((new Date(item.dateStart)).getDate() - currentTime.getDate()) * 24;
             for (let i = number; i <= number + item.hour; i++) {
                 tempTest[i] = 1;
             }
         }
         for (let i = 0; i < 24; i++) {
-            if (day.getHours() >= i) {
+            if (currentTime.getHours() >= i) {
                 tempTest[i] = 1;
             }
         }
@@ -76,7 +111,6 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         const temp = [];
         for (let i = 0; i < 24; i++) {
             temp.push(tempTest[i]);
-            console.log(tempTest[i])
         }
         setHourRent(temp);
     }
@@ -84,6 +118,11 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         let check = true;
         const temp = [...test];
         const number = index + ((day - currentTime.getDate()) * 24);
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i] === 2) {
+                temp[i] = 0;
+            }
+        }
         for (let i = number; i < (parseInt(number) + parseInt(hour)); i++) {
             if (temp[i] === 0) {
                 temp[i] = 2;
@@ -91,11 +130,18 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 check = false;
             }
         }
-        console.log(temp)
         if (check) {
             setTest(temp)
         }
+        const number1 = day - currentTime.getDate();
+        const temp1 = [];
+        for (let i = 0; i < 24; i++) {
+            temp1.push(temp[(i + (number1 * 24))]);
+        }
+        // setUseState bất đồng bộ vkl , nên cmn ko bao giờ bắt set 1 thg = giá trị 1 thg khác
+        setHourRent(temp1);
     }
+
 
     return isShowing ? ReactDOM.createPortal(
         <div role="dialog">
@@ -153,17 +199,18 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 </tr>
                                 <tr>
                                     <td><span>Số dư hiện tại</span>:</td>
-                                    <td><span className="total-amount">0đ</span><span
+                                    <td><span className="total-amount">{userDetail.balance}đ</span><span
                                         className="load-more-credit">+</span></td>
                                 </tr>
                                 <tr>
                                     <td>Địa Chỉ :</td>
-                                    <td><textarea placeholder="Nhập địa chỉ cho firts date " name="address"
+                                    <td><textarea placeholder="Nhập địa chỉ  " name="address"
                                                   maxLength={255} type="text" className="form-control"
                                                   defaultValue={""}/><p className="err-message"/></td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={2}><textarea placeholder="Tin nhắn đầu tiên " name="firstMessage"
+                                    <td colSpan={2}><textarea placeholder=" Gửi lời nhắn cho người được thuê "
+                                                              name="MessageBills"
                                                               maxLength={255} type="text" className="form-control"
                                                               defaultValue={""}/><p className="err-message"/></td>
                                 </tr>
@@ -194,7 +241,8 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                                              key={index}>&nbsp;{index}h00 </div> :
                                                         value === 2 ?
                                                             <div className="item-box-pick"
-                                                                 key={index}>&nbsp;{index}h00 </div> : <></>
+                                                                 onClick={() => handClick(index)}
+                                                                 key={index}>&nbsp;{index}h00:Đặt </div> : <></>
                                             ))}
 
                                         </div>
