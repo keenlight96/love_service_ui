@@ -41,7 +41,9 @@ function Detail(){
         const lastPageIndex = firstPageIndex + PageSize;
         // reviews là mảng gốc các phần tử thật
         return reviews.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage]);
+    }, [currentPage, reviews]);
+
+
     // End Pagination
 
     useEffect(() => {

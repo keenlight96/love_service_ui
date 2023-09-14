@@ -3,7 +3,8 @@ import {getAllReviewsByProviderUsername} from "../service/ReviewService";
 
 const initialState = {
     reviews: {
-        byProviderUsername: []
+        byProviderUsername: [],
+        isAble: false
     }
 }
 
