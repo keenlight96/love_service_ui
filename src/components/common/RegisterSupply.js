@@ -3,25 +3,30 @@ import axios from "axios";
 import "../../custom-css/RegisterSupply.css";
 import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
-import {getAllActiveSupplies} from "../../service/SupplyService";
-import {getSupplyByUserID} from "../../service/CCDVsService";
+import {getAllActiveSupplies, getSupplyByUserID2, updateUserSupply} from "../../service/SupplyService";
 
-function RegisterSupply() {
+function RegisterSupply(isRegister) {
     const dispatch = useDispatch();
     const supply = useSelector(state => {
         return state.supplies.supplies.all;
     });
     const userSupply = useSelector(state => {
-        return state.supplies.supplies.user.supplies;
+        try {
+            return state.supplies.supplies.userSupplies;
+        } catch (e) {
+            return [];
+        }
     });
     // const [userSupply, setUserSupply] = useState([]);
-    const idUser = localStorage.getItem("idUser");
+    const idUser = JSON.parse(localStorage.getItem("account")).id;
     const [cost, setCost] = useState('');
     const [hour, setHour] = useState('');
 
     useEffect(() => {
-        dispatch(getAllActiveSupplies);
-        dispatch(getSupplyByUserID(idUser))
+        dispatch(getAllActiveSupplies());
+        if (!isRegister) {
+            dispatch(getSupplyByUserID2(idUser))
+        }
     }, []);
 
 
@@ -35,6 +40,30 @@ function RegisterSupply() {
         else
             $(this).removeClass('selected');
     });
+
+    function handleChosenSupplies(e, item) {
+        let targetSupply = {id : item};
+        let newSupplies;
+        if (e.target.checked) {
+            if (!userSupply || userSupply.length == 0) {
+                newSupplies = [targetSupply];
+            } else {
+                newSupplies = [...userSupply]
+                newSupplies.push(targetSupply);
+            }
+            dispatch(updateUserSupply(newSupplies))
+        } else {
+            if (!userSupply || userSupply.length == 0) {
+            } else {
+                newSupplies = userSupply.filter(ele => {
+                    if (ele.id != item) {
+                        return ele;
+                    }
+                })
+            }
+            dispatch(updateUserSupply(newSupplies))
+        }
+    }
 
     function send() {
         const result = [];
@@ -55,78 +84,41 @@ function RegisterSupply() {
     }
 
     return (<>
-        <span>Đăng Ký Dịch Vụ</span>
-        <div className="container">
-            <div className="row pick-supply">
-                <h2 className="col-12">Các dịch vụ cơ bản gồm :</h2>
+        <div>
+            <div className="pick-supply" style={{textAlign: "center"}}>
+                <h4 className="col-12">Dịch vụ cung cấp</h4>
+                <div style={{textAlign: "initial"}}>
                 {supply.length > 0 && supply.map((s) => {
-                    if (s.type === 1 && s.isActive === true) {
+                    if (s.isActive === true) {
                         if (userSupply && userSupply.find(userSupply => userSupply.id === s.id)) {
-                            return (<div className="col-4">
-                                    <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
+                            return (
+                                <div className="col-md-6">
+                                        <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked
+                                               onClick={(e) => {handleChosenSupplies(e, s.id)}}/>
                                     <label htmlFor={s.id}>{s.nameSupply}</label>
                                 </div>
                             );
                         } else {
-                            return (<div className="col-4">
+                            return (<div className="col-md-6">
                                     <input type="checkbox" name="checkbox" id={s.id} value={s.id}
-                                    />
+                                           onClick={(e) => {handleChosenSupplies(e, s.id)}}/>
                                     <label htmlFor={s.id}>{s.nameSupply}</label>
                                 </div>
                             );
                         }
                     }
                 })}
+                </div>
             </div>
-            <div className="row pick-supply">
-                <h2 className="col-12">Dịch vụ miễn phí :</h2>
-                {supply.length > 0 && supply.map((s) => {
-                    if (s.type === 2 && s.isActive === true) {
-                        if (userSupply &&userSupply.find(userSupply => userSupply.id === s.id)) {
-                            return (<div className="col-4">
-                                    <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
-                                    <label htmlFor={s.id}>{s.nameSupply}</label>
-                                </div>
-                            );
-                        } else {
-                            return (<div className="col-4">
-                                    <input type="checkbox" name="checkbox" id={s.id} value={s.id}/>
-                                    <label htmlFor={s.id}>{s.nameSupply}</label>
-                                </div>
-                            );
-                        }
-                    }
-                })}
-            </div>
-            <div className="row pick-supply">
-                <h2 className="col-12">Dịch vụ mở rộng :</h2>
-                {supply.length > 0 && supply.map((s) => {
-                    if (s.type === 3 && s.isActive === true) {
-                        if (userSupply &&userSupply.find(userSupply => userSupply.id === s.id)) {
-                            return (<div className="col-4">
-                                    <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
-                                    <label htmlFor={s.id}>{s.nameSupply}</label>
-                                </div>
-                            );
-                        } else {
-                            return (<div className="col-4">
-                                    <input type="checkbox" name="checkbox" id={s.id} value={s.id}/>
-                                    <label htmlFor={s.id}>{s.nameSupply}</label>
-                                </div>
-                            );
-                        }
-                    }
-                })}
-            </div>
-            <table className="Cost">
-                <tr>
-                    <td><label htmlFor="rentCost">Tiền Theo Tiếng :</label>
-                    </td>
-                    <td><input type="text" id="rentCost" placeholder={cost} required/>
-                    </td>
-                </tr>
-            </table>
-            <input type="button" id="send" value="Submit" onClick={send}/>
+            {/*<table className="Cost">*/}
+            {/*    <tr>*/}
+            {/*        <td><label htmlFor="rentCost">Tiền Theo Tiếng :</label>*/}
+            {/*        </td>*/}
+            {/*        <td><input type="text" id="rentCost" placeholder={cost} required/>*/}
+            {/*        </td>*/}
+            {/*    </tr>*/}
+            {/*</table>*/}
+            {/*<input type="button" id="send" value="Submit" onClick={send}/>*/}
         </div>
 
     </>)

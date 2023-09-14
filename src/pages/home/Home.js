@@ -3,13 +3,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     getCCDVProperGender, getCCDVsByTopViews,
     getNewestCCDVs,
-    getSupplyByUserID,
     getTopFemale,
     getTopMale
 } from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import SidebarSupplies from "./SidebarSupplies";
-import {getAllActiveSupplies} from "../../service/SupplyService";
+import {getAllActiveSupplies, getSupplyByUserID} from "../../service/SupplyService";
 import TopServiceCCDV from "./TopServiceCCDV";
 import TopMaleAndFemale from "./TopMaleAndFemale";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";

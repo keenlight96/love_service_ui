@@ -9,10 +9,12 @@ import axios from "axios";
 import {DatePicker, Select, Space, TimePicker} from 'antd';
 import {useNavigate, useParams} from "react-router";
 import Swal from "sweetalert2";
+import RegisterSupply from "../../components/common/RegisterSupply";
+import {useSelector} from "react-redux"; // Import CSS cho DatePicker
 
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required('Họ là bắt buộc'),
-    lastName: Yup.string().required('Tên là bắt buộc'),
+    lastName: Yup.string().required('Họ là bắt buộc'),
+    firstName: Yup.string().required('Tên là bắt buộc'),
     country: Yup.string().required('Quốc tịch là bắt buộc'),
     address: Yup.string().required('Địa chỉ là bắt buộc'),
     phoneNumber: Yup.string().required('Số điện thoại là bắt buộc'),
@@ -25,6 +27,14 @@ const validationSchema = Yup.object().shape({
 const RegisterProfile =()=> {
     const [selectedIds, setSelectedIds] = useState([]);
     const [supply, setSupply] = useState([]);
+
+    const userSupply = useSelector(state => {
+        try {
+            return state.supplies.supplies.userSupplies;
+        } catch (e) {
+            return [];
+        }
+    });
 
     useEffect(() => {
         axios
@@ -52,24 +62,14 @@ const RegisterProfile =()=> {
         if (type === 'date') return <DatePicker onChange={onChange}/>;
         return <DatePicker picker={type} onChange={onChange}/>;
     };
-
-
-    // const getSelectedOptionId = () => {
-    //     var select = document.getElementById("zoneSelect");
-    //     var selectedOption = select.options[select.selectedIndex];
-    //     var selectedId = selectedOption.value;
-    //     console.log("Selected ID: " + selectedId);
-    // }
+    const getSelectedOptionId =()=> {
+        var select = document.getElementById("zoneSelect");
+        var selectedOption = select.options[select.selectedIndex];
+        var selectedId = selectedOption.value;
+        console.log("Selected ID: " + selectedId);
+    }
     // Khai báo state để lưu trữ giá trị được chọn
-    // const [selectedId, setSelectedId] = useState(['']);
-    // const getSelectedGender = () => {
-    //     var select = document.getElementById("genderSelect");
-    //     var selectedOption = select.options[select.selectedIndex];
-    //     var selectedGender = selectedOption.value;
-    //     console.log("Selected Gender: " + selectedGender);
-    // }
-// Khai báo state để lưu trữ giá trị được chọn
-//     const [selectedGender, setSelectedGender] = useState('');
+    const [selectedId, setSelectedId] = useState(['']);
     const navigate = useNavigate();
     const {id: urlId} = useParams(); // Lấy ID từ URL (nếu có)
 
@@ -79,21 +79,20 @@ const RegisterProfile =()=> {
     return (
         <>
             <div className={'wrapper'}>
-                <div className={'container'} style={{backgroundColor: 'whitesmoke'}}>
+                <div className={'container'}>
                     <div style={{display: 'flex', width: '100%'}}>
                         <div style={{width: '100%'}}>
                             <div>
                                 <Formik
                                     initialValues={{
-                                        firstName: '',
                                         lastName: '',
+                                        firstName: '',
                                         country: '',
                                         address: '',
                                         height: '',
                                         weight: '',
                                         phoneNumber: '',
                                         idCard: '',
-                                        gender: '',
                                         price: '',
                                         basicRequest: '',
                                         facebookLink: '',
@@ -104,7 +103,6 @@ const RegisterProfile =()=> {
                                         supplies: [{
                                             id: ""
                                         },],
-                                        // supplies: supply.map((supplyItem) => supplyItem.id),
                                     }}
                                     validationSchema={validationSchema}
                                     onSubmit={(values) => {
@@ -112,7 +110,7 @@ const RegisterProfile =()=> {
 
 
                                         // values.zone.id = selectedId.toString(); // Cập nhật giá trị zone từ selectedId
-                                        values.supplies = selectedIds;
+                                        values.supplies = userSupply;
                                         // values.gender = selectedGender
 
                                         console.log("id supply la", selectedIds)
@@ -169,400 +167,315 @@ const RegisterProfile =()=> {
                                     }}
                                 >
                                     <Form>
-                                        <div style={{display: 'flex'}}>
-                                            <div>
+                                        <div className={"row"}>
+                                            <div className={"col-md-6"} style={{textAlign: "center"}}>
+                                                <h4>Thông tin cơ bản:</h4>
+                                                <table style={{marginLeft: "auto", marginRight: "auto"}}>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="lastName"
+                                                                    placeholder="Họ"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="lastName" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="firstName"
+                                                                    placeholder="Tên"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="firstName" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    as="select"
+                                                                    name="gender"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none',
+                                                                        width: '190px',
+                                                                        border: '2px solid black',
+                                                                    }}
+                                                                >
+                                                                    <option value="">Chọn giới tính</option>
+                                                                    <option value="Nam">Nam</option>
+                                                                    <option value="Nữ">Nữ</option>
+                                                                </Field>
+                                                            </div>
+                                                        </td>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    as="select"
+                                                                    name="zone.id"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none',
+                                                                        width: '190px',
+                                                                        border: '2px solid black',
+                                                                    }}
+                                                                >
+                                                                    <option value="">Chọn khu vực</option>
+                                                                    <option value='1'>Bắc</option>
+                                                                    <option value="2">Trung</option>
+                                                                    <option value="3">Nam</option>
+                                                                </Field>
+                                                            </div>
+                                                        </td>
 
-                                                <tr>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="firstName"
-                                                                placeholder="Họ"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="firstName" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="lastName"
-                                                                placeholder="Tên"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="lastName" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="country"
-                                                                placeholder="Quốc tịch"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="country" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
+                                                    </tr>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="country"
+                                                                    placeholder="Quốc tịch"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="country" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
 
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="address"
-                                                                placeholder="Địa chỉ"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="address" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="phoneNumber"
-                                                                placeholder="Số điện thoại"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="phoneNumber" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="idCard"
-                                                                placeholder=" Số CCCD"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="idCard" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="height"
-                                                                placeholder="Chiều cao"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="height" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="weight"
-                                                                placeholder="Cân nặng"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="weight" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="basicRequest"
-                                                                placeholder="Yêu cầu cơ bản"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="basicRequest" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="facebookLink"
-                                                                placeholder="Link trang cá nhân"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="facebookLink" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div>
-                                                            <Field
-                                                                type="text"
-                                                                name="price"
-                                                                placeholder="Mức giá cho thuê theo giờ"
-                                                                maxLength="5000"
-                                                                autoComplete="false"
-                                                                style={{
-                                                                    textAlign: 'center',
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    margin: '10px',
-                                                                    outline: 'none'
-                                                                }}
-                                                            />
-                                                            <ErrorMessage name="price" component="div"
-                                                                          className="error"/>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            {/*<Space>*/}
-                                                            {/*    <PickerWithType type={type} onChange={(value) => console.log(value)} />*/}
-                                                            {/*</Space>*/}
-                                                            <Field
-                                                            type='date'
-                                                            name='birthday'  style={{
-                                                                textAlign: 'center',
-                                                                borderRadius: '7px',
-                                                                padding: '7px',
-                                                                margin: '10px',
-                                                                outline: 'none',
-                                                                width:'190px'
-                                                            }}
-
-                                                            />
-
-
-                                                        </div>
-
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>
-                                                        {/*<div>*/}
-                                                        {/*    <select*/}
-                                                        {/*        name="zone"*/}
-                                                        {/*        id="zoneSelect"*/}
-                                                        {/*        onChange={(event) => setSelectedId(event.target.value)}*/}
-                                                        {/*        value={selectedId}*/}
-                                                        {/*        style={{*/}
-                                                        {/*            textAlign: 'center',*/}
-                                                        {/*            borderRadius: '7px',*/}
-                                                        {/*            padding: '7px',*/}
-                                                        {/*            margin: '10px',*/}
-                                                        {/*            outline: 'none',*/}
-                                                        {/*            width:'190px',*/}
-                                                        {/*            border: '2px solid black',*/}
-                                                        {/*        }}*/}
-                                                        {/*    >*/}
-                                                        {/*        <option value="">Chọn khu vực</option>*/}
-                                                        {/*        <option value={1}>Bắc</option>*/}
-                                                        {/*        <option value={2}>Trung</option>*/}
-                                                        {/*        <option value={3}>Nam</option>*/}
-                                                        {/*    </select>*/}
-                                                        {/*</div>*/}
-                                                        <Field
-                                                            as="select"
-                                                            name="zone.id"
-                                                            style={{
-                                                                textAlign: 'center',
-                                                                borderRadius: '7px',
-                                                                padding: '7px',
-                                                                margin: '10px',
-                                                                outline: 'none',
-                                                                width: '190px',
-                                                                border: '2px solid black',
-                                                            }}
-                                                        >
-                                                            <option value="">Chọn khu vực</option>
-                                                            <option value='1'>Bắc</option>
-                                                            <option value="2">Trung</option>
-                                                            <option value="3">Nam</option>
-                                                        </Field>
-
-                                                    </td>
-                                                    <td>
-                                                        <div>
-                                                            {/*<select*/}
-                                                            {/*    name="gender"*/}
-                                                            {/*    id="genderSelect"*/}
-                                                            {/*    onChange={(event) => setSelectedGender(event.target.value)}*/}
-                                                            {/*    value={selectedGender}*/}
-                                                            {/*    style={{*/}
-                                                            {/*        textAlign: 'center',*/}
-                                                            {/*        borderRadius: '7px',*/}
-                                                            {/*        padding: '7px',*/}
-                                                            {/*        margin: '10px',*/}
-                                                            {/*        outline: 'none',*/}
-                                                            {/*        width:'190px',*/}
-                                                            {/*        border: '2px solid black',*/}
-                                                            {/*    }}*/}
-                                                            {/*>*/}
-                                                            {/*    <option value="">Chọn giới tính</option>*/}
-                                                            {/*    <option value="Nam">Nam</option>*/}
-                                                            {/*    <option value="Nữ">Nữ</option>*/}
-                                                            {/*</select>*/}
-                                                            <Field
-                                                                as="select"
-                                                                name="gender"
-                                                                style={{
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="address"
+                                                                    placeholder="Địa chỉ"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="address" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="phoneNumber"
+                                                                    placeholder="Số điện thoại"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="phoneNumber" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="idCard"
+                                                                    placeholder=" Số CCCD"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="idCard" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="height"
+                                                                    placeholder="Chiều cao"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="height" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="weight"
+                                                                    placeholder="Cân nặng"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="weight" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="basicRequest"
+                                                                    placeholder="Yêu cầu cơ bản"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="basicRequest" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="facebookLink"
+                                                                    placeholder="Link trang cá nhân"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="facebookLink" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr className={"row"}>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="price"
+                                                                    placeholder="Mức giá cho thuê theo giờ"
+                                                                    maxLength="5000"
+                                                                    autoComplete="false"
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        borderRadius: '7px',
+                                                                        padding: '7px',
+                                                                        margin: '10px',
+                                                                        outline: 'none'
+                                                                    }}
+                                                                />
+                                                                <ErrorMessage name="price" component="div"
+                                                                              className="error"/>
+                                                            </div>
+                                                        </td>
+                                                        <td className={"col-md-6"}>
+                                                            <div>
+                                                                {/*<Space>*/}
+                                                                {/*    <PickerWithType type={type} onChange={(value) => console.log(value)} />*/}
+                                                                {/*</Space>*/}
+                                                                <Field
+                                                                    type='date'
+                                                                    name='birthday'  style={{
                                                                     textAlign: 'center',
                                                                     borderRadius: '7px',
                                                                     padding: '7px',
                                                                     margin: '10px',
                                                                     outline: 'none',
-                                                                    width: '190px',
-                                                                    border: '2px solid black',
+                                                                    width:'190px'
                                                                 }}
-                                                            >
-                                                                <option value="">Chọn giới tính</option>
-                                                                <option value="Nam">Nam</option>
-                                                                <option value="Nữ">Nữ</option>
-                                                            </Field>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </div>
-                                            <div style={{width:'600px'}}>
-                                                <table style={{width:'100%'}}>
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Chọn</th>
-                                                        <th>Tên dịch vụ</th>
-
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {supply.map((supplyItem) => (
-                                                        <tr key={supplyItem.id}>
-                                                            <td>
-                                                                <input
-                                                                    type="checkbox"
-                                                                    name="supplies"
-                                                                    value={supplyItem.id}
-                                                                    checked={selectedIds.includes(supplyItem.id)}
-                                                                    onChange={(event) =>
-                                                                        handleCheckboxChange(event, supplyItem.id)
-                                                                    }
                                                                 />
-                                                            </td>
-                                                            <td>{supplyItem.nameSupply}</td>
-                                                        </tr>
-                                                    ))}
-
-                                                    {/*{supply.map((supplyItem) => (*/}
-                                                    {/*    <tr key={supplyItem.id}>*/}
-                                                    {/*        <td>*/}
-                                                    {/*            <Field*/}
-                                                    {/*                type="checkbox"*/}
-                                                    {/*                name='supplies.id'*/}
-                                                    {/*                value={supplyItem.id}*/}
-                                                    {/*            />*/}
-                                                    {/*        </td>*/}
-                                                    {/*        <td>{supplyItem.nameSupply}</td>*/}
-                                                    {/*    </tr>*/}
-                                                    {/*))}*/}
-                                                    </tbody>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 </table>
                                             </div>
-                                        </div>
-                                        <div style={{marginLeft: '170px'}}>
-
-                                         <button type={"submit"} style={{width: '100px'}}
-                                            >Lưu
-                                            </button>
+                                            <div className={"col-md-6"} style={{textAlign: "center"}}>
+                                                <RegisterSupply isRegister={true}/>
+                                            </div>
+                                            <div className={"col-md-12"} style={{textAlign: "center"}}>
+                                                <button type={"submit"} style={{width: '100px'}}>Xác nhận</button>
+                                            </div>
                                         </div>
                                     </Form>
 
