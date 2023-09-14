@@ -1,16 +1,46 @@
-import React, {useState} from 'react';
+
+import React, {useEffect, useState} from 'react';
 import {Outlet} from "react-router";
 import $ from "jquery";
 import {Link} from "react-router-dom";
+import LoginService from "../service/custom/login";
+import {useDispatch, useSelector} from "react-redux";
+import {checkToken, setUser} from "../service/UserService";
 
 const Header = () => {
         const [isClicked, setIsClicked] = useState(true);
+        const dispatch = useDispatch();
+        const [user, setUser] = useState(() => {
+            try {
+                return JSON.parse(localStorage.getItem("account"))
+            } catch (e) {
+                return {};
+            }
+        });
+        const storeUser = useSelector(state => (state.user.user.current));
         const handleClick = (e) => {
-            console.log(e.target.classList)
             setIsClicked(!isClicked);
         };
 
+        const logout = () => {
+            LoginService.logout().then(r => {
+            });
+            try {
+                setUser(JSON.parse(localStorage.getItem("account")));
+                dispatch(checkToken());
+            } catch (e) {
+                setUser({});
+                dispatch(checkToken());
+            }
+        }
 
+        useEffect(() => {
+            try {
+                setUser(JSON.parse(localStorage.getItem("account")));
+            } catch (e) {
+                setUser({});
+            }
+        }, [storeUser])
 
         return (
             <>
@@ -44,8 +74,10 @@ const Header = () => {
                 <link rel="stylesheet" href="../resources/css-home.css"/>
                 <div id="root">
                     <header className="menu__header fix-menu" id="header-menu">
-                        <div className="navbar-header"><a href className="logo"><img alt="logo playerduo"
-                                                                                     src="../resources/raw/logo.png"/></a>
+                        <div className="navbar-header">
+                            <Link to={"/"}>
+                                <a href className="logo"><img alt="logo playerduo" src="../resources/raw/logo.png"/></a>
+                            </Link>
                         </div>
                         <div className="navbar">
                             <ul className="nav navbar-nav navbar-left">
@@ -55,7 +87,7 @@ const Header = () => {
                                             <div className="Group-search visible "><span
                                                 className="search input-group"><input placeholder="Nickname/Url ..."
                                                                                       type="text" className="form-control"
-                                                                                      defaultValue/><span
+                                                                                      defaultValue={""}/><span
                                                 className="input-group-addon"><button type="button"
                                                                                       className="btn btn-default"><i
                                                 className="fal fa-search" aria-hidden="true"/></button></span></span></div>
@@ -64,99 +96,107 @@ const Header = () => {
                                 </li>
                             </ul>
                             <ul className="nav navbar-nav navbar-center">
-                                <li className="item-icon"><a className="group-user active" href><i
-                                    className="fal fa-home-alt"/></a></li>
+                                <li className="item-icon">
+                                    <a className="group-user active" href>
+                                        <Link to={"/"}>
+                                            <i className="fal fa-home-alt"/>
+                                        </Link>
+                                    </a>
+                                </li>
                                 <li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i
                                     className="fal fa-camera-movie"/></a></li>
                                 <li className="item-icon group-fb"><a className="group-user" href="/#"><i
                                     className="fal fa-trophy-alt"/></a></li>
                             </ul>
                             <ul className="nav navbar-nav navbar-right">
-                                <li className="item-icon notificate dropdown"><a id="basic-nav-dropdown" role="button"
-                                                                                 className="dropdown-toggle"
-                                                                                 aria-haspopup="true" aria-expanded="false"
-                                                                                 href="#">
-                                    <div className="item-title"><i className="fal fa-bell"/></div>
-                                </a>
-                                    <ul role="menu" className="dropdown-menu" aria-labelledby="basic-nav-dropdown">
-                                        <div className="content">
-                                            <div className="tab-notif-common"><h5><span>Thông báo</span></h5>
-                                                <div className="tab-action"><p className="active"><span>Chính</span></p>
-                                                    <p className><span>Khác</span></p>
-                                                    <p className><span>Theo dõi</span></p>
-                                                    <p className><span>Tương tác</span></p></div>
-                                            </div>
-                                            <div>
-                                                <div className="infinite-scroll-component "
-                                                     style={{height: '400px', overflow: 'auto'}}/>
-                                            </div>
-                                        </div>
-                                    </ul>
-                                </li>
-                                <li className="item-icon balance"><a className="money-user"><i className="far fa-plus"/> 0 đ</a>
-                                </li>
-                                <li className={isClicked ? "item-icon item-avatar dropdown " : "item-icon item-avatar dropdown open"}
-                                    onClick={(e) => {handleClick(e)}}
-                                ><a id="header-nav-dropdown" role="button"
-                                    className="dropdown-toggle"
-                                    aria-haspopup="true" aria-expanded="false"
-                                    href="#"><img
-                                    src="../resources/raw/avatar6.png" className="avt-img" alt="PD"/></a>
-                                    <ul role="menu" className="dropdown-menu" aria-labelledby="header-nav-dropdown">
-                                        <li role="presentation" className="page-user"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><img
-                                            src="../resources/raw/avatar6.png" className="avt-img" alt="PD"/>
-                                            <div className="text-logo"><h5>keenlight</h5>
-                                                <p>ID : <span>keenlight</span></p>
-                                                <p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>
-                                            </div>
-                                        </a></li>
-                                        <li role="presentation" className="menu-item hidden-lg hidden-md"><a role="menuitem"
-                                                                                                             tabIndex={-1}
-                                                                                                             href="#"><i
-                                            className="fas fa-plus"/> <span>Số dư</span> : <span
-                                            className="money">0 đ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-minus"/> <span>Rút tiền</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-credit-card"/> <span>Mua thẻ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-user-lock"/> <span>Tạo khóa bảo vệ</span></a></li>
-                                       <Link to={"/history"}> <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-clock"/>   <span>Lịch sử giao dịch</span> </a></li></Link>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-users"/> <span>Danh sách theo dõi</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-power-off"/> <span>Đăng xuất</span></a></li>
-                                        <div className="menu-item list-flag">
-                                            <div className="box-item">
-                                                <div className="flag-all active"><img src="../resources/raw/2.png"
-                                                                                      className="flag flag-vn" alt="PD"/>
-                                                </div>
-                                                <div className="flag-all false"><img src="../resources/raw/1.png"
-                                                                                     className="flag flag-en" alt="PD"/>
-                                                </div>
-                                            </div>
-                                            <div className="box-item"><a href="https://www.facebook.com/groups/playerduovn"
-                                                                         target="_blank"
-                                                                         rel="noopener noreferrer"><span>Group</span></a><a
-                                                href="https://www.facebook.com/playerduo" target="_blank"
-                                                rel="noopener noreferrer"><span>Fanpage</span></a>
-                                            </div>
-                                        </div>
-                                    </ul>
-                                </li>
-                                <li className="item-icon mode"><a className="group-user"><i className="fas fa-moon"/></a>
-                                </li>
+                                {
+                                    user && user.id ?
+                                        <>
+                                            <li className="item-icon notificate dropdown"><a id="basic-nav-dropdown" role="button"
+                                                                                             className="dropdown-toggle"
+                                                                                             aria-haspopup="true" aria-expanded="false"
+                                                                                             href="#">
+                                                <div className="item-title"><i className="fal fa-bell"/></div>
+                                            </a>
+                                                <ul role="menu" className="dropdown-menu" aria-labelledby="basic-nav-dropdown">
+                                                    <div className="content">
+                                                        <div className="tab-notif-common"><h5><span>Thông báo</span></h5>
+                                                            <div className="tab-action"><p className="active"><span>Chính</span></p>
+                                                                <p className><span>Khác</span></p>
+                                                                <p className><span>Theo dõi</span></p>
+                                                                <p className><span>Tương tác</span></p></div>
+                                                        </div>
+                                                        <div>
+                                                            <div className="infinite-scroll-component "
+                                                                 style={{height: '400px', overflow: 'auto'}}/>
+                                                        </div>
+                                                    </div>
+                                                </ul>
+                                            </li>
+                                            <li className="item-icon balance"><a className="money-user"><i className="far fa-plus"/> {user && user.balance} đ</a>
+                                            </li>
+                                            <li className={isClicked ? "item-icon item-avatar dropdown " : "item-icon item-avatar dropdown open"}
+                                                onClick={(e) => {
+                                                    handleClick(e)
+                                                }}>
+                                                <a id="header-nav-dropdown" role="button"
+                                                   className="dropdown-toggle"
+                                                   aria-haspopup="true" aria-expanded="false"
+                                                   href="#"><img
+                                                    src={user.avatar} className="avt-img" alt="" style={{width: "45px", height: "45px", maxWidth: "45px"}}/></a>
+                                                <ul role="menu" className="dropdown-menu" aria-labelledby="header-nav-dropdown">
+                                                    <li role="presentation" className="page-user"><a role="menuitem" tabIndex={-1}
+                                                                                                     href="#"><img
+                                                        src={user.avatar} className="avt-img" alt="" style={{maxWidth: "55px"}}/>
+                                                        <div className="text-logo"><h5>{user.nickName}</h5>
+                                                            <p>Username : <span>{user.username}</span></p>
+                                                            {/*<p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>*/}
+                                                        </div>
+                                                    </a></li>
+                                                    <li role="presentation" className="menu-item hidden-lg hidden-md"><a role="menuitem"
+                                                                                                                         tabIndex={-1}
+                                                                                                                         href="#"><i
+                                                        className="fas fa-plus"/> <span>Số dư</span> : <span
+                                                        className="money">{user.balance} đ</span></a></li>
+                                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                                                                     href="/information/topup"><i
+                                                        className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>
+                                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                                                                     href="/information/bills"><i
+                                                        className="fas fa-clock"/> <span>Lịch sử thuê</span> </a></li>
+                                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                                                                     href="/information/info"><i
+                                                        className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
+                                                    <li role="presentation" className="menu-item" onClick={() => {
+                                                        logout()
+                                                    }}><a role="menuitem" tabIndex={-1}
+                                                          href="#"><i
+                                                        className="fas fa-power-off"/> <span>Đăng xuất</span></a></li>
+                                                    <div className="menu-item list-flag">
+                                                        <div className="box-item">
+                                                            <div className="flag-all active"><img src="../resources/raw/2.png"
+                                                                                                  className="flag flag-vn" alt="PD"/>
+                                                            </div>
+                                                            <div className="flag-all false"><img src="../resources/raw/1.png"
+                                                                                                 className="flag flag-en" alt="PD"/>
+                                                            </div>
+                                                        </div>
+                                                        <div className="box-item"><a href="#"
+                                                                                     target="_blank"
+                                                                                     rel="noopener noreferrer"><span>Group</span></a><a
+                                                            href="#" target="_blank"
+                                                            rel="noopener noreferrer"><span>Fanpage</span></a>
+                                                        </div>
+                                                    </div>
+                                                </ul>
+                                            </li>
+                                            <li className="item-icon mode"><a className="group-user"><i className="fas fa-moon"/></a>
+                                            </li>
+                                        </>
+                                        :
+                                        <li className="item-icon authent"><a className="money-user" href={"/login"}><i
+                                            className="fal fa-power-off"/><span>Đăng nhập</span></a></li>
+                                }
                             </ul>
                         </div>
                         <div className="navbar-mobile hidden">
@@ -182,15 +222,19 @@ const Header = () => {
                                         </div>
                                     </ul>
                                 </li>
-                                <li className="item-icon item-avatar dropdown"><a id="header-nav-dropdown" role="button"
-                                                                                  className="dropdown-toggle"
-                                                                                  aria-haspopup="true" aria-expanded="false"
-                                                                                  href="#"><img
-                                    src="../resources/raw/avatar6.png" className="avt-img" alt="PD"/></a>
+                                <li className={isClicked ? "item-icon item-avatar dropdown " : "item-icon item-avatar dropdown open"}
+                                    onClick={(e) => {
+                                        handleClick(e)
+                                    }}
+                                ><a id="header-nav-dropdown" role="button"
+                                    className="dropdown-toggle"
+                                    aria-haspopup="true" aria-expanded="false"
+                                    href="#"><img
+                                    src="../resources/raw/avatar6.png" className="avt-img" alt=""/></a>
                                     <ul role="menu" className="dropdown-menu" aria-labelledby="header-nav-dropdown">
                                         <li role="presentation" className="page-user"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><img
-                                            src="../resources/raw/avatar6.png" className="avt-img" alt="PD"/>
+                                            src="../resources/raw/avatar6.png" className="avt-img" alt=""/>
                                             <div className="text-logo"><h5>keenlight</h5>
                                                 <p>ID : <span>keenlight</span></p>
                                                 <p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>
@@ -200,24 +244,15 @@ const Header = () => {
                                                                                                              tabIndex={-1}
                                                                                                              href="#"><i
                                             className="fas fa-plus"/> <span>Số dư</span> : <span
-                                            className="money">0 đ</span></a></li>
+                                            className="money">{user.balance} đ</span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-minus"/> <span>Rút tiền</span></a></li>
+                                                                                         href="/information/topup"><i
+                                            className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-credit-card"/> <span>Mua thẻ</span></a></li>
+                                                                                         href="/information/bills"><i
+                                            className="fas fa-clock"/> <span>Lịch sử thuê</span> </a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-user-lock"/> <span>Tạo khóa bảo vệ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-clock"/> <span>Lịch sử giao dịch</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-users"/> <span>Danh sách theo dõi</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
+                                                                                         href="/information/info"><i
                                             className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i

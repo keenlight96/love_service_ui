@@ -4,32 +4,74 @@ import NewCcdVs from "../home/NewCCDVs";
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
-import ModalCreateBill from "./CreateBill/ModalCreateBill";
+import {useDispatch, useSelector} from "react-redux";
+import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import ShowImages from "./ShowImages";
+import {convertToFormattedDate} from "../../service/custom/general.function";
 import useModal from "./CreateBill/UseModal";
+import ModalCreateBill from "./CreateBill/ModalCreateBill";
 
-function Detail() {
+function Detail(){
     const [userDetail, setUserDetail] = useState({});
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
     const [bill, setBill] = useState([])
-    const {id} = useParams();
+    const {username} = useParams();
     const navigate = useNavigate();
     const {isShowing, toggle} = useModal();
+    const dispatch = useDispatch();
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    })
+
     useEffect(() => {
-        axios.get(`http://localhost:8080/userDetail/` + id)
+        axios.get(`http://localhost:8080/userDetail/` + username,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(response => {
+                // console.log(response.data.userProfile);
+                // let {birthday} = response.data.userProfile;
+                // let newBirthday = convertToFormattedDate(birthday);
+                // console.log(newBirthday);
+                // let formattedUserProfile = {...response.data.userProfile, [birthday]: newBirthday};
                 setUserDetail(response.data.userProfile);
                 setImage(response.data.image)
                 setInterest(response.data.interests)
                 setBill(response.data.bills)
             })
             .catch(error => {
+                console.log(error);
             });
     }, []);
     useLayoutEffect(() => {
         window.scrollTo(0, 0)
     });
-    return (
+
+    const addNewChat = () => {
+        let newReceiver = {
+            id: userDetail.account.id,
+            username: userDetail.account.username,
+            nickname: userDetail.account.nickname,
+            avatar: userDetail.account.avatar,
+            role: {
+                id: userDetail.account.role.id,
+                nameRole: userDetail.account.role.nameRole,
+            },
+            status: {
+                id: userDetail.account.status.id,
+                nameStatus: userDetail.account.status.nameStatus,
+            },
+            isActive: userDetail.account.isActive
+        }
+        dispatch(addChatReceivers(newReceiver));
+        dispatch(setActiveReceiver(newReceiver));
+
+        if (!msgBoxToggle) {
+            dispatch(setMsgBoxToggle());
+        }
+    }
+
+    //Js function
+
+    return(
         <>
             {userDetail.id && < ModalCreateBill isShowing={isShowing}
                                                 hide={toggle}
@@ -93,31 +135,30 @@ function Detail() {
                             <div className="social-icon">
                                 <div className="icon-wrap user-page">
                                     <a href="https://playerduo.net/rabbitnee" target="_blank" rel="noopener noreferrer">
-                                        {userDetail.account &&
-                                            <img src={userDetail.account.avatar} style={{width: "50px", height: "50px"}}
-                                                 alt="PD" title="Trang cá nhân"
-                                                 className="option-icon img-rounded"/>}
+                                        {userDetail.account && <img src={userDetail.account.avatar} style={{width:"50px",height:"50px"}} alt="PD" title="Trang cá nhân"
+                                                                    className="option-icon img-rounded"/>}
                                     </a>
                                 </div>
                             </div>
                             <div className="member-since">
                                 <div>Ngày tham gia:</div>
                                 <span>
-                                {userDetail.dateCreate}
+                                {new Date(userDetail.dateCreate).toLocaleDateString()}
                             </span>
                             </div>
                         </div>
                         <div className="player-profile-right-wrap col-md-3 col-md-push-6">
-                            <div className="right-player-profile"><p className="price-player-profile">75,000 đ/h</p>
+                            <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
                                 <div className="rateting-style"><i className="fas fa-star"></i><i
                                     className="fas fa-star"></i><i
                                     className="fas fa-star"></i><i className="fas fa-star"></i><i
                                     className="fas fa-star-half-alt"></i>&nbsp;<span>352 <span>Đánh giá</span></span>
                                 </div>
                                 <div className="text-center">
-                                    <button className="btn-my-style red" onClick={toggle}>Thuê</button>
-                                    <button className="btn-my-style white">Donate</button>
-                                    <button className="btn-my-style white"><i className="fas fa-comment-alt"></i>Chat
+                                    <button className="btn-my-style red"onClick={toggle}>Thuê</button>
+                                    {/*<button className="btn-my-style white">Donate</button>*/}
+                                    <button className="btn-my-style white" onClick={() => {addNewChat()}}>
+                                        <i className="fas fa-comment-alt"></i>Chat
                                     </button>
                                 </div>
                             </div>
@@ -126,67 +167,110 @@ function Detail() {
                             <div>
                                 <div className="row">
                                     <div className="center-item col-md-12">
-                                    <span
-                                        className="name-player-profile hidden-over-name">{userDetail.firstName} {userDetail.lastName} 🐰🐰</span>
-                                        <button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;
-                                            <span
-                                                className="plus"><span>Theo dõi</span></span></button>
+                                        <span className="name-player-profile hidden-over-name">{userDetail.account && userDetail.account.nickname}</span>
+                                        {/*<button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;*/}
+                                        {/*    <span className="plus">*/}
+                                        {/*        <span>Theo dõi</span>*/}
+                                        {/*    </span>*/}
+                                        {/*</button>*/}
                                     </div>
                                 </div>
                                 <div className="nav-player-profile row">
-                                    <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Số người theo dõi</span></div>
-                                        <div className="item-nav-value">400 <span>người</span></div>
-                                    </div>
                                     <div className="col-md-3 col-xs-6">
                                         <div className="item-nav-name"><span>Đã được thuê</span></div>
                                         <div className="item-nav-value">{bill.length}&nbsp;<span> lần</span></div>
                                     </div>
                                     <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>
-                                        <div className="item-nav-value">100&nbsp;%</div>
+                                        <div className="item-nav-name"><span>Số lượt xem</span></div>
+                                        <div className="item-nav-value">{userDetail.views} <span> lượt</span></div>
                                     </div>
-                                    <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Tình trạng thiết bị</span></div>
-                                        <div className="item-nav-value"><i className="fas fa-microphone"></i></div>
-                                    </div>
+                                    {/*<div className="col-md-3 col-xs-6">*/}
+                                    {/*    <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>*/}
+                                    {/*    <div className="item-nav-value">100&nbsp;%</div>*/}
+                                    {/*</div>*/}
                                 </div>
                                 <div>
                                     <div className="game-category row">
-                                        <div className="choose-game"
-                                             style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
-                                            <p className="overlay">{interest.length > 0 ? interest[0].interest : 'no'}</p>
+                                        <div className="title-player-profile row">
+                                            <div className="col-xs-6"><span>Dịch vụ</span></div>
                                         </div>
+                                        {userDetail.supplies && userDetail.supplies.length > 0 && userDetail.supplies.map((item, key) => (
+                                            <div className="choose-game" style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
+                                                    <p className="overlay" key={key}>{item.nameSupply}</p>
+
+                                            </div>
+                                        ))}
+
                                     </div>
                                     <div>
                                         <div className="title-player-profile row">
                                             <div className="col-xs-6"><span>Thông tin</span></div>
                                         </div>
-                                        <div className="content-player-profile"><p>nhận all game, sv Na, Naraka</p>
+                                        <div className="content-player-profile">
                                             <div className="album-of-player">
-                                                <div>
-                                                    <a href="https://playerduo.net/api/upload-service/images/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__ae016c20-4679-11ee-a657-a54d6be1d46a__player_album.jpg"
-                                                       style={{display: "block"}}>
-                                                        {image && image.map(image => (
-                                                            <img key={image.id} src={image.img}
-                                                                 alt={`Ảnh chân dung ${image.id}`}
-                                                                 style={{width: "50px", height: "50px"}}/>))}
-                                                    </a>
+                                                {image.length > 0 && <ShowImages images={image}/>}
 
-                                                    <div className="clearfix"></div>
-                                                </div>
+                                                {/*<div>*/}
+                                                {/*    <a href="https://playerduo.net/api/upload-service/images/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__ae016c20-4679-11ee-a657-a54d6be1d46a__player_album.jpg"*/}
+                                                {/*       style={{display: "block"}}>*/}
+                                                {/*        {image && image.map(image => (*/}
+                                                {/*            <img key={image.id} src={image.img}*/}
+                                                {/*                 alt={`Ảnh chân dung ${image.id}`}*/}
+                                                {/*                 style={{width: "50px", height: "50px"}}/>))}*/}
+                                                {/*    </a>*/}
+
+                                                {/*    <div className="clearfix"></div>*/}
+                                                {/*</div>*/}
                                             </div>
-                                            <p>Tên: {userDetail.firstName} {userDetail.lastName}</p>
-                                            <p>Địa Chỉ: {userDetail.address}, {userDetail.country}</p>
-                                            <p>Năm Sinh: {userDetail.birthday} ♥ Không biết hát nha</p>
-                                            <p>Giới Tính: {userDetail.gender}</p>
-                                            <p>Chiều Cao: {userDetail.height}</p>
-                                            <p>Cân Nặng: {userDetail.weight}</p>
-                                            <p>Mô tả về bản thân: {userDetail.describes}</p>
-                                            <p>Yêu cầu với người thuê: {userDetail.basicRequest}</p>
-                                            <p>fb: <a href={userDetail.facebookLink} target="_blank"
-                                                      rel="noopener noreferrer">{userDetail.facebookLink}</a>
-                                            </p>
+                                            <table className={"table table-bordered"}>
+                                                <tbody>
+                                                <tr>
+                                                    <td>Họ tên</td>
+                                                    <td>{userDetail.firstName} {userDetail.lastName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Giới tính</td>
+                                                    <td>{userDetail.gender}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Năm sinh</td>
+                                                    <td>{new Date(userDetail.birthday).toLocaleDateString()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều cao</td>
+                                                    <td>{userDetail.height}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cân nặng</td>
+                                                    <td>{userDetail.weight}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Địa chỉ</td>
+                                                    <td>{userDetail.address}, {userDetail.country}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mô tả về bản thân</td>
+                                                    <td>{userDetail.describes}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Yêu cầu với người thuê</td>
+                                                    <td>{userDetail.basicRequest}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Facebook</td>
+                                                    <td><a href={userDetail.facebookLink} target="_blank"
+                                                           rel="noopener noreferrer">{userDetail.facebookLink}</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            {/*<p>Tên: {userDetail.firstName} {userDetail.lastName}</p>*/}
+                                            {/*<p>Địa Chỉ: {userDetail.address}, {userDetail.country}</p>*/}
+                                            {/*<p>Năm Sinh: {userDetail.birthday}</p>*/}
+                                            {/*<p>Giới Tính: {userDetail.gender}</p>*/}
+                                            {/*<p>Chiều Cao: {userDetail.height}</p>*/}
+                                            {/*<p>Cân Nặng: {userDetail.weight}</p>*/}
+                                            {/*<p>Mô tả về bản thân: {userDetail.describes}</p>*/}
+                                            {/*<p>Yêu cầu với người thuê: {userDetail.basicRequest}</p>*/}
                                         </div>
                                         <div>
                                             <div id="top-donate">
@@ -202,8 +286,7 @@ function Detail() {
                                                                                             aria-controls="top-donate-pane-2"
                                                                                             tabIndex="-1"
                                                                                             aria-selected="false"
-                                                                                            href="home/userProfile#">Top
-                                                        Donate
+                                                                                            href="home/userProfile#">Top Donate
                                                         Tháng</a></li>
                                                 </ul>
                                                 <div className="tab-content">
@@ -861,5 +944,4 @@ function Detail() {
         </>
     )
 }
-
 export default Detail

@@ -20,7 +20,6 @@ export const getTopMale = createAsyncThunk(
     "getTopMale",
     async (qty) => {
         const res = await customAxios.get("userDetail/get4MaleCCDVs/" +  qty,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
-        console.log(res)
         return res.data;
     }
 )
@@ -28,21 +27,28 @@ export const getTopFemale = createAsyncThunk(
     "getTopFemale",
     async (qty) => {
         const res = await customAxios.get("userDetail/get8FemaleCCDVs/" + qty ,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
-        console.log(res)
         return res.data;
     }
 )
 export const getSupplyByUserID = createAsyncThunk(
     "getSupplyByUserID",
     async (idUser) => {
-        const rs = await customAxios.get("supplies/getSupplyByUserID?id=" + idUser);
+        const rs = await customAxios.get("supplies/getSupplyByUserID?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return rs.data;
     }
 )
 export const getCCDVProperGender = createAsyncThunk(
     "getCCDVProperGender",
     async (idUser) => {
-        const rs = await customAxios.get("userDetail/listCCDVHaveProperGender?id=" + idUser);
+        const rs = await customAxios.get("userDetail/listCCDVHaveProperGender?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return rs.data;
+    }
+)
+
+export const getCCDVsByTopViews = createAsyncThunk(
+    "getCCDVsByTopViews",
+    async (qty) => {
+        const rs = await customAxios.get("userDetail/topService/" + qty,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return rs.data;
     }
 )

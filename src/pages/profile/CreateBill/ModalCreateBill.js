@@ -3,12 +3,25 @@ import React, {useEffect, useState} from "react";
 import "./modalCreateBill.css"
 import axios from "axios";
 import $ from 'jquery'
+import {useDispatch, useSelector} from "react-redux";
+import {getAllBillIn7DayByCCDV} from "../../../service/BillsService";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
-    const [message,setMessage]=useState('');
+    const data = useSelector(state => {
+        return state.BillByAccount.BillByAccount.bill7DayByCCDV
+    })
+    const users = useSelector(state => {
+        return state.user.user.current
+    })
+
+    const dispatch = useDispatch();
+    const [message, setMessage] = useState('');
     const currentTime = new Date();
     const [hourRent, setHourRent] = useState([]);
-    const [test, setTest] = useState(new Array(72).fill(0))
+    const [test, setTest] = useState(new Array(72).fill(0));
+    const [total, setTotal] = useState(userDetail.price);
+    const [day, setDay] = useState((new Date()).getDate());
+    const [hour, setHour] = useState(1);
     const [bill, setBill] = useState({
         address: '',
         dateCreate: '',
@@ -24,21 +37,30 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         accountUser: {
             id: JSON.parse(localStorage.getItem("account")).id
         }
-    })
-    const [total, setTotal] = useState('');
-    const [day, setDay] = useState((new Date()).getDate());
-    const [hour, setHour] = useState(1)
+    });
+    const [halo, setHalo] = useState([]);
 
     useEffect(() => {
-        setTotal(userDetail.price);
-        axios.get(`http://localhost:8080/bills/getAllBill7DayByIDCCDV?id=` + userDetail.id).then(data => {
+        dispatch(getAllBillIn7DayByCCDV(userDetail.id));
+        fillDay();
+        axios.get(`http://localhost:8080/bills/getAllBill7DayByIDCCDV?id=${userDetail.id}`).then(data => {
             fillData(data.data);
             console.log("nạp");
-            console.log(data.data);
         }).catch(() => {
             console.log("check api")
         })
     }, [message]);
+
+    const fillDay = () => {
+
+        const b = [];
+        for (let i = 0; i < 3; i++) {
+            const a = new Date();
+            a.setDate((a.getDate() + i));
+            b.push(a);
+        }
+        setHalo(b)
+    }
     const pricing = (valueTag) => {
         setTotal(userDetail.price * valueTag.target.value);
         setBill({...bill, total: userDetail.price * valueTag.target.value});
@@ -55,50 +77,41 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     }
     const submit = () => {
         let check = false;
-        let start = new Date()
-        start.setDate(start.getDate() + (parseInt(day) - parseInt(start.getDate())));
         for (let i = 0; i < hourRent.length; i++) {
             if (hourRent[i] === 2) {
-                start.setHours(i)
                 check = true;
                 break
             }
         }
-        start.setMinutes(0);
-        start.setSeconds(0);
-        const end = new Date(start.getTime());
-        end.setHours((end.getHours() + parseInt(hour)))
-        console.log(start)
-        console.log(end)
+        console.log(check)
         if (check) {
-            setBill({
+            let tempBill = {
                 ...bill,
                 total: total,
                 hour: hour,
-                dateCreate: ((new Date().getTime())),
-                dateStart: (start),
-                dateEnd: (end),
+                dateCreate: new Date(),
                 firstMessage: $("[name='MessageBills']").val(),
                 address: $("[name='address']").val(),
-            })
-            axios.post("http://localhost:8080/bills/createBill",  bill,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
-                console.log(bill);
-                console.log("done")
+            }
+            axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
-                setMessage("done")
+                alert(data.data);
             }).catch(
                 (e) => {
                     console.log(e);
-                    console.log("méo")
                 }
-            )
+            ).finally(()=>{
+                setMessage("1")
+            })
         }
     }
+
+
     const fillData = (data) => {
         const tempTest = [...test];
         for (const item of data) {
             const number = (new Date(item.dateStart)).getHours() + ((new Date(item.dateStart)).getDate() - currentTime.getDate()) * 24;
-            for (let i = number; i <= number + item.hour; i++) {
+            for (let i = number; i < number + item.hour; i++) {
                 tempTest[i] = 1;
             }
         }
@@ -112,7 +125,10 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         for (let i = 0; i < 24; i++) {
             temp.push(tempTest[i]);
         }
+        $("[name='MessageBills']").text("");
+        $("[name='address']").text("");
         setHourRent(temp);
+        setHour(1)
     }
     const handClick = (index) => {
         let check = true;
@@ -124,22 +140,32 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             }
         }
         for (let i = number; i < (parseInt(number) + parseInt(hour)); i++) {
-            if (temp[i] === 0) {
-                temp[i] = 2;
-            } else if (temp[i] === 1) {
+            if(temp[i]===1){
                 check = false;
             }
         }
         if (check) {
-            setTest(temp)
+            for (let i = number; i < (parseInt(number) + parseInt(hour)); i++) {
+                if (temp[i] === 0) {
+                    temp[i] = 2;
+                }
+            }
+            setTest(temp);
         }
         const number1 = day - currentTime.getDate();
         const temp1 = [];
         for (let i = 0; i < 24; i++) {
             temp1.push(temp[(i + (number1 * 24))]);
         }
-        // setUseState bất đồng bộ vkl , nên cmn ko bao giờ bắt set 1 thg = giá trị 1 thg khác
         setHourRent(temp1);
+        const a = new Date();
+        a.setDate(day);
+        a.setHours(index);
+        a.setMinutes(0);
+        a.setSeconds(0, 0);
+        const b = new Date(a.getTime());
+        b.setHours((b.getHours() + parseInt(hour)));
+        setBill({...bill, dateStart: a, dateEnd: b});
     }
 
 
@@ -154,15 +180,15 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                             <button type="button" className="close" onClick={hide}><span
                                 aria-hidden="true">×</span><span
                                 className="sr-only">Close</span></button>
-                            <h4 className="modal-title"><span>Thuê player</span></h4></div>
+                            <h4 className="modal-title"><span>Thuê người yêu </span></h4></div>
                         <div className="modal-body" style={{
-                            overflow: 'auto', maxHeight: '600px'
+                            overflow: 'auto', maxHeight: '550px'
                         }}>
                             <table>
                                 <tbody>
                                 <tr>
                                     <td>Player:</td>
-                                    <td>{userDetail.lastName}</td>
+                                    <td>{userDetail.account.nickname}</td>
                                 </tr>
                                 <tr>
                                     <td><span>Thời gian muốn thuê</span>:</td>
@@ -199,17 +225,17 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 </tr>
                                 <tr>
                                     <td><span>Số dư hiện tại</span>:</td>
-                                    <td><span className="total-amount">{userDetail.balance}đ</span><span
+                                    <td><span className="total-amount">0đ</span><span
                                         className="load-more-credit">+</span></td>
                                 </tr>
                                 <tr>
                                     <td>Địa Chỉ :</td>
-                                    <td><textarea placeholder="Nhập địa chỉ  " name="address"
+                                    <td><textarea id="textAddress" placeholder="Nhập địa chỉ  " name="address"
                                                   maxLength={255} type="text" className="form-control"
                                                   defaultValue={""}/><p className="err-message"/></td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={2}><textarea placeholder=" Gửi lời nhắn cho người được thuê "
+                                    <td colSpan={2}><textarea id="testMessage" placeholder=" Gửi lời nhắn cho người được thuê "
                                                               name="MessageBills"
                                                               maxLength={255} type="text" className="form-control"
                                                               defaultValue={""}/><p className="err-message"/></td>
@@ -218,14 +244,14 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 <tr>
                                     <td>Chọn Ngày :</td>
                                     <td><select name="dateCreate" className="form-control" onChange={getData}>
-                                        <option value={currentTime.getDate()}>Hôm Nay:&nbsp;
-                                            {currentTime.getDate()}-{currentTime.getMonth()}-{currentTime.getFullYear()}
+                                        <option id="day0" value={halo[0].getDate()}>
+                                            Ngày :&nbsp;{halo[0].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
                                         </option>
-                                        <option value={currentTime.getDate() + 1}>Ngày Mai:&nbsp;
-                                            {currentTime.getDate() + 1}-{currentTime.getMonth()}-{currentTime.getFullYear()}
+                                        <option id="day1" value={halo[1].getDate()}>
+                                            Ngày :&nbsp;{halo[1].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
                                         </option>
-                                        <option value={currentTime.getDate() + 2}>Ngày Kia:&nbsp;
-                                            {currentTime.getDate() + 2}-{currentTime.getMonth()}-{currentTime.getFullYear()}
+                                        <option id="day2" value={halo[2].getDate()}>
+                                            Ngày :&nbsp;{halo[2].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
                                         </option>
                                     </select></td>
                                 </tr>
@@ -238,11 +264,11 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                                          key={index}>&nbsp;{index}h00</div> :
                                                     value === 1 ?
                                                         <div className="item-box-unavailable"
-                                                             key={index}>&nbsp;{index}h00 </div> :
+                                                             key={index}>&nbsp;{index}h00:&nbsp;Thuê </div> :
                                                         value === 2 ?
                                                             <div className="item-box-pick"
                                                                  onClick={() => handClick(index)}
-                                                                 key={index}>&nbsp;{index}h00:Đặt </div> : <></>
+                                                                 key={index}>&nbsp;{index}h00:&nbsp;Chọn </div> : <></>
                                             ))}
 
                                         </div>

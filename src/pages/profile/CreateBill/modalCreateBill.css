@@ -6,7 +6,7 @@
     align-content: normal;
     justify-content: normal;
     align-items: flex-end;
-    background-color: lightgrey;
+
     padding:8px 12px;
     box-sizing: content-box;
     transform: translate3d(0px, 0px, 0px);
@@ -15,10 +15,23 @@
     transition-property: transform;
     overflow: auto;
     max-height: 250px;
-    border: 1px solid #e2e6ea;
 
 }
-
+#textAddress {
+    height: 50px;
+}
+.modal-body::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 5px transparent;
+    border-radius: 10px
+}
+.modal-body::-webkit-scrollbar {
+    width: 6px
+}
+.modal-body::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, .1);
+    background-color: #dcdcdc
+}
 
 .table-boxTime::-webkit-scrollbar-track{
     -webkit-box-shadow: inset 0 0 5px transparent;
@@ -45,17 +58,17 @@
     background-color: #dcdcdc
 }
 
-.item-box {
+.item-box-unavailable {
     flex: 0 0 150px;
     margin: 10px;
     padding: 20px;
     border-radius: 10px;
     text-transform: uppercase;
-    color: #354052;
-    background-color: #fff;
+    color: lightgrey;
+    background-color: grey;
     border: 1px solid #e2e6ea;
 }
-.item-box-unavailable {
+.item-box-pick{
     flex: 0 0 150px;
     margin: 10px;
     padding: 20px;
@@ -65,11 +78,12 @@
     text-transform: uppercase;
     border: 0;
 }
-.item-box-pick {
+.item-box {
     flex: 0 0 150px;
     margin: 10px;
     padding: 20px;
-    background-color: yellow;
+    background-color: whitesmoke;
     border-radius: 10px;
-    border: 0;
+    text-transform: uppercase;
+    border: 1px solid #e2e6ea;
 }

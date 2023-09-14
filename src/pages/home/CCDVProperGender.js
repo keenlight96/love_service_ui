@@ -4,14 +4,13 @@ import {Link} from "react-router-dom";
 
 const CCDVProperGender = () => {
     const properCCDV = useSelector(state => {
-        console.log(state.CCDVs.CCDVs.properGender)
         return state.CCDVs.CCDVs.properGender;
     })
 
     return (<>
         <div className="box proper-CDDV">
-            <header className="title-header vip"><h5 className="title-header-left">GỢI Ý PHÙ HỢP GIỚI TÍNH </h5>
-                <p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false"/></p>
+            <header className="title-header vip"><h5 className="title-header-left">GỢI Ý PHÙ HỢP GIỚI TÍNH  </h5>
+                {/*<p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>*/}
             </header>
             <div className="card-player row">
                 {properCCDV && properCCDV.map((item, key) => (
