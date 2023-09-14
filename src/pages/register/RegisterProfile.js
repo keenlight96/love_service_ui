@@ -3,14 +3,13 @@ import React, {useEffect, useState} from "react";
 import SignupCCDV from "../../service/custom/SignupCCDV";
 // import React, {useState} from "react";
 import * as Yup from "yup";
-import DatePicker from 'react-datepicker';
+// import  from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
-
-
-import {Link} from "react-router-dom";
+import {DatePicker, Select, Space, TimePicker} from 'antd';
+import {useNavigate, useParams} from "react-router";
 import Swal from "sweetalert2";
-import {useNavigate} from "react-router"; // Import CSS cho DatePicker
+
 const validationSchema = Yup.object().shape({
     firstName: Yup.string().required('Họ là bắt buộc'),
     lastName: Yup.string().required('Tên là bắt buộc'),
@@ -24,7 +23,6 @@ const validationSchema = Yup.object().shape({
     weight: Yup.string().required('Cân nặng là bắt buộc')
 });
 const RegisterProfile =()=> {
-    const [selectedDate, setSelectedDate] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
     const [supply, setSupply] = useState([]);
 
@@ -45,18 +43,35 @@ const RegisterProfile =()=> {
             setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
         }
     };
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
+
+    const [type, setType] = useState('date');
+    const {Option} = Select;
+    const PickerWithType = ({type, onChange}) => {
+
+        if (type === 'time') return <TimePicker onChange={onChange}/>;
+        if (type === 'date') return <DatePicker onChange={onChange}/>;
+        return <DatePicker picker={type} onChange={onChange}/>;
     };
-    const getSelectedOptionId =()=> {
-        var select = document.getElementById("zoneSelect");
-        var selectedOption = select.options[select.selectedIndex];
-        var selectedId = selectedOption.value;
-        console.log("Selected ID: " + selectedId);
-    }
+
+
+    // const getSelectedOptionId = () => {
+    //     var select = document.getElementById("zoneSelect");
+    //     var selectedOption = select.options[select.selectedIndex];
+    //     var selectedId = selectedOption.value;
+    //     console.log("Selected ID: " + selectedId);
+    // }
     // Khai báo state để lưu trữ giá trị được chọn
-    const [selectedId, setSelectedId] = useState(['']);
+    // const [selectedId, setSelectedId] = useState(['']);
+    // const getSelectedGender = () => {
+    //     var select = document.getElementById("genderSelect");
+    //     var selectedOption = select.options[select.selectedIndex];
+    //     var selectedGender = selectedOption.value;
+    //     console.log("Selected Gender: " + selectedGender);
+    // }
+// Khai báo state để lưu trữ giá trị được chọn
+//     const [selectedGender, setSelectedGender] = useState('');
     const navigate = useNavigate();
+    const {id: urlId} = useParams(); // Lấy ID từ URL (nếu có)
 
 
     const account = JSON.parse(localStorage.getItem("account"));
@@ -78,6 +93,7 @@ const RegisterProfile =()=> {
                                         weight: '',
                                         phoneNumber: '',
                                         idCard: '',
+                                        gender: '',
                                         price: '',
                                         basicRequest: '',
                                         facebookLink: '',
@@ -88,35 +104,66 @@ const RegisterProfile =()=> {
                                         supplies: [{
                                             id: ""
                                         },],
+                                        // supplies: supply.map((supplyItem) => supplyItem.id),
                                     }}
                                     validationSchema={validationSchema}
                                     onSubmit={(values) => {
                                         // Đây là nơi xử lý submit form sau khi đã validate thành công
 
 
-                                        values.zone.id = selectedId.toString(); // Cập nhật giá trị zone từ selectedId
+                                        // values.zone.id = selectedId.toString(); // Cập nhật giá trị zone từ selectedId
                                         values.supplies = selectedIds;
+                                        // values.gender = selectedGender
 
-                                        console.log("id supply la",selectedIds)
-                                        console.log("ID zone là", selectedId);
+                                        console.log("id supply la", selectedIds)
+                                        // console.log("ID zone là", selectedId);
                                         // Chuyển đổi giá trị ngày thành định dạng "YYYY-MM-DD"
-                                        const formattedDate = selectedDate.toISOString().split('T')[0];
-                                        values.birthday = formattedDate;
+                                        // const formattedDate = selectedDate.toISOString().split('T')[0];
+                                        console.log("sinh nhat", values.birthday)
+
+
                                         console.log("Giá trị đối tượng values là", values);
-                                        // Lấy ID tài khoản từ token ( ID được lưu trong localStorage)
-                                        const id = JSON.parse(localStorage.getItem("account")).id
+                                        // // Lấy ID tài khoản từ token ( ID được lưu trong localStorage)
+                                        // const id = JSON.parse(localStorage.getItem("account")).id
+                                        // Kiểm tra xem có ID trong localStorage không
+                                        const localStorageId = JSON.parse(localStorage.getItem("account"))?.id;
+                                        var id;
+                                        if (localStorageId) {
+                                            // Nếu có ID trong localStorage, sử dụng nó
+                                            id = localStorageId.toString();
+                                            console.log("id trong local", localStorageId)
+                                        } else if (urlId) {
+                                            // Nếu không có ID trong localStorage, kiểm tra xem có ID trong URL không
+                                            id = urlId.toString();
+                                            console.log("id trong url", urlId)
+                                        }
+
+
                                         SignupCCDV.signupUserDetailProfile(id, values)
                                             .then(async (response) => {
                                                 console.log(2)
                                                 console.log(response.data)
-                                                Swal.fire({
+                                                if(urlId){
+                                                    Swal.fire({
+                                                        position: 'center',
+                                                        icon: 'success',
+                                                        title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
+                                                        showConfirmButton: false,
+                                                        timer: 1500
+                                                    })
+                                                    navigate("/login")
+                                                }else {
+                                                    Swal.fire({
                                                     position: 'center',
                                                     icon: 'success',
                                                     title: 'Đăng kí thành công',
                                                     showConfirmButton: false,
                                                     timer: 1500
                                                 })
-                                                navigate("/CCDV")
+                                                    navigate("/CCDV")
+
+                                                }
+
 
                                             })
                                     }}
@@ -359,49 +406,113 @@ const RegisterProfile =()=> {
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div style={{
-                                                            textAlign: 'center',
-                                                            borderRadius: '10px',
-                                                            padding: '7px',
-                                                            margin: '10px',
-                                                            outline: 'none'
-                                                        }}>
-                                                            <DatePicker
-                                                                selected={selectedDate}
-                                                                onChange={handleDateChange}
-                                                                dateFormat="dd/MM/yyyy"
-                                                                placeholderText="Sinh nhật"
-                                                                style={{
-                                                                    border: '1px solid #ccc', // Thêm đường viền
-                                                                    borderRadius: '7px',
-                                                                    padding: '7px',
-                                                                    outline: 'none'
-                                                                }}
+                                                        <div>
+                                                            {/*<Space>*/}
+                                                            {/*    <PickerWithType type={type} onChange={(value) => console.log(value)} />*/}
+                                                            {/*</Space>*/}
+                                                            <Field
+                                                            type='date'
+                                                            name='birthday'  style={{
+                                                                textAlign: 'center',
+                                                                borderRadius: '7px',
+                                                                padding: '7px',
+                                                                margin: '10px',
+                                                                outline: 'none',
+                                                                width:'190px'
+                                                            }}
+
                                                             />
+
+
                                                         </div>
+
                                                     </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
-                                                        <div>
-                                                            <select
-                                                                name="zone"
-                                                                id="zoneSelect"
-                                                                onChange={(event) => setSelectedId(event.target.value)}
-                                                                value={selectedId}
-                                                                style={{marginLeft:'10px'}}
-                                                            >
-                                                                <option value="">Chọn khu vực</option>
-                                                                <option value={1}>Bắc</option>
-                                                                <option value={2}>Trung</option>
-                                                                <option value={3}>Nam</option>
-                                                            </select>
+                                                        {/*<div>*/}
+                                                        {/*    <select*/}
+                                                        {/*        name="zone"*/}
+                                                        {/*        id="zoneSelect"*/}
+                                                        {/*        onChange={(event) => setSelectedId(event.target.value)}*/}
+                                                        {/*        value={selectedId}*/}
+                                                        {/*        style={{*/}
+                                                        {/*            textAlign: 'center',*/}
+                                                        {/*            borderRadius: '7px',*/}
+                                                        {/*            padding: '7px',*/}
+                                                        {/*            margin: '10px',*/}
+                                                        {/*            outline: 'none',*/}
+                                                        {/*            width:'190px',*/}
+                                                        {/*            border: '2px solid black',*/}
+                                                        {/*        }}*/}
+                                                        {/*    >*/}
+                                                        {/*        <option value="">Chọn khu vực</option>*/}
+                                                        {/*        <option value={1}>Bắc</option>*/}
+                                                        {/*        <option value={2}>Trung</option>*/}
+                                                        {/*        <option value={3}>Nam</option>*/}
+                                                        {/*    </select>*/}
+                                                        {/*</div>*/}
+                                                        <Field
+                                                            as="select"
+                                                            name="zone.id"
+                                                            style={{
+                                                                textAlign: 'center',
+                                                                borderRadius: '7px',
+                                                                padding: '7px',
+                                                                margin: '10px',
+                                                                outline: 'none',
+                                                                width: '190px',
+                                                                border: '2px solid black',
+                                                            }}
+                                                        >
+                                                            <option value="">Chọn khu vực</option>
+                                                            <option value='1'>Bắc</option>
+                                                            <option value="2">Trung</option>
+                                                            <option value="3">Nam</option>
+                                                        </Field>
 
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            {/*<select*/}
+                                                            {/*    name="gender"*/}
+                                                            {/*    id="genderSelect"*/}
+                                                            {/*    onChange={(event) => setSelectedGender(event.target.value)}*/}
+                                                            {/*    value={selectedGender}*/}
+                                                            {/*    style={{*/}
+                                                            {/*        textAlign: 'center',*/}
+                                                            {/*        borderRadius: '7px',*/}
+                                                            {/*        padding: '7px',*/}
+                                                            {/*        margin: '10px',*/}
+                                                            {/*        outline: 'none',*/}
+                                                            {/*        width:'190px',*/}
+                                                            {/*        border: '2px solid black',*/}
+                                                            {/*    }}*/}
+                                                            {/*>*/}
+                                                            {/*    <option value="">Chọn giới tính</option>*/}
+                                                            {/*    <option value="Nam">Nam</option>*/}
+                                                            {/*    <option value="Nữ">Nữ</option>*/}
+                                                            {/*</select>*/}
+                                                            <Field
+                                                                as="select"
+                                                                name="gender"
+                                                                style={{
+                                                                    textAlign: 'center',
+                                                                    borderRadius: '7px',
+                                                                    padding: '7px',
+                                                                    margin: '10px',
+                                                                    outline: 'none',
+                                                                    width: '190px',
+                                                                    border: '2px solid black',
+                                                                }}
+                                                            >
+                                                                <option value="">Chọn giới tính</option>
+                                                                <option value="Nam">Nam</option>
+                                                                <option value="Nữ">Nữ</option>
+                                                            </Field>
                                                         </div>
                                                     </td>
-
-
                                                 </tr>
                                             </div>
                                             <div style={{width:'600px'}}>
@@ -430,6 +541,19 @@ const RegisterProfile =()=> {
                                                             <td>{supplyItem.nameSupply}</td>
                                                         </tr>
                                                     ))}
+
+                                                    {/*{supply.map((supplyItem) => (*/}
+                                                    {/*    <tr key={supplyItem.id}>*/}
+                                                    {/*        <td>*/}
+                                                    {/*            <Field*/}
+                                                    {/*                type="checkbox"*/}
+                                                    {/*                name='supplies.id'*/}
+                                                    {/*                value={supplyItem.id}*/}
+                                                    {/*            />*/}
+                                                    {/*        </td>*/}
+                                                    {/*        <td>{supplyItem.nameSupply}</td>*/}
+                                                    {/*    </tr>*/}
+                                                    {/*))}*/}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -439,9 +563,6 @@ const RegisterProfile =()=> {
                                          <button type={"submit"} style={{width: '100px'}}
                                             >Lưu
                                             </button>
-
-
-
                                         </div>
                                     </Form>
 

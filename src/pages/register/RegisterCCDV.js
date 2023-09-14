@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import "../../custom-css/cssRegister.css"
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
+import {useNavigate} from "react-router";
 
 const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -21,9 +22,10 @@ const validationSchema = Yup.object().shape({
     nickName: Yup.string().required('Tên người dùng là bắt buộc')
 });
 
-let id = 0
 const RegisterCCDV =() =>{
     const [message, setMessage] = useState('');
+    // const [idAccount, setIdAccount] = useState('');
+    const navigate = useNavigate();
     return(
         <>
             <div style={{display:'flex', backgroundColor:'lightpink',justifyContent:'center'}}>
@@ -50,24 +52,25 @@ const RegisterCCDV =() =>{
 
                                         SignupCCDV.registerUser(values)
                                             .then( async (response) => {
-                                                console.log(response)
+                                                // setIdAccount(response.data.id)
+                                                console.log(response.data)
                                                 if (response.data.validStatus === 'NAME_EXISTED') {
                                                     setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                 } else if (response.data.validStatus === 'EMAIL_EXIST') {
                                                     setMessage("Email đã được đăng ký. Vui lòng sử dụng email khác.");
                                                 }  else if (response.data.validStatus === 'SUCCESSFULL') {
                                                     // alert("Đăng ký thành công.");
-                                                     Swal.fire({
-                                                        position: 'center',
-                                                        icon: 'success',
-                                                        title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
-                                                        showConfirmButton: false,
-                                                        timer: 1500
-                                                    });
+                                                    //  Swal.fire({
+                                                    //     position: 'center',
+                                                    //     icon: 'success',
+                                                    //     title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
+                                                    //     showConfirmButton: false,
+                                                    //     timer: 1500
+                                                    // });
                                                 }
-                                                var idAccount = response.id;
-                                                id =idAccount
-                                                console.log(idAccount)
+
+                                                navigate(`/registerProfile/${response.data.id}`)
+
                                             })
                                             .finally(() => {
                                                 actions.setSubmitting(false);
@@ -150,22 +153,22 @@ const RegisterCCDV =() =>{
                                             <div className="recaptcha">
                                                 {/* Đoạn mã reCAPTCHA */}
                                             </div>
-                                          <Link to={'/registerProfile/'+id}>
-                                              <button
-                                                  type={"submit"}
-                                                  disabled={isSubmitting}
-                                                  style={{
-                                                      backgroundColor: '#FFE4E1',
-                                                      marginTop: '2px',
-                                                      marginLeft:'39px',
-                                                      marginBottom:'20px',
-                                                      height: '30px',
-                                                      borderRadius: '10px',
-                                                      alignContent:'center'
-                                                  }}>
-                                                <span style={{margin:'20px',padding:'10px',}} >Đăng ký tài khoản</span>
-                                            </button>
-                                          </Link>
+                                            {/*<Link to={`/registerProfile/${idAccount}`}>*/}
+                                                <button
+                                                    type={"submit"}
+                                                    disabled={isSubmitting}
+                                                    style={{
+                                                        backgroundColor: '#FFE4E1',
+                                                        marginTop: '2px',
+                                                        marginLeft:'39px',
+                                                        marginBottom:'20px',
+                                                        height: '30px',
+                                                        borderRadius: '10px',
+                                                        alignContent:'center'
+                                                    }}>
+                                                    <span style={{margin:'20px',padding:'10px',}} >Đăng ký tài khoản</span>
+                                                </button>
+                                            {/*</Link>*/}
                                         </form>
                                     )}
                                 </Formik>

@@ -5,18 +5,17 @@ import {Link} from "react-router-dom";
 const NewCcdVs = () => {
 
     const newestCCDVs = useSelector(state => {
-        console.log(state);
         return state.CCDVs.CCDVs.newestCCDVs;
     })
     return (
         <>
             <div className="box newest-ccdvs">
                 <header className="title-header vip"><h5 className="title-header-left">Người CCDV mới</h5>
-                    <p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>
+                    {/*<p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>*/}
                 </header>
                 <div className="card-player row">
                     {newestCCDVs && newestCCDVs.map((item, key) => (
-                        <Link to={"/userDetail/" + item.userProfile.id}>
+                        <Link to={"/profile/" + item.userProfile.account.username}>
                         <div className="col-md-3" key={key}>
                             <div className="player-information-card-wrap">
                                 <div className="player-avatar">
