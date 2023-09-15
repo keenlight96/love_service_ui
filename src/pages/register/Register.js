@@ -4,10 +4,16 @@ import * as Yup from 'yup';
 import Swal from "sweetalert2";
 import '../../custom-css/cssRegister.css'
 import SignupCCDV from "../../service/custom/SignupCCDV";
+import {useNavigate} from "react-router";
 
 const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Tên đăng nhập là bắt buộc'),
-    password: Yup.string().required('Mật khẩu là bắt buộc'),
+    username: Yup.string()
+        .required('Tên đăng nhập là bắt buộc')
+        .min(8, 'Tên đăng nhập phải có ít nhất 8 ký tự'),
+    password: Yup.string()
+        .required('Mật khẩu là bắt buộc')
+        .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+        .matches(/(?=.*\d)/, 'Mật khẩu phải chứa ít nhất một chữ số'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không trùng khớp')
         .required('Nhập lại mật khẩu là bắt buộc'),
@@ -16,6 +22,8 @@ const validationSchema = Yup.object().shape({
 });
 const SignupForm = () => {
     const [message, setMessage] = useState('');
+    const [message2, setMessage2] = useState('');
+    const navigate = useNavigate();
     return (
        <>
            <div className={'wrapper-register'}>
@@ -44,7 +52,7 @@ const SignupForm = () => {
                                            if (response.data.validStatus === 'NAME_EXISTED') {
                                                setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
-                                               setMessage("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
                                                }  else if (response.data.validStatus === 'SUCCESSFULL') {
                                                Swal.fire({
                                                    position: 'center',
@@ -53,7 +61,9 @@ const SignupForm = () => {
                                                    showConfirmButton: false,
                                                    timer: 1500
                                                });
+                                               navigate("/login")
                                                }
+
                                    })
                                            .finally(() => {
                                                actions.setSubmitting(false);
@@ -146,9 +156,9 @@ const SignupForm = () => {
                                                    {/*</div>*/}
                                                </div>
                                                <ErrorMessage name="email" component="div" className="error" />
-                                               {message && (
+                                               {message2 && (
                                                    <div className="error">
-                                                       {message}
+                                                       {message2}
                                                    </div>
                                                )}
                                            </div>
