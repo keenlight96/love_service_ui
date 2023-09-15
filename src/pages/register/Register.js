@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import Swal from "sweetalert2";
 import '../../custom-css/cssRegister.css'
 import SignupCCDV from "../../service/custom/SignupCCDV";
+import {useNavigate} from "react-router";
 
 const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -22,6 +23,7 @@ const validationSchema = Yup.object().shape({
 const SignupForm = () => {
     const [message, setMessage] = useState('');
     const [message2, setMessage2] = useState('');
+    const navigate = useNavigate();
     return (
        <>
            <div className={'wrapper-register'}>
@@ -59,7 +61,9 @@ const SignupForm = () => {
                                                    showConfirmButton: false,
                                                    timer: 1500
                                                });
+                                               navigate("/login")
                                                }
+
                                    })
                                            .finally(() => {
                                                actions.setSubmitting(false);
