@@ -161,9 +161,18 @@ function Login() {
                                         <i className="fab fa-facebook"></i>
                                         <span>Đăng nhập bằng Facebook</span>
                                     </button>
-                                    <a className="create-new">
-                                        <p><span>Đăng ký tài khoản</span></p>
-                                    </a>
+                                    <div className={"row"}>
+                                        <div className={"col-md-6"}>
+                                            <a className="create-new" href={"/register"}>
+                                                <p><span>Đăng ký người dùng</span></p>
+                                            </a>
+                                        </div>
+                                        <div className={"col-md-6"}>
+                                            <a className="create-new" href={"/registerCCDV"}>
+                                                <p><span>Đăng ký cung cấp dịch vụ</span></p>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
