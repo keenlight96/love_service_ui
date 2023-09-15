@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
@@ -23,6 +23,16 @@ const validationSchema = Yup.object().shape({
 const SignupForm = () => {
     const [message, setMessage] = useState('');
     const [message2, setMessage2] = useState('');
+    useEffect(() => {
+        setMessage('');
+        setMessage2('');
+    }, []);
+
+
+    const resetMessage = () => {
+        setMessage('');
+        setMessage2('');
+    }
     const navigate = useNavigate();
     return (
        <>
@@ -82,6 +92,7 @@ const SignupForm = () => {
                                                    placeholder="Tên đăng nhập"
                                                    maxLength="5000"
                                                    autoComplete="false"
+                                                   onFocus = {resetMessage}
                                                    style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none' }}
                                                />
                                                <ErrorMessage name="username" component="div" className="error" />
@@ -122,6 +133,7 @@ const SignupForm = () => {
                                                            placeholder="Email"
                                                            maxLength="5000"
                                                            autoComplete="false"
+                                                           onFocus = {resetMessage}
                                                            style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
 
                                                            // style={{

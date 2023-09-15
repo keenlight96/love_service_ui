@@ -30,13 +30,14 @@ const RegisterCCDV =() =>{
         setMessage('');
         setMessage2('');
     }, []);
-    const navigate = useNavigate();
-    const location = useLocation();
+
 
     const resetMessage = () => {
         setMessage('');
         setMessage2('');
     }
+    const navigate = useNavigate();
+    const location = useLocation();
 
     return(
         <>
