@@ -1,12 +1,8 @@
-import SidebarSupplies from "./SidebarSupplies";
-import Top6ServiceCCDV from "./Top6ServiceCCDV";
-import NewCcdVs from "./NewCCDVs";
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
-import {Link} from "react-router-dom";
 
-function Detail(){
+function Detail() {
     const [userDetail, setUserDetail] = useState({});
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
@@ -30,37 +26,37 @@ function Detail(){
     useLayoutEffect(() => {
         window.scrollTo(0, 0)
     });
-    return(
+    return (
         <>
-        <title>User Profile</title>
-        <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
-        <link rel="manifest" href="https://playerduo.net/manifest.json" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#ffffff" />
-        <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
-        <link href="../resources/all.css" rel="stylesheet" />
-        <link href="../resources/css.css" rel="stylesheet" />
-        <title>PlayerDuo - Thuê người chơi</title>
-        <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet" />
-        <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="../resources/0.cbdbec7b.chunk.css" />
-        <link rel="stylesheet" type="text/css" href="../resources/3.fe7e74cf.chunk.css" />
-        <link rel="stylesheet" type="text/css" href="../resources/10.697bc269.chunk.css" />
-        <link rel="stylesheet" href="../resources/css-user-profile.css" />
-            <div >
+            <title>User Profile</title>
+            <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png"/>
+            <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png"/>
+            <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png"/>
+            <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png"/>
+            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png"/>
+            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png"/>
+            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png"/>
+            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png"/>
+            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png"/>
+            <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png"/>
+            <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png"/>
+            <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png"/>
+            <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png"/>
+            <link rel="manifest" href="https://playerduo.net/manifest.json"/>
+            <meta name="msapplication-TileColor" content="#ffffff"/>
+            <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png"/>
+            <meta name="theme-color" content="#ffffff"/>
+            <link rel="shortcut icon" href="../resources/raw/favicon.ico"/>
+            <link href="../resources/all.css" rel="stylesheet"/>
+            <link href="../resources/css.css" rel="stylesheet"/>
+            <title>PlayerDuo - Thuê người chơi</title>
+            <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
+            <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
+            <link rel="stylesheet" type="text/css" href="../resources/0.cbdbec7b.chunk.css"/>
+            <link rel="stylesheet" type="text/css" href="../resources/3.fe7e74cf.chunk.css"/>
+            <link rel="stylesheet" type="text/css" href="../resources/10.697bc269.chunk.css"/>
+            <link rel="stylesheet" href="../resources/css-user-profile.css"/>
+            <div>
                 <div className="hidden">
                     <audio src="../resources/raw/notification-sound.805a8904.mp3"/>
                     <audio src="../resources/raw/notification-group-sound.4c7ac55b.mp3"/>
@@ -87,9 +83,11 @@ function Detail(){
                             <div className="rent-time-wrap"><p className="ready">Đang sẵn sàng</p></div>
                             <div className="social-icon">
                                 <div className="icon-wrap user-page">
-                                    <a href="" target="_blank" rel="noopener noreferrer">
-                                        {userDetail.account && <img src={userDetail.account.avatar} style={{width:"50px",height:"50px"}} alt="PD" title="Trang cá nhân"
-                                                                    className="option-icon img-rounded"/>}
+                                    <a href="#" target="_blank" rel="noopener noreferrer">
+                                        {userDetail.account &&
+                                            <img src={userDetail.account.avatar} style={{width: "50px", height: "50px"}}
+                                                 alt="PD" title="Trang cá nhân"
+                                                 className="option-icon img-rounded"/>}
                                     </a>
                                 </div>
                             </div>
@@ -155,18 +153,18 @@ function Detail(){
                                         <div className="title-player-profile row">
                                             <div className="col-xs-6"><span>Thông tin</span></div>
                                         </div>
-                                        <div className="content-player-profile"><p>Nhận tất cả các dịch vụ</p>
+                                        <div className="content-player-profile"><p>nhận all game, sv Na, Naraka</p>
                                             <div className="album-of-player">
-                                                <div>
-                                                    {image && image.map(image => (
-                                                    <a  href={image.img}
-                                                       style={{display: "block",borderRadius:"10px"}}>
-                                                        <img src={image.img} alt={`Ảnh chân dung ${image.id}`} style={{width: "100%", height: "100%"}}/>
-                                                    </a>
-                                                    ))}
+                                                {image && image.map(image => (
+                                                    <a href={image.img}
+                                                       style={{display: "block", borderRadius:"10px"}}>
 
-                                                    <div className="clearfix"></div>
-                                                </div>
+                                                        <img key={image.id} src={image.img}
+                                                             alt={`Ảnh chân dung ${image.id}`}
+                                                             style={{width: "100%", height: "100%"}}/>
+                                                    </a>
+                                                ))}
+                                                <div className="clearfix"></div>
                                             </div>
                                             <p>Tên: {userDetail.firstName} {userDetail.lastName}</p>
                                             <p>Địa Chỉ: {userDetail.address}, {userDetail.country}</p>
@@ -194,7 +192,8 @@ function Detail(){
                                                                                             aria-controls="top-donate-pane-2"
                                                                                             tabIndex="-1"
                                                                                             aria-selected="false"
-                                                                                            href="home/userProfile#">Top Donate
+                                                                                            href="home/userProfile#">Top
+                                                        Donate
                                                         Tháng</a></li>
                                                 </ul>
                                                 <div className="tab-content">
@@ -852,4 +851,5 @@ function Detail(){
         </>
     )
 }
+
 export default Detail

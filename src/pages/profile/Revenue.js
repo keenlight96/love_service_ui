@@ -1,66 +1,79 @@
-import {useState, useEffect} from "react";
-import {ref, uploadBytes, getDownloadURL, listAll} from "firebase/storage";
-import {storage} from "./firebase";
-import {v4} from "uuid";
-import axios from "axios";
+import {Bar} from "react-chartjs-2";
+import {Chart, registerables} from 'chart.js';
+import React, {useEffect, useState} from "react";
 import {useParams} from "react-router";
+import axios from "axios";
+Chart.register(...registerables);
 
-function Album() {
-    const [imageUpload, setImageUpload] = useState([]);
-    const [imageUrls, setImageUrls] = useState([]);
-    const [image , setImage] = useState([]);
-    const imagesListRef = ref(storage, "images/");
-    const account = JSON.parse(localStorage.getItem('account'));
+function Revenue() {
+    const [modal, setModal] = useState(false);
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
     const {id} = useParams();
-    const album = {
-        img: imageUrls,
-        accountCCDV: {
-            id: account.id
-        },
-        isActive: 'true'
+    const openModal = () => {
+        setModal(true);
+    };
+    const closeModal = () => {
+        setModal(false);
+    };
+    function getDaysInMonth(month, year) {
+        return new Date(year, month, 0).getDate();
     }
-    function ok() {
-        if (imageUpload == null) return;
-        for (let i = 0; i < imageUpload.length; i++) {
-            console.log(imageUpload[i])
-            const imageRef = ref(storage, `images/${imageUpload[i].name + v4()}`);
-            uploadBytes(imageRef, imageUpload[i]).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    let data1 = {...album, img: [url]}
-                    console.log(data1)
-                    axios.post("http://localhost:8080/images/album", data1)
-                        .then(response => {
-                            setImageUrls(response.data.img);
-                            load()
 
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        })
-                });
-            });
-        }
+    const daysInCurrentMonth = getDaysInMonth(currentMonth, currentYear);
+    const labels = [];
+    for (let i = 1; i <= daysInCurrentMonth; i++) {
+        labels.push(i.toString());
     }
-     const load = () => {
-         axios.get("http://localhost:8080/images/" + id)
-             .then(response =>{
-                 setImage(response.data)
-                 console.log(response.data)
-             })
-             .catch(error =>{
-                 console.log(error)
-             })
-         listAll(imagesListRef).then((response) => {
-             response.items.forEach((item) => {
-                 getDownloadURL(item).then((url) => {
-                     setImageUrls((prev) => [...prev, url]);
-                 });
-             });
-         });
-    }
+    const [data, setData] = useState({
+        labels: labels,
+        datasets: [
+            {
+                label: 'Sample Data',
+                data: [900,1000,2000,600,500,300,360,800,5000,200,100,2500,4900,4500,2900,3900,3100,2300,890,1900,800,3500,4300,4800,4900,5100,5000,4700,4600,4800],
+                backgroundColor: ['rgba(75,192,192,0.82)', 'rgba(255,99,132,0.8)', 'rgba(255,205,86,0.82)'],
+                borderColor: ['rgb(75,161,192)', 'rgba(255, 99, 132, 1)', 'rgba(255, 205, 86, 1)'],
+                borderWidth: 1,
+            },
+        ],
+    });
     useEffect(() => {
-        load()
+        fetchDataFromBackend();
     }, []);
+    function fetchDataFromBackend() {
+        axios.get('http://localhost:8080/revenues/totalRevenueByDay/1')
+            .then((response) => {
+                setData(response.data)
+                console.log(response.data)
+                const newData = {
+                    ...data,
+                    labels: response.data.labels,
+                    datasets: [
+                        {
+                            ...data.datasets[0],
+                            data: response.data,
+                        },
+                    ],
+                };
+                setData(newData);
+            })
+            .catch((error) => {
+                console.error('Lỗi khi gọi API từ backend:', error);
+            });
+    };
+
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
+
+
+
+
     return (
         <>
             <meta httpEquiv="origin-trial"
@@ -97,11 +110,16 @@ function Album() {
             <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png"/>
             <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png"/>
             <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png"/>
-            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png"/>
-            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png"/>
-            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png"/>
-            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png"/>
-            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png"/>
+            <link rel="apple-touch-icon" sizes="114x114"
+                  href="https://playerduo.net/favicons/apple-icon-114x114.png"/>
+            <link rel="apple-touch-icon" sizes="120x120"
+                  href="https://playerduo.net/favicons/apple-icon-120x120.png"/>
+            <link rel="apple-touch-icon" sizes="144x144"
+                  href="https://playerduo.net/favicons/apple-icon-144x144.png"/>
+            <link rel="apple-touch-icon" sizes="152x152"
+                  href="https://playerduo.net/favicons/apple-icon-152x152.png"/>
+            <link rel="apple-touch-icon" sizes="180x180"
+                  href="https://playerduo.net/favicons/apple-icon-180x180.png"/>
             <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png"/>
             <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png"/>
             <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png"/>
@@ -130,10 +148,8 @@ function Album() {
                 </div>
                 <div className="notifications-wrapper"/>
                 <div className="message__popup  false">
-                    <div className="message__popup--icon">
-                        <img src="../resources/raw/popup-chat.png" className
-                                                               alt="PD"/>
-                    </div>
+                    <div className="message__popup--icon"><img src="../resources/raw/popup-chat.png" className
+                                                               alt="PD"/></div>
                 </div>
                 <div className="wrapper">
                     <div className="setting__main row">
@@ -142,7 +158,8 @@ function Album() {
                                 <div className="menu__setting  panel-group">
                                     <div className="menu__setting--main panel panel-default">
                                         <div className="panel-heading">
-                                            <div className="panel-title"><a aria-expanded="true" className role="button"
+                                            <div className="panel-title"><a aria-expanded="true" className
+                                                                            role="button"
                                                                             href="#">TÀI
                                                 KHOẢN <i className="fas fa-chevron-down"/></a></div>
                                         </div>
@@ -168,7 +185,8 @@ function Album() {
                                                         <div className="panel-heading">
                                                             <div className="title-sub  panel-title"><a
                                                                 aria-expanded="false" className="collapsed"
-                                                                role="button" href="#"><i className="fas fa-cog"/> Cài
+                                                                role="button" href="#"><i
+                                                                className="fas fa-cog"/> Cài
                                                                 đặt <i className="fas fa-chevron-right"/></a></div>
                                                         </div>
                                                         <div className="panel-collapse collapse">
@@ -183,7 +201,8 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Tài khoản và
+                                                                            <div className="panel-title">Tài khoản
+                                                                                và
                                                                                 mật khẩu
                                                                             </div>
                                                                         </div>
@@ -204,7 +223,8 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Hiển thị</div>
+                                                                            <div className="panel-title">Hiển thị
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -249,7 +269,8 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Biến động số
+                                                                            <div className="panel-title">Biến động
+                                                                                số
                                                                                 dư
                                                                             </div>
                                                                         </div>
@@ -286,7 +307,8 @@ function Album() {
                                     </div>
                                     <div className="menu__setting--main panel panel-default">
                                         <div className="panel-heading">
-                                            <div className="panel-title"><a aria-expanded="true" className role="button"
+                                            <div className="panel-title"><a aria-expanded="true" className
+                                                                            role="button"
                                                                             href="#">VÍ ĐIỆN
                                                 TỬ <i className="fas fa-chevron-down"/></a></div>
                                         </div>
@@ -307,13 +329,15 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Thông tin</div>
+                                                                            <div className="panel-title">Thông tin
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Lịch sử</div>
+                                                                            <div className="panel-title">Lịch sử
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -333,7 +357,8 @@ function Album() {
                                     </div>
                                     <div className="menu__setting--main panel panel-default">
                                         <div className="panel-heading">
-                                            <div className="panel-title"><a aria-expanded="true" className role="button"
+                                            <div className="panel-title"><a aria-expanded="true" className
+                                                                            role="button"
                                                                             href="#">PLAYER
                                                 <i className="fas fa-chevron-down"/></a></div>
                                         </div>
@@ -359,7 +384,8 @@ function Album() {
                                                         <div className="panel-heading">
                                                             <div className="title-sub  panel-title"><a
                                                                 aria-expanded="false" className="collapsed"
-                                                                role="button" href="#"><i className="fas fa-cog"/> Cài
+                                                                role="button" href="#"><i
+                                                                className="fas fa-cog"/> Cài
                                                                 đặt <i className="fas fa-chevron-right"/></a></div>
                                                         </div>
                                                         <div className="panel-collapse collapse">
@@ -382,7 +408,8 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Albums Player
+                                                                            <div className="panel-title">Albums
+                                                                                Player
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -409,7 +436,8 @@ function Album() {
                                                                 aria-expanded="false" className="collapsed"
                                                                 role="button" href="#"><i
                                                                 className="far fa-calendar-alt"/> Lịch sử nhận Duo,
-                                                                Donate <i className="fas fa-chevron-right"/></a></div>
+                                                                Donate <i className="fas fa-chevron-right"/></a>
+                                                            </div>
                                                         </div>
                                                         <div className="panel-collapse collapse">
                                                             <div className="panel-body">
@@ -417,7 +445,8 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Lịch sử nhận
+                                                                            <div className="panel-title">Lịch sử
+                                                                                nhận
                                                                                 duo
                                                                             </div>
                                                                         </div>
@@ -425,7 +454,8 @@ function Album() {
                                                                     <div
                                                                         className="menu__setting--last panel panel-default">
                                                                         <div className="panel-heading">
-                                                                            <div className="panel-title">Lịch sử nhận
+                                                                            <div className="panel-title">Lịch sử
+                                                                                nhận
                                                                                 donate
                                                                             </div>
                                                                         </div>
@@ -462,7 +492,8 @@ function Album() {
                                     </div>
                                     <div className="menu__setting--main panel panel-default">
                                         <div className="panel-heading">
-                                            <div className="panel-title"><a aria-expanded="true" className role="button"
+                                            <div className="panel-title"><a aria-expanded="true" className
+                                                                            role="button"
                                                                             href="#">DONATE
                                                 <i className="fas fa-chevron-down"/></a></div>
                                         </div>
@@ -485,36 +516,85 @@ function Album() {
                                 </div>
                             </div>
                         </div>
-
                         {/*body*/}
                         <div className="col-lg-9 col-md-3 col-sm-12 col-xs-12">
                             <div className="box vip-player">
-                                <h3>Albums Player</h3>
-                                <div className="player-albums">
-                                    <div className="col-md-12">
-                                        <div>
-                                            <input name="album" type="file" accept="image/png, image/jpeg, image/jpg" multiple='multiple'
-                                                   onChange={(event) => {setImageUpload(event.target.files);}}/>
-                                            <div className="btn-upload"><i className="fas fa-images"></i>Thêm ảnh</div>
-                                            <button type="submit" onClick={ok} className="btn-upload">Enter
-                                            </button>
-                                        </div>
-                                    </div>
-                                    {image && image.map((item) => (
-                                        <div className="col-md-3">
-                                            <p>
-                                                <img src={item.img} alt=""
-                                                     style={{width: "100%", height: "250px", borderRadius: "10px"}}/>
-                                            </p>
-                                        </div>
-                                    ))}
+                                <h3>Doanh Thu</h3>
+                                <button onClick={openModal}>Xem Doanh Thu</button>
+
+                                <table>
+                                    <tr>
+                                        <td style={{padding:"5px"}}>Từ ngày:</td>
+                                        <td style={{padding:"5px"}}>Đến ngày:</td>
+                                        <td style={{padding:"5px"}}>Lọc theo:</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{padding:"5px"}}><input style={{ borderRadius:"5px"}} type="date"/></td>
+                                        <td style={{padding:"5px"}}><input style={{ borderRadius:"5px"}} type="date"/></td>
+                                        <td style={{padding:"5px"}}>
+                                            <select style={{height:"26px",borderRadius:"5px"}}>
+                                                <option>Chọn</option>
+                                                <option>Ngày hôm nay</option>
+                                                <option>Tháng này</option>
+                                            </select>
+                                        </td>
+                                        <td><button select style={{height:"26px",borderRadius:"5px"}} >Enter</button></td>
+                                    </tr>
+                                </table>
+                                <div>
+                                    <Bar data={data} options={options}/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {/*modal bill chi tiết*/}
+            {modal && (
+                <>
+                    <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
+                    <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
+                    <div role="dialog">
+                        <div className="fade modal-backdrop in"/>
+                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"
+                             style={{display: "block"}}>
+                            <div className="modal-dialog">
+                                <div className="modal-content" role="document">
+                                    <div className="modal-header">
+                                        <button type="button" className="close" onClick={closeModal}>
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 className="modal-title">
+                                            <span>Nhập Mật Khẩu Xác Nhận </span>
+                                        </h4>
+                                    </div>
+                                    <div className="modal-body">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                   Mật Khẩu:
+                                                </td>
+                                                <td>
+                                                    <input style={{width:"300px", height:"30px", borderRadius:"5px", padding:"8px"}} type="password" placeholder="Vui lòng nhập mật khẩu"/>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-default" onClick={closeModal}>
+                                            <span>Xác Nhận </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
         </>
     )
 }
-export default Album;
+
+export default Revenue;

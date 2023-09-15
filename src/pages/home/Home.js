@@ -8,10 +8,9 @@ import {
     getTopMale
 } from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
-import Header from "../../components/Header";
 import SidebarSupplies from "./SidebarSupplies";
 import {getAllActiveSupplies} from "../../service/SupplyService";
-import Top6ServiceCCDV from "./Top6ServiceCCDV";
+import TopServiceCCDV from "./TopServiceCCDV";
 import TopMaleAndFemale from "./TopMaleAndFemale";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
 import CCDVProperGender from "./CCDVProperGender";
@@ -248,7 +247,7 @@ const Home = () => {
 
                                 {chosenSupplies.length > 0 ? <CcdVsByChosenSupplies/> : <div></div>}
 
-                                <Top6ServiceCCDV/>
+                                <TopServiceCCDV/>
                                 <NewCcdVs/>
                                 <TopMaleAndFemale/>
                                 {localStorage.getItem("account") !=null && localStorage.getItem("account") != "" ? <CCDVProperGender/> : <div></div>}

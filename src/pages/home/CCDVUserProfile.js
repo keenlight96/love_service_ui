@@ -1,6 +1,6 @@
 import SidebarSupplies from "./SidebarSupplies";
 import React from "react";
-import RegisterSupply from "../../feature/RegisterSupply";
+import RegisterSupply from "../../components/common/RegisterSupply";
 
 const CCDVUserProfile = () => {
 

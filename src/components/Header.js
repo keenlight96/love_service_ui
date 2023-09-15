@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {Outlet} from "react-router";
+import $ from "jquery";
 import {Link} from "react-router-dom";
 
 const Header = () => {
@@ -39,7 +41,6 @@ const Header = () => {
                 <link rel="stylesheet" type="text/css" href="../resources/4.2ddfb1d3.chunk.css"/>
                 <link rel="stylesheet" type="text/css" href="../resources/15.7bac9b00.chunk.css"/>
                 <link rel="stylesheet" href="../resources/css-home.css"/>
-
                 <div id="root">
                     <header className="menu__header fix-menu" id="header-menu">
                         <div className="navbar-header"><a href className="logo"><img alt="logo playerduo"
@@ -66,9 +67,8 @@ const Header = () => {
                                     className="fal fa-home-alt"/></a></li>
                                 <li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i
                                     className="fal fa-camera-movie"/></a></li>
-                                <li className="item-icon group-fb">
-                                    <a className="group-user" data-toggle="modal" data-target="#exampleModal"><i
-                                        className="fal fa-trophy-alt"/></a></li>
+                                <li className="item-icon group-fb"><a className="group-user" href="/#"><i
+                                    className="fal fa-trophy-alt"/></a></li>
                             </ul>
                             <ul className="nav navbar-nav navbar-right">
                                 <li className="item-icon notificate dropdown"><a id="basic-nav-dropdown" role="button"
@@ -95,9 +95,7 @@ const Header = () => {
                                 <li className="item-icon balance"><a className="money-user"><i className="far fa-plus"/> 0 đ</a>
                                 </li>
                                 <li className={isClicked ? "item-icon item-avatar dropdown " : "item-icon item-avatar dropdown open"}
-                                    onClick={(e) => {
-                                        handleClick(e)
-                                    }}
+                                    onClick={(e) => {handleClick(e)}}
                                 ><a id="header-nav-dropdown" role="button"
                                     className="dropdown-toggle"
                                     aria-haspopup="true" aria-expanded="false"
@@ -107,8 +105,7 @@ const Header = () => {
                                         <li role="presentation" className="page-user"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><img
                                             src="../resources/raw/avatar6.png" className="avt-img" alt="PD"/>
-                                            <div className="text-logo">
-                                                <h5>keenlight</h5>
+                                            <div className="text-logo"><h5>keenlight</h5>
                                                 <p>ID : <span>keenlight</span></p>
                                                 <p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>
                                             </div>
@@ -124,28 +121,30 @@ const Header = () => {
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-credit-card"/> <span>Mua thẻ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-user-lock"/> <span>Tạo khóa bảo vệ</span></a></li>
+                                        <Link to={"/revenue"}>
+                                        <li role="presentation" className="menu-item">
+                                            <a role="menuitem" tabIndex={-1} href="#">
+                                                <i className="fas fa-user-lock"/>
+                                                <span>Doanh Thu</span>
+                                            </a>
+                                        </li>
+                                        </Link>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-clock"/> <span>Lịch sử giao dịch</span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-users"/> <span>Danh sách theo dõi</span></a></li>
-                                        <Link to={"/billsDetail"}>
-                                            <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                             href="#"><i
-                                                className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
-                                        </Link>
+                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                                                         href="#"><i
+                                            className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-power-off"/> <span>Đăng xuất</span></a></li>
                                         <div className="menu-item list-flag">
                                             <div className="box-item">
-                                                <div className="flag-all active">
-                                                    <img src="../resources/raw/2.png"
-                                                         className="flag flag-vn" alt="PD"/>
+                                                <div className="flag-all active"><img src="../resources/raw/2.png"
+                                                                                      className="flag flag-vn" alt="PD"/>
                                                 </div>
                                                 <div className="flag-all false"><img src="../resources/raw/1.png"
                                                                                      className="flag flag-en" alt="PD"/>
@@ -212,21 +211,21 @@ const Header = () => {
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-credit-card"/> <span>Mua thẻ</span></a></li>
-                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                         href="#"><i
-                                            className="fas fa-user-lock"/> <span>Tạo khóa bảo vệ</span></a></li>
+                                        <li role="presentation" className="menu-item">
+                                            <a role="menuitem" tabIndex={-1} href="#">
+                                                <i className="fas fa-user-lock"/>
+                                                <span>Tạo khóa bảo vệ</span>
+                                            </a>
+                                        </li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-clock"/> <span>Lịch sử giao dịch</span></a></li>
-                                        <li role="presentation" className="menu-item">
-                                            <a role="menuitem" tabIndex={-1} href="#"><i className="fas fa-users"/> <span>Danh sách theo dõi</span></a>
-                                        </li>
-                                        <li role="presentation" className="menu-item">
-                                            <a role="menuitem" tabIndex={-1} href="#">
-                                                <i className="fas fa-cogs"/>
-                                                <span>Cài đặt tài khoản</span>
-                                            </a>
-                                        </li>
+                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                                                         href="#"><i
+                                            className="fas fa-users"/> <span>Danh sách theo dõi</span></a></li>
+                                        <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                                                         href="#"><i
+                                            className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="#"><i
                                             className="fas fa-power-off"/> <span>Đăng xuất</span></a></li>
@@ -307,7 +306,6 @@ const Header = () => {
                         </div>
                     </header>
                 </div>
-
             </>
         );
     }
