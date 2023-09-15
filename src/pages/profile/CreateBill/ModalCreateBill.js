@@ -127,7 +127,6 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setHour(1)
     }
     const handClick = (index) => {
-        console.log(halo[0].getMonth())
         let check = true;
         const temp = [...test];
         const number = index + ((day - currentTime.getDate()) * 24);

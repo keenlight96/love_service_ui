@@ -99,7 +99,7 @@ function Detail(){
 
     return(
         <>
-            {userDetail && userDetail.id &&< ModalCreateBill isShowing={isShowing}
+            {userDetail.id && < ModalCreateBill isShowing={isShowing}
                                                 hide={toggle}
                                                 userDetail={userDetail}
             />}
