@@ -9,6 +9,8 @@ import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../servic
 import ShowImages from "./ShowImages";
 import {convertToFormattedDate} from "../../service/custom/general.function";
 import {getAllReviewsByProviderUsername, isAbleToReview, sendReview} from "../../service/ReviewService";
+import useModal from "./CreateBill/UseModal";
+import ModalCreateBill from "./CreateBill/ModalCreateBill";
 
 // Start Pagination
 // import
@@ -28,6 +30,7 @@ function Detail(){
     const [avgStar, setAvgStar] = useState(0);
     const {username} = useParams();
     const navigate = useNavigate();
+    const {isShowing, toggle} = useModal();
     const dispatch = useDispatch();
     const msgBoxToggle = useSelector(state => {
         return state.chatting.chatting.msgBoxToggle;
@@ -158,11 +161,15 @@ function Detail(){
             dispatch(setMsgBoxToggle());
         }
     }
-
+    const user = useSelector(state => (state.user.user.current));
     //Js function
 
     return(
         <>
+            {userDetail && userDetail.id && < ModalCreateBill isShowing={isShowing}
+                                                hide={toggle}
+                                                userDetail={userDetail}
+            />}
         <title>User Profile</title>
         <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
         <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
@@ -247,8 +254,8 @@ function Detail(){
                                             <span>{reviews ? reviews.length : <></>} <span>Đánh giá</span></span>
                                         </div>
                                         <div className="text-center">
-                                            <button className="btn-my-style red">Thuê</button>
-                                            {/*<button className="btn-my-style white">Donate</button>*/}
+                                            {user?                                    <button className="btn-my-style red"onClick={toggle}>Thuê</button>
+                                                :<></>}                                            {/*<button className="btn-my-style white">Donate</button>*/}
                                             <button className="btn-my-style white" onClick={() => {addNewChat()}}>
                                                 <i className="fas fa-comment-alt"></i>Chat
                                             </button>
