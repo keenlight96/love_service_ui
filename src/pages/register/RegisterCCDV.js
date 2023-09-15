@@ -56,7 +56,11 @@ const RegisterCCDV =() =>{
                                             .then( async (response) => {
                                                 // setIdAccount(response.data.id)
                                                 console.log(response.data)
-                                                if (response.data.validStatus === 'NAME_EXISTED') {
+                                                if (response.data.validStatus === 'NAME_EXISTED_EMAIL_EXIST') {
+                                                    setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                                    setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                                    return
+                                                }else if (response.data.validStatus === 'NAME_EXISTED') {
                                                     setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                     return
                                                 } else if (response.data.validStatus === 'EMAIL_EXIST') {

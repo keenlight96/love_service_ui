@@ -48,20 +48,23 @@ const SignupForm = () => {
                                        console.log(values);
                                        SignupCCDV.registerAndProfile(values)
                                            .then( async (response) => {
-                                               console.log(response)
-                                           if (response.data.validStatus === 'NAME_EXISTED') {
-                                               setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                               console.log('trave',response)
+                                               if (response.data.validStatus === 'NAME_EXISTED_EMAIL_EXIST') {
+                                                   setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                                   setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               } else if (response.data.validStatus === 'NAME_EXISTED') {
+                                                   setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
-                                               setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
-                                               }  else if (response.data.validStatus === 'SUCCESSFULL') {
-                                               Swal.fire({
-                                                   position: 'center',
-                                                   icon: 'success',
-                                                   title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
-                                                   showConfirmButton: false,
-                                                   timer: 1500
-                                               });
-                                               navigate("/login")
+                                                   setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               } else if (response.data.validStatus === 'SUCCESSFULL') {
+                                                   Swal.fire({
+                                                       position: 'center',
+                                                       icon: 'success',
+                                                       title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
+                                                       showConfirmButton: false,
+                                                       timer: 1500
+                                                   });
+                                                   navigate("/login")
                                                }
 
                                    })
