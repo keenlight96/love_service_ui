@@ -68,7 +68,7 @@ function Detail(){
             dispatch(setMsgBoxToggle());
         }
     }
-
+    const user = useSelector(state => (state.user.user.current));
     //Js function
 
     return(
@@ -155,7 +155,8 @@ function Detail(){
                                     className="fas fa-star-half-alt"></i>&nbsp;<span>352 <span>Đánh giá</span></span>
                                 </div>
                                 <div className="text-center">
-                                    <button className="btn-my-style red"onClick={toggle}>Thuê</button>
+                                    {user?                                    <button className="btn-my-style red"onClick={toggle}>Thuê</button>
+                                    :<></>}
                                     {/*<button className="btn-my-style white">Donate</button>*/}
                                     <button className="btn-my-style white" onClick={() => {addNewChat()}}>
                                         <i className="fas fa-comment-alt"></i>Chat

@@ -157,7 +157,9 @@ const Header = () => {
                                                                                                                          tabIndex={-1}
                                                                                                                          href="#"><i
                                                         className="fas fa-plus"/> <span>Số dư</span> : <span
-                                                        className="money">{user.balance} đ</span></a></li>
+                                                        className="money">
+                                                        {user.balance} đ
+                                                    </span></a></li>
                                                     <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                                      href="/information/topup"><i
                                                         className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>
@@ -244,7 +246,9 @@ const Header = () => {
                                                                                                              tabIndex={-1}
                                                                                                              href="#"><i
                                             className="fas fa-plus"/> <span>Số dư</span> : <span
-                                            className="money">{user.balance} đ</span></a></li>
+                                            className="money">
+                                            {user.balance} đ
+                                        </span></a></li>
                                         <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                          href="/information/topup"><i
                                             className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>

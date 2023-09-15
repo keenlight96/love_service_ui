@@ -7,18 +7,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {getAllBillIn7DayByCCDV} from "../../../service/BillsService";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
-    const data = useSelector(state => {
-        return state.BillByAccount.BillByAccount.bill7DayByCCDV
-    })
-    const users = useSelector(state => {
-        return state.user.user.current
-    })
+    const user=useSelector(state => (state.user.user.current));
 
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const currentTime = new Date();
     const [hourRent, setHourRent] = useState([]);
-    const [test, setTest] = useState(new Array(72).fill(0));
+    const [test, setTest] = useState(new Array(168).fill(0));
     const [total, setTotal] = useState(userDetail.price);
     const [day, setDay] = useState((new Date()).getDate());
     const [hour, setHour] = useState(1);
@@ -34,9 +29,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         accountCCDV: {
             id: userDetail.id
         },
-        accountUser: {
-            id: JSON.parse(localStorage.getItem("account")).id
-        }
+        accountUser: {}
     });
     const [halo, setHalo] = useState([]);
 
@@ -52,9 +45,8 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     }, [message]);
 
     const fillDay = () => {
-
         const b = [];
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 7; i++) {
             const a = new Date();
             a.setDate((a.getDate() + i));
             b.push(a);
@@ -83,7 +75,8 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 break
             }
         }
-        console.log(check)
+        if (user ) {
+        } else {check = false;}
         if (check) {
             let tempBill = {
                 ...bill,
@@ -92,6 +85,9 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 dateCreate: new Date(),
                 firstMessage: $("[name='MessageBills']").val(),
                 address: $("[name='address']").val(),
+                accountUser: {
+                    id: JSON.parse(localStorage.getItem("account")).id
+                }
             }
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
@@ -100,7 +96,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 (e) => {
                     console.log(e);
                 }
-            ).finally(()=>{
+            ).finally(() => {
                 setMessage("1")
             })
         }
@@ -140,7 +136,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             }
         }
         for (let i = number; i < (parseInt(number) + parseInt(hour)); i++) {
-            if(temp[i]===1){
+            if (temp[i] === 1) {
                 check = false;
             }
         }
@@ -225,8 +221,12 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 </tr>
                                 <tr>
                                     <td><span>Số dư hiện tại</span>:</td>
-                                    <td><span className="total-amount">0đ</span><span
-                                        className="load-more-credit">+</span></td>
+                                    {user  ? <td>
+                                        <span className="total-amount">{user.balance}đ</span><span
+                                        className="load-more-credit">+</span></td> : <td>
+                                        <span className="total-amount">0đ</span><span
+                                        className="load-more-credit">+</span></td>}
+
                                 </tr>
                                 <tr>
                                     <td>Địa Chỉ :</td>
@@ -235,7 +235,8 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                                   defaultValue={""}/><p className="err-message"/></td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={2}><textarea id="testMessage" placeholder=" Gửi lời nhắn cho người được thuê "
+                                    <td colSpan={2}><textarea id="testMessage"
+                                                              placeholder=" Gửi lời nhắn cho người được thuê "
                                                               name="MessageBills"
                                                               maxLength={255} type="text" className="form-control"
                                                               defaultValue={""}/><p className="err-message"/></td>
@@ -253,6 +254,22 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                         <option id="day2" value={halo[2].getDate()}>
                                             Ngày :&nbsp;{halo[2].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
                                         </option>
+                                        <option id="day3" value={halo[3].getDate()}>
+                                            Ngày :&nbsp;{halo[3].getDate()}-{halo[3].getMonth()}-{halo[3].getFullYear()}
+                                        </option>
+
+                                        <option id="day4" value={halo[4].getDate()}>
+                                            Ngày :&nbsp;{halo[4].getDate()}-{halo[4].getMonth()}-{halo[4].getFullYear()}
+                                        </option>
+
+                                        <option id="day5" value={halo[5].getDate()}>
+                                            Ngày :&nbsp;{halo[5].getDate()}-{halo[5].getMonth()}-{halo[5].getFullYear()}
+                                        </option>
+
+                                        <option id="day6" value={halo[6].getDate()}>
+                                            Ngày :&nbsp;{halo[6].getDate()}-{halo[6].getMonth()}-{halo[6].getFullYear()}
+                                        </option>
+
                                     </select></td>
                                 </tr>
                                 <tr>
@@ -270,7 +287,6 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                                                  onClick={() => handClick(index)}
                                                                  key={index}>&nbsp;{index}h00:&nbsp;Chọn </div> : <></>
                                             ))}
-
                                         </div>
                                     </td>
                                 </tr>
