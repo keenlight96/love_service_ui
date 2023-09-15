@@ -29,7 +29,7 @@ function App() {
                     {/*Page Home*/}
                     <Route path={""} element={<Home/>}></Route>
                     <Route path={"register"} element={<Register/>}></Route>
-                    <Route path={"registerCCDV"} element={<RegisterProfile/>}></Route>
+                    <Route path={"registerCCDV"} element={<RegisterCCDV/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
                     <Route path={"/bills"} element={<Bills/>}></Route>
 

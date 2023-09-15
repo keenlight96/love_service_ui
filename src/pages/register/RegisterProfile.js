@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
 import {DatePicker, Select, Space, TimePicker} from 'antd';
-import {useNavigate, useParams} from "react-router";
+import {useLocation, useNavigate, useParams} from "react-router";
 import Swal from "sweetalert2";
 import RegisterSupply from "../../components/common/RegisterSupply";
 import {useSelector} from "react-redux"; // Import CSS cho DatePicker
@@ -27,6 +27,11 @@ const validationSchema = Yup.object().shape({
 const RegisterProfile =()=> {
     const [selectedIds, setSelectedIds] = useState([]);
     const [supply, setSupply] = useState([]);
+    const location = useLocation();
+
+    // Truy cập dữ liệu được truyền đi kèm từ trang trước
+    const receivedData = location.state?.data;
+
 
     const userSupply = useSelector(state => {
         try {
@@ -35,7 +40,6 @@ const RegisterProfile =()=> {
             return [];
         }
     });
-
     useEffect(() => {
         axios
             .get('http://localhost:8080/supplies/getAllSupply')
@@ -53,29 +57,25 @@ const RegisterProfile =()=> {
             setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
         }
     };
-
-    const [type, setType] = useState('date');
-    const {Option} = Select;
-    const PickerWithType = ({type, onChange}) => {
-
-        if (type === 'time') return <TimePicker onChange={onChange}/>;
-        if (type === 'date') return <DatePicker onChange={onChange}/>;
-        return <DatePicker picker={type} onChange={onChange}/>;
-    };
-    const getSelectedOptionId =()=> {
-        var select = document.getElementById("zoneSelect");
-        var selectedOption = select.options[select.selectedIndex];
-        var selectedId = selectedOption.value;
-        console.log("Selected ID: " + selectedId);
-    }
+    // const [type, setType] = useState('date');
+    // const {Option} = Select;
+    // const PickerWithType = ({type, onChange}) => {
+    //
+    //     if (type === 'time') return <TimePicker onChange={onChange}/>;
+    //     if (type === 'date') return <DatePicker onChange={onChange}/>;
+    //     return <DatePicker picker={type} onChange={onChange}/>;
+    // };
+    // const getSelectedOptionId =()=> {
+    //     var select = document.getElementById("zoneSelect");
+    //     var selectedOption = select.options[select.selectedIndex];
+    //     var selectedId = selectedOption.value;
+    //     console.log("Selected ID: " + selectedId);
+    // }
     // Khai báo state để lưu trữ giá trị được chọn
-    const [selectedId, setSelectedId] = useState(['']);
+    // const [selectedId, setSelectedId] = useState(['']);
     const navigate = useNavigate();
-    const {id: urlId} = useParams(); // Lấy ID từ URL (nếu có)
-
-
-    const account = JSON.parse(localStorage.getItem("account"));
-
+    // const {id: urlId} = useParams(); // Lấy ID từ URL (nếu có)
+    // const account = JSON.parse(localStorage.getItem("account"));
     return (
         <>
             <div className={'wrapper'}>
@@ -93,6 +93,7 @@ const RegisterProfile =()=> {
                                         weight: '',
                                         phoneNumber: '',
                                         idCard: '',
+                                        gender: '',
                                         price: '',
                                         basicRequest: '',
                                         facebookLink: '',
@@ -107,42 +108,36 @@ const RegisterProfile =()=> {
                                     validationSchema={validationSchema}
                                     onSubmit={(values) => {
                                         // Đây là nơi xử lý submit form sau khi đã validate thành công
-
-
                                         // values.zone.id = selectedId.toString(); // Cập nhật giá trị zone từ selectedId
                                         values.supplies = userSupply;
                                         // values.gender = selectedGender
-
-                                        console.log("id supply la", selectedIds)
                                         // console.log("ID zone là", selectedId);
                                         // Chuyển đổi giá trị ngày thành định dạng "YYYY-MM-DD"
                                         // const formattedDate = selectedDate.toISOString().split('T')[0];
                                         console.log("sinh nhat", values.birthday)
-
-
                                         console.log("Giá trị đối tượng values là", values);
                                         // // Lấy ID tài khoản từ token ( ID được lưu trong localStorage)
                                         // const id = JSON.parse(localStorage.getItem("account")).id
                                         // Kiểm tra xem có ID trong localStorage không
-                                        const localStorageId = JSON.parse(localStorage.getItem("account"))?.id;
-                                        var id;
-                                        if (localStorageId) {
+                                        const localStorageData = localStorage.getItem("account");
+                                        let id;
+                                        if (localStorageData) {
                                             // Nếu có ID trong localStorage, sử dụng nó
-                                            id = localStorageId.toString();
-                                            console.log("id trong local", localStorageId)
-                                        } else if (urlId) {
+                                            const accountData = JSON.parse(localStorageData);
+                                            id = accountData.toString();
+                                            console.log("id trong local", accountData)
+                                        } else if (receivedData) {
                                             // Nếu không có ID trong localStorage, kiểm tra xem có ID trong URL không
-                                            id = urlId.toString();
-                                            console.log("id trong url", urlId)
+                                            id = receivedData.toString();
+                                            console.log("id trong url", receivedData)
                                         }
-
-
+                                        console.log(1)
                                         SignupCCDV.signupUserDetailProfile(id, values)
                                             .then(async (response) => {
                                                 console.log(2)
                                                 console.log(response.data)
-                                                if(urlId){
-                                                    Swal.fire({
+                                                if(receivedData){
+                                                    await Swal.fire({
                                                         position: 'center',
                                                         icon: 'success',
                                                         title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
@@ -158,11 +153,8 @@ const RegisterProfile =()=> {
                                                     showConfirmButton: false,
                                                     timer: 1500
                                                 })
-                                                    navigate("/CCDV")
-
+                                                    navigate("/info")
                                                 }
-
-
                                             })
                                     }}
                                 >
@@ -478,7 +470,6 @@ const RegisterProfile =()=> {
                                             </div>
                                         </div>
                                     </Form>
-
                                 </Formik>
                             </div>
                         </div>
@@ -487,7 +478,5 @@ const RegisterProfile =()=> {
         </div>
     </>
 )
-
-
 }
 export default RegisterProfile

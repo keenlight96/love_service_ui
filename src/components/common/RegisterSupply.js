@@ -18,7 +18,7 @@ function RegisterSupply(isRegister) {
         }
     });
     // const [userSupply, setUserSupply] = useState([]);
-    const idUser = JSON.parse(localStorage.getItem("account")).id;
+
     const [cost, setCost] = useState('');
     const [hour, setHour] = useState('');
 
@@ -26,6 +26,8 @@ function RegisterSupply(isRegister) {
         dispatch(getAllActiveSupplies());
         if (!isRegister) {
             dispatch(getSupplyByUserID2(idUser))
+            const idUser = JSON.parse(localStorage.getItem("account")).id;
+
         }
     }, []);
 
@@ -65,23 +67,23 @@ function RegisterSupply(isRegister) {
         }
     }
 
-    function send() {
-        const result = [];
-        const costIP = $('#rentCost').val();
-        $('input[type=checkbox]').each(function () {
-            if ($(this).prop('checked')) {
-                result.push(
-                    {id: $(this).val()}
-                );
-            }
-        });
-
-        // sử dụng idUser để call API
-        axios.post("http://localhost:8080/supplies/createSupply?id=" + idUser + "?cost=" + costIP , result).then(data => {
-            alert("Thêm dữ liệu thành công")
-        })
-
-    }
+    // function send() {
+    //     const result = [];
+    //     const costIP = $('#rentCost').val();
+    //     $('input[type=checkbox]').each(function () {
+    //         if ($(this).prop('checked')) {
+    //             result.push(
+    //                 {id: $(this).val()}
+    //             );
+    //         }
+    //     });
+    //
+    //     // sử dụng idUser để call API
+    //     axios.post("http://localhost:8080/supplies/createSupply?id=" + idUser + "?cost=" + costIP , result).then(data => {
+    //         alert("Thêm dữ liệu thành công")
+    //     })
+    //
+    // }
 
     return (<>
         <div>

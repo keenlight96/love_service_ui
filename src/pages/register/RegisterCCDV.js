@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import "../../custom-css/cssRegister.css"
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 
 const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -26,6 +26,7 @@ const RegisterCCDV =() =>{
     const [message, setMessage] = useState('');
     // const [idAccount, setIdAccount] = useState('');
     const navigate = useNavigate();
+    const localtion = useLocation();
     return(
         <>
             <div style={{display:'flex', backgroundColor:'lightpink',justifyContent:'center'}}>
@@ -68,8 +69,8 @@ const RegisterCCDV =() =>{
                                                     //     timer: 1500
                                                     // });
                                                 }
-
-                                                navigate(`/registerProfile/${response.data.id}`)
+                                                const id = response.data.id
+                                                navigate('/registerProfile',{state : {data : id}})
 
                                             })
                                             .finally(() => {
