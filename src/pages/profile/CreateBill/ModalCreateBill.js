@@ -5,6 +5,7 @@ import axios from "axios";
 import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
 import {getAllBillIn7DayByCCDV} from "../../../service/BillsService";
+import Swal from "sweetalert2";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const user=useSelector(state => (state.user.user.current));
@@ -91,13 +92,19 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             }
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
-                alert(data.data);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: data.data,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             }).catch(
                 (e) => {
                     console.log(e);
                 }
             ).finally(() => {
-                setMessage("1")
+                setMessage(message+1)
             })
         }
     }
@@ -246,28 +253,28 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                     <td>Chọn Ngày :</td>
                                     <td><select name="dateCreate" className="form-control" onChange={getData}>
                                         <option id="day0" value={halo[0].getDate()}>
-                                            Ngày :&nbsp;{halo[0].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
+                                            Ngày :&nbsp;{halo[0].getDate()}-{halo[2].getMonth()+1}-{halo[2].getFullYear()}
                                         </option>
                                         <option id="day1" value={halo[1].getDate()}>
-                                            Ngày :&nbsp;{halo[1].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
+                                            Ngày :&nbsp;{halo[1].getDate()}-{halo[2].getMonth()+1}-{halo[2].getFullYear()}
                                         </option>
                                         <option id="day2" value={halo[2].getDate()}>
-                                            Ngày :&nbsp;{halo[2].getDate()}-{halo[2].getMonth()}-{halo[2].getFullYear()}
+                                            Ngày :&nbsp;{halo[2].getDate()}-{halo[2].getMonth()+1}-{halo[2].getFullYear()}
                                         </option>
                                         <option id="day3" value={halo[3].getDate()}>
-                                            Ngày :&nbsp;{halo[3].getDate()}-{halo[3].getMonth()}-{halo[3].getFullYear()}
+                                            Ngày :&nbsp;{halo[3].getDate()}-{halo[3].getMonth()+1}-{halo[3].getFullYear()}
                                         </option>
 
                                         <option id="day4" value={halo[4].getDate()}>
-                                            Ngày :&nbsp;{halo[4].getDate()}-{halo[4].getMonth()}-{halo[4].getFullYear()}
+                                            Ngày :&nbsp;{halo[4].getDate()}-{halo[4].getMonth()+1}-{halo[4].getFullYear()}
                                         </option>
 
                                         <option id="day5" value={halo[5].getDate()}>
-                                            Ngày :&nbsp;{halo[5].getDate()}-{halo[5].getMonth()}-{halo[5].getFullYear()}
+                                            Ngày :&nbsp;{halo[5].getDate()}-{halo[5].getMonth()+1}-{halo[5].getFullYear()}
                                         </option>
 
                                         <option id="day6" value={halo[6].getDate()}>
-                                            Ngày :&nbsp;{halo[6].getDate()}-{halo[6].getMonth()}-{halo[6].getFullYear()}
+                                            Ngày :&nbsp;{halo[6].getDate()}-{halo[6].getMonth()+1}-{halo[6].getFullYear()}
                                         </option>
 
                                     </select></td>
