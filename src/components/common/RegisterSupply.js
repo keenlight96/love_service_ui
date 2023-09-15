@@ -15,25 +15,25 @@ function RegisterSupply() {
         return state.supplies.supplies.user.supplies;
     });
     // const [userSupply, setUserSupply] = useState([]);
-    const idUser = localStorage.getItem("idUser");
+    const idUser = JSON.parse(localStorage.getItem("account"));
     const [cost, setCost] = useState('');
     const [hour, setHour] = useState('');
 
     useEffect(() => {
-        dispatch(getAllActiveSupplies);
+        dispatch(getAllActiveSupplies());
         dispatch(getSupplyByUserID(idUser))
     }, []);
-
 
 
     $('input[type=checkbox]').on('click', function () {
         $('input[type=checkbox]', this).prop('checked', function (i, checked) {
             return !checked
         })
-        if ($('input[type=checkbox]', this).prop('checked'))
+        if ($('input[type=checkbox]', this).prop('checked')) {
             $(this).addClass('selected');
-        else
+        } else {
             $(this).removeClass('selected');
+        }
     });
 
     function send() {
@@ -48,7 +48,7 @@ function RegisterSupply() {
         });
 
         // sử dụng idUser để call API
-        axios.post("http://localhost:8080/supplies/createSupply?id=" + idUser + "?cost=" + costIP , result).then(data => {
+        axios.post("http://localhost:8080/supplies/createSupply?id=" + idUser + "?cost=" + costIP, result).then(data => {
             alert("Thêm dữ liệu thành công")
         })
 
@@ -82,7 +82,7 @@ function RegisterSupply() {
                 <h2 className="col-12">Dịch vụ miễn phí :</h2>
                 {supply.length > 0 && supply.map((s) => {
                     if (s.type === 2 && s.isActive === true) {
-                        if (userSupply &&userSupply.find(userSupply => userSupply.id === s.id)) {
+                        if (userSupply && userSupply.find(userSupply => userSupply.id === s.id)) {
                             return (<div className="col-4">
                                     <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
                                     <label htmlFor={s.id}>{s.nameSupply}</label>
@@ -102,7 +102,7 @@ function RegisterSupply() {
                 <h2 className="col-12">Dịch vụ mở rộng :</h2>
                 {supply.length > 0 && supply.map((s) => {
                     if (s.type === 3 && s.isActive === true) {
-                        if (userSupply &&userSupply.find(userSupply => userSupply.id === s.id)) {
+                        if (userSupply && userSupply.find(userSupply => userSupply.id === s.id)) {
                             return (<div className="col-4">
                                     <input type="checkbox" name="checkbox" id={s.id} value={s.id} checked/>
                                     <label htmlFor={s.id}>{s.nameSupply}</label>

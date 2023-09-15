@@ -17,6 +17,7 @@ import HistoryProvider from "./pages/home/HistoryProvider";
 import ShowImages from "./pages/profile/ShowImages";
 import SidebarInformation from "./components/common/SidebarInformation";
 import Information from "./pages/information/Information";
+import Test from "./pages/Test";
 import ListBill from "./pages/admin/ListBill";
 import NewCCDVList from "./pages/admin/NewCCDVList";
 import AllUserList from "./pages/admin/AllUserList";
@@ -27,7 +28,7 @@ function App() {
     return (
         <>
             <Routes>
-                <Route path={"/test"} element={<SidebarInformation/>}></Route>
+                <Route path={"/test"} element={<Test/>}></Route>
                 <Route path={"/"} element={<Layout/>}>
                     {/*Page Login*/}
                     <Route path={"/login"} element={<Login/>}></Route>
