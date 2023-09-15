@@ -12,7 +12,7 @@ import axios from "axios";
              }
          });
      }
-     // call api đăng kí tài khoản
+     // call api đăng kí tài khoản chưa có profile
      static async registerUser(values) {
          return await axios.post("http://localhost:8080/accounts/registerUser", values, {
              headers: {
@@ -26,8 +26,8 @@ import axios from "axios";
 
      //call api đăng kí ccdv userprofile
 
-    static async signupUserDetailProfile(id){
-        return await axios.post("http://localhost:8080/userDetail/registerCCDV/" +id);
+    static async signupUserDetailProfile(id,values){
+        return await axios.post("http://localhost:8080/userDetail/registerCCDV/" +id, values);
     }
     //api dang ki tu dong userProfile
     static async signUpAutoUserDetailProfile(id){

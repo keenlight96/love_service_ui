@@ -30,13 +30,7 @@ export const getTopFemale = createAsyncThunk(
         return res.data;
     }
 )
-export const getSupplyByUserID = createAsyncThunk(
-    "getSupplyByUserID",
-    async (idUser) => {
-        const rs = await customAxios.get("supplies/getSupplyByUserID?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
-        return rs.data;
-    }
-)
+
 export const getCCDVProperGender = createAsyncThunk(
     "getCCDVProperGender",
     async (idUser) => {

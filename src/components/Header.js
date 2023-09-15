@@ -190,7 +190,7 @@ const Header = () => {
                                                         href="#"><i
                                                         className="fas fa-plus"/> <span>Số dư</span> : <span
                                                         className="money">
-                                                        {user.balance} đ
+                                                        {user && user.balance} đ
                                                     </span></a></li>
                                                     <li role="presentation" className="menu-item"><a role="menuitem"
                                                                                                      tabIndex={-1}
