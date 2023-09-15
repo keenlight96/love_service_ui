@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import {cancelBill, completes, getAllBillByIdUser} from "../../service/BillsService";
+import {checkToken} from "../../service/UserService";
 
 const AllBillOfUser = () => {
 
@@ -61,7 +62,11 @@ const AllBillOfUser = () => {
         setBillComplete(idBill)
     }
     useEffect(() =>{
-        dispatch(completes(idBillComplete))
+        dispatch(completes(idBillComplete)).then(() =>{
+            dispatch(checkToken());
+            dispatch(getAllBillByIdUser(idAccount))
+
+        })
     },[idBillComplete])
 
     const confirmCancelBill = (idBill) => {
@@ -71,15 +76,15 @@ const AllBillOfUser = () => {
 
     useEffect(() => {
         dispatch(cancelBill({ idBill, idAccount, message })).then(() =>{
+            dispatch(checkToken());
             dispatch(getAllBillByIdUser(idAccount));
+
         });
     },[idBill,idAccount,message]);
 
     return (
         <>
-            <div class="setting__main row" style={{ marginTop: '70px' }}>
-                <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                    <div className="aside">
+
                         <h3>Lịch sử đơn thuê</h3>
                         <div className="transaction-table">
                             <div className="table-responsive">
@@ -170,9 +175,8 @@ const AllBillOfUser = () => {
                         {allBillOfUser.length === 0 && (
                             <div className="text-center mt-20 col-md-12"><span>Không có dữ liệu</span></div>
                         )}
-                    </div>
-                </div>
-            </div>
+
+
             {objects && modal &&  (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
@@ -366,8 +370,6 @@ const AllBillOfUser = () => {
                     </div>
                 </>
             )}
-            {stringComplete && alert(stringComplete)}
-            {stringCancelBill && alert(stringCancelBill)}
         </>
     );
 }

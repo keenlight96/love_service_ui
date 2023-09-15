@@ -10,6 +10,7 @@ import {
 } from "../../service/BillsService";
 import {Link} from "react-router-dom";
 import Bills from "./Bills";
+import {checkToken} from "../../service/UserService";
 
 const AllBillByOfCCDV = () => {
 
@@ -70,10 +71,13 @@ const AllBillByOfCCDV = () => {
 
     const receivedBills = (idBill1) => {
         setBillRecevied(idBill1)
-        alert(stringReceivedBill)
     }
     useEffect(() => {
-        dispatch(receivedBill(idBillRecevied))
+        dispatch(receivedBill(idBillRecevied)).then(() =>{
+            dispatch(checkToken());
+            dispatch(getAllBillByIdCCDV(idAccount));
+
+        })
     }, [idBillRecevied]);
 
     const confirmCancelBill = (idBill1) => {
@@ -83,15 +87,14 @@ const AllBillByOfCCDV = () => {
 
     useEffect(() => {
         dispatch(cancelBill({idBill, idAccount, message})).then(() => {
-            dispatch(getAllBillByIdCCDV(idAccount))
+            dispatch(checkToken());
+            dispatch(getAllBillByIdCCDV(idAccount));
         });
     }, [idBill, idAccount, message]);
 
     return (
         <>
-            <div className="setting__main row" style={{marginTop: "70px"}}>
-                <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                    <div className="aside">
+
                         <h3>Lịch sử đơn thuê</h3>
                         <div className="transaction-table">
                             <div className="table-responsive">
@@ -193,9 +196,6 @@ const AllBillByOfCCDV = () => {
                                 <span>Không có dữ liệu</span>
                             </div>
                         )}
-                    </div>
-                </div>
-            </div>
             {objects && modal && (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
@@ -405,7 +405,6 @@ const AllBillByOfCCDV = () => {
             {/*        :*/}
             {/*        <></>*/}
             {/*}*/}
-            {stringCancelBill ? alert(stringCancelBill) : <div></div>}
         </>
     );
 };
