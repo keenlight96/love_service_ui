@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
@@ -23,6 +23,16 @@ const validationSchema = Yup.object().shape({
 const SignupForm = () => {
     const [message, setMessage] = useState('');
     const [message2, setMessage2] = useState('');
+    useEffect(() => {
+        setMessage('');
+        setMessage2('');
+    }, []);
+
+
+    const resetMessage = () => {
+        setMessage('');
+        setMessage2('');
+    }
     const navigate = useNavigate();
     return (
        <>
@@ -48,9 +58,12 @@ const SignupForm = () => {
                                        console.log(values);
                                        SignupCCDV.registerAndProfile(values)
                                            .then( async (response) => {
-                                               console.log(response)
-                                           if (response.data.validStatus === 'NAME_EXISTED') {
-                                               setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                               console.log('trave',response)
+                                               if (response.data.validStatus === 'NAME_EXISTED_EMAIL_EXIST') {
+                                                   setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                                   setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               } else if (response.data.validStatus === 'NAME_EXISTED') {
+                                                   setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
                                                setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
                                                }  else if (response.data.validStatus === 'SUCCESSFULL') {
@@ -79,6 +92,7 @@ const SignupForm = () => {
                                                    placeholder="Tên đăng nhập"
                                                    maxLength="5000"
                                                    autoComplete="false"
+                                                   onFocus = {resetMessage}
                                                    style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none' }}
                                                />
                                                <ErrorMessage name="username" component="div" className="error" />
@@ -119,6 +133,7 @@ const SignupForm = () => {
                                                            placeholder="Email"
                                                            maxLength="5000"
                                                            autoComplete="false"
+                                                           onFocus = {resetMessage}
                                                            style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
 
                                                            // style={{

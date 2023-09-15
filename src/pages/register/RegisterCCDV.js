@@ -1,7 +1,7 @@
 import * as Yup from "yup";
-import {ErrorMessage, Field, Formik} from "formik";
+import formik, {ErrorMessage, Field, Formik} from "formik";
 import SignupCCDV from "../../service/custom/SignupCCDV";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "../../custom-css/cssRegister.css"
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
@@ -26,8 +26,19 @@ const RegisterCCDV =() =>{
     const [message, setMessage] = useState('');
     const [message2, setMessage2] = useState('');
     // const [idAccount, setIdAccount] = useState('');
+    useEffect(() => {
+        setMessage('');
+        setMessage2('');
+    }, []);
+
+
+    const resetMessage = () => {
+        setMessage('');
+        setMessage2('');
+    }
     const navigate = useNavigate();
-    const localtion = useLocation();
+    const location = useLocation();
+
     return(
         <>
             <div style={{display:'flex', backgroundColor:'lightpink',justifyContent:'center'}}>
@@ -51,12 +62,15 @@ const RegisterCCDV =() =>{
                                     onSubmit={(values, actions) => {
                                         // Đây là nơi xử lý submit form sau khi đã validate thành công
                                         console.log(values);
-
                                         SignupCCDV.registerUser(values)
                                             .then( async (response) => {
                                                 // setIdAccount(response.data.id)
                                                 console.log(response.data)
-                                                if (response.data.validStatus === 'NAME_EXISTED') {
+                                                if (response.data.validStatus === 'NAME_EXISTED_EMAIL_EXIST') {
+                                                    setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                                    setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                                    return
+                                                }else if (response.data.validStatus === 'NAME_EXISTED') {
                                                     setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                     return
                                                 } else if (response.data.validStatus === 'EMAIL_EXIST') {
@@ -80,6 +94,7 @@ const RegisterCCDV =() =>{
                                                 actions.setSubmitting(false);
                                             });
                                     }}
+
                                 >
                                     {({ handleSubmit, isSubmitting }) => (
                                         <form onSubmit={handleSubmit}>
@@ -90,10 +105,11 @@ const RegisterCCDV =() =>{
                                                     placeholder="Tên đăng nhập"
                                                     maxLength="5000"
                                                     autoComplete="false"
+                                                    onFocus = {resetMessage}
                                                     style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none' }}
                                                 />
                                                 <ErrorMessage name="username" component="div" className="error" />
-                                                {message && (
+                                                {message&& (
                                                     <div className="error">
                                                         {message}
                                                     </div>
@@ -117,6 +133,7 @@ const RegisterCCDV =() =>{
                                                     placeholder="Nhập lại mật khẩu"
                                                     maxLength="5000"
                                                     autoComplete="false"
+                                                    onFocus = {resetMessage}
                                                     style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
                                                 />
                                                 <ErrorMessage name="confirmPassword" component="div" className="error" />
@@ -129,6 +146,7 @@ const RegisterCCDV =() =>{
                                                         placeholder="Xác thực Email"
                                                         maxLength="5000"
                                                         autoComplete="false"
+                                                        onFocus = {resetMessage}
                                                         style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
 
                                                     />
