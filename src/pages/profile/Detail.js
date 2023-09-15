@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 import ShowImages from "./ShowImages";
 import {convertToFormattedDate} from "../../service/custom/general.function";
-import {getAllReviewsByProviderUsername} from "../../service/ReviewService";
+import {getAllReviewsByProviderUsername, isAbleToReview, sendReview} from "../../service/ReviewService";
 
 // Start Pagination
 // import
@@ -24,6 +24,8 @@ function Detail(){
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
     const [bill, setBill] = useState([])
+    const [star, setStar] = useState(5);
+    const [avgStar, setAvgStar] = useState(0);
     const {username} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -32,6 +34,12 @@ function Detail(){
     })
     const reviews = useSelector(state => {
         return state.reviews.reviews.byProviderUsername;
+    })
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    })
+    const isAbleReview = useSelector(state => {
+        return state.reviews.reviews.isAble;
     })
 
     // Start Pagination
@@ -42,9 +50,43 @@ function Detail(){
         // reviews là mảng gốc các phần tử thật
         return reviews.slice(firstPageIndex, lastPageIndex);
     }, [currentPage, reviews]);
-
-
     // End Pagination
+
+    // test function
+    const handleStarClicking = (e, star) => {
+        setStar(star);
+        for (let i = 1; i <= 5; i++) {
+            const input = document.querySelector(`#star${i}`);
+
+            if (i <= star) {
+                if (!input.classList.contains("fa-star-active")) {
+                    input.classList.toggle("fa-star-active");
+                }
+            } else {
+                if (input.classList.contains("fa-star-active")) {
+                    input.classList.toggle("fa-star-active");
+                }
+            }
+        }
+    }
+
+    const sendReviewFunction = () => {
+        const reviewContent = document.querySelector("#reviewContent").value;
+        const review = {
+            accountCCDV: {
+                id: userDetail.account.id
+            },
+            accountUser: {
+                id: storeUser.account.id
+            },
+            rating : star,
+            content: reviewContent
+        }
+        dispatch(sendReview(review)).then((data) => {
+            dispatch(getAllReviewsByProviderUsername(userDetail.account.username));
+        });
+        // dispatch(sendReview(review));
+    }
 
     useEffect(() => {
         axios.get(`http://localhost:8080/userDetail/` + username,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
@@ -66,9 +108,32 @@ function Detail(){
                 console.log(error);
             });
     }, []);
+
+    useEffect(() => {
+        try {
+            const ids = {
+                ccdvId: userDetail.account.id,
+                userId: storeUser.account.id,
+            }
+            dispatch(isAbleToReview(ids));
+        } catch (e) {
+        }
+    }, [storeUser, userDetail])
     // useLayoutEffect(() => {
     //     window.scrollTo(0, 0)
     // });
+
+    useEffect(() => {
+        let avg = 0;
+        if (reviews.length > 0) {
+            let total = 0;
+            for (let i = 0; i < reviews.length; i++) {
+                total += reviews[i].rating;
+            }
+            avg = total / reviews.length;
+        }
+        setAvgStar(avg);
+    }, [reviews])
 
     const addNewChat = () => {
         let newReceiver = {
@@ -174,10 +239,12 @@ function Detail(){
                                 </div>
                                 <div className="player-profile-right-wrap col-md-3 col-md-push-6">
                                     <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
-                                        <div className="rateting-style"><i className="fas fa-star"></i><i
-                                            className="fas fa-star"></i><i
-                                            className="fas fa-star"></i><i className="fas fa-star"></i><i
-                                            className="fas fa-star-half-alt"></i>&nbsp;<span>352 <span>Đánh giá</span></span>
+                                        <div className="rateting-style">
+                                            {avgStar}
+                                            &nbsp;
+                                            <i className="fas fa-star"></i>
+                                            &nbsp;
+                                            <span>{reviews ? reviews.length : <></>} <span>Đánh giá</span></span>
                                         </div>
                                         <div className="text-center">
                                             <button className="btn-my-style red">Thuê</button>
@@ -217,6 +284,7 @@ function Detail(){
                                         <div>
                                             <div className="game-category row">
                                                 <div className="title-player-profile row">
+                                                    <div style={{marginTop: "20px"}}><p>&nbsp;</p></div>
                                                     <div className="col-xs-6"><span>Dịch vụ</span></div>
                                                 </div>
                                                 {userDetail.supplies && userDetail.supplies.length > 0 && userDetail.supplies.map((item, key) => (
@@ -229,6 +297,7 @@ function Detail(){
                                             </div>
                                             <div>
                                                 <div className="title-player-profile row">
+                                                    <div style={{marginTop: "20px"}}><p>&nbsp;</p></div>
                                                     <div className="col-xs-6"><span>Thông tin</span></div>
                                                 </div>
                                                 <div className="content-player-profile">
@@ -292,11 +361,83 @@ function Detail(){
                                                 <div>
                                                     <div>
                                                         <div className="title-player-profile row">
+                                                            <div style={{marginTop: "20px"}}><p>&nbsp;</p></div>
                                                             <div className="col-xs-6"><span>Đánh giá</span></div>
-                                                            <textarea placeholder="message ..." name="message" type="text" className="form-control" defaultValue={""} />
-                                                            <div className={"customButton"}>
-                                                                <p>Gửi</p>
-                                                            </div>
+                                                            {
+                                                                isAbleReview && isAbleReview == true ?
+                                                                    <>
+                                                                        <div style={{marginTop: "50px"}}><p>&nbsp;</p></div>
+                                                                        <textarea placeholder="Nhập đánh giá ..." name="message" type="text"
+                                                                                  className="form-control" defaultValue={""}
+                                                                                  style={{marginLeft: "15px", width: "97%"}} id={"reviewContent"}/>
+                                                                        <>
+                                                                            <style
+                                                                                dangerouslySetInnerHTML={{
+                                                                                    __html:
+                                                                                        "\n.rate {\n    float: left;\n    height: 46px;\n    padding: 0 10px;\n}\n.rate:not(:checked) > input {\n    position:absolute;\n    top:-9999px;\n}\n.rate:not(:checked) > label {\n    float:right;\n    width:1em;\n    overflow:hidden;\n    white-space:nowrap;\n    cursor:pointer;\n    font-size:30px;\n    color:#ccc;\n}\n.rate:not(:checked) > label:before {\n    content: '★ ';\n}\n\n/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */\n"
+                                                                                }}
+                                                                            />
+
+                                                                            <div className="rate" >
+                                                                                <i className="fas fa-star fa-star-active" id={"star1"} onClick={(e) => {handleStarClicking(e, 1)}} style={{cursor: "pointer"}}></i>
+                                                                                <i className="fas fa-star fa-star-active" id={"star2"} onClick={(e) => {handleStarClicking(e, 2)}} style={{cursor: "pointer"}}></i>
+                                                                                <i className="fas fa-star fa-star-active" id={"star3"} onClick={(e) => {handleStarClicking(e, 3)}} style={{cursor: "pointer"}}></i>
+                                                                                <i className="fas fa-star fa-star-active" id={"star4"} onClick={(e) => {handleStarClicking(e, 4)}} style={{cursor: "pointer"}}></i>
+                                                                                <i className="fas fa-star fa-star-active" id={"star5"} onClick={(e) => {handleStarClicking(e, 5)}} style={{cursor: "pointer"}}></i>
+                                                                            {/*    <input type="radio" id="star5" name="rate" defaultValue={5} />*/}
+                                                                            {/*    <label htmlFor="star5" title="text">*/}
+                                                                            {/*        5 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star4" name="rate" defaultValue={4} />*/}
+                                                                            {/*    <label htmlFor="star4" title="text">*/}
+                                                                            {/*        4 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star3" name="rate" defaultValue={3} />*/}
+                                                                            {/*    <label htmlFor="star3" title="text">*/}
+                                                                            {/*        3 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star2" name="rate" defaultValue={2} />*/}
+                                                                            {/*    <label htmlFor="star2" title="text">*/}
+                                                                            {/*        2 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star1" name="rate" defaultValue={1} />*/}
+                                                                            {/*    <label htmlFor="star1" title="text">*/}
+                                                                            {/*        1 star*/}
+                                                                            {/*    </label>*/}
+                                                                            </div>
+
+                                                                            {/*<div className="rate" onClick={(e) => {e.stopPropagation()}}>*/}
+                                                                            {/*    <input type="radio" id="star5" name="rate" defaultValue={5} onClick={(e) => {e.nativeEvent.stopImmediatePropagation();handleStarClicking(e, 5);}}/>*/}
+                                                                            {/*    <label htmlFor="star5" title="text">*/}
+                                                                            {/*        5 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star4" name="rate" defaultValue={4} onClick={(e) => {e.stopPropagation();handleStarClicking(e, 4)}}/>*/}
+                                                                            {/*    <label htmlFor="star4" title="text">*/}
+                                                                            {/*        4 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star3" name="rate" defaultValue={3} onClick={(e) => {e.stopPropagation();handleStarClicking(e, 3)}}/>*/}
+                                                                            {/*    <label htmlFor="star3" title="text">*/}
+                                                                            {/*        3 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star2" name="rate" defaultValue={2} onClick={(e) => {e.stopPropagation();handleStarClicking(e, 2)}}/>*/}
+                                                                            {/*    <label htmlFor="star2" title="text">*/}
+                                                                            {/*        2 stars*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*    <input type="radio" id="star1" name="rate" defaultValue={1} onClick={(e) => {e.stopPropagation();handleStarClicking(e, 1)}}/>*/}
+                                                                            {/*    <label htmlFor="star1" title="text">*/}
+                                                                            {/*        1 star*/}
+                                                                            {/*    </label>*/}
+                                                                            {/*</div>*/}
+                                                                        </>
+
+                                                                        <div className={"customButton"} onClick={() => {sendReviewFunction()}}>
+                                                                            <p>Gửi</p>
+                                                                        </div>
+                                                                    </>
+                                                                    :
+                                                                    <></>
+                                                            }
+
                                                         </div>
                                                         <div className="text-center review-duo-player row">
                                                             <div className="col-md-12">

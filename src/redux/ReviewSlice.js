@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAllReviewsByProviderUsername} from "../service/ReviewService";
+import {getAllReviewsByProviderUsername, isAbleToReview, sendReview} from "../service/ReviewService";
 
 const initialState = {
     reviews: {
@@ -15,6 +15,13 @@ const ReviewSlice = createSlice({
     extraReducers: builder => {
         builder.addCase(getAllReviewsByProviderUsername.fulfilled, (state, action) => {
             state.reviews.byProviderUsername = action.payload;
+        })
+        builder.addCase(isAbleToReview.fulfilled, (state, action) => {
+            state.reviews.isAble = action.payload;
+        })
+        builder.addCase(sendReview.fulfilled, (state, action) => {
+            state.reviews.byProviderUsername.unshift(action.payload);
+            state.reviews.isAble = false;
         })
     }
 })
