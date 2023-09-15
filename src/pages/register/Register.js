@@ -54,7 +54,7 @@ const SignupForm = () => {
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
                                                setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
                                                }  else if (response.data.validStatus === 'SUCCESSFULL') {
-                                               Swal.fire({
+                                               await Swal.fire({
                                                    position: 'center',
                                                    icon: 'success',
                                                    title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
