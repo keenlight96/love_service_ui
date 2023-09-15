@@ -21,6 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 const SignupForm = () => {
     const [message, setMessage] = useState('');
+    const [message2, setMessage2] = useState('');
     return (
        <>
            <div className={'wrapper-register'}>
@@ -49,7 +50,7 @@ const SignupForm = () => {
                                            if (response.data.validStatus === 'NAME_EXISTED') {
                                                setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
-                                               setMessage("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
                                                }  else if (response.data.validStatus === 'SUCCESSFULL') {
                                                Swal.fire({
                                                    position: 'center',
@@ -151,9 +152,9 @@ const SignupForm = () => {
                                                    {/*</div>*/}
                                                </div>
                                                <ErrorMessage name="email" component="div" className="error" />
-                                               {message && (
+                                               {message2 && (
                                                    <div className="error">
-                                                       {message}
+                                                       {message2}
                                                    </div>
                                                )}
                                            </div>

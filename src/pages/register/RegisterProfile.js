@@ -120,19 +120,20 @@ const RegisterProfile =()=> {
                                         // const id = JSON.parse(localStorage.getItem("account")).id
                                         // Kiểm tra xem có ID trong localStorage không
                                         const localStorageData = localStorage.getItem("account");
-                                        let id;
+                                        let idAccount;
                                         if (localStorageData) {
                                             // Nếu có ID trong localStorage, sử dụng nó
                                             const accountData = JSON.parse(localStorageData);
-                                            id = accountData.toString();
                                             console.log("id trong local", accountData)
+                                            console.log("id",accountData.id)
+                                            idAccount = accountData.id;
                                         } else if (receivedData) {
                                             // Nếu không có ID trong localStorage, kiểm tra xem có ID trong URL không
-                                            id = receivedData.toString();
+                                            idAccount = receivedData.toString();
                                             console.log("id trong url", receivedData)
                                         }
                                         console.log(1)
-                                        SignupCCDV.signupUserDetailProfile(id, values)
+                                        SignupCCDV.signupUserDetailProfile(idAccount, values)
                                             .then(async (response) => {
                                                 console.log(2)
                                                 console.log(response.data)
@@ -145,7 +146,17 @@ const RegisterProfile =()=> {
                                                         timer: 1500
                                                     })
                                                     navigate("/login")
-                                                }else {
+                                                }else if(localStorageData){
+                                                    Swal.fire({
+                                                        position: 'center',
+                                                        icon: 'success',
+                                                        title: 'Cập nhật thành công',
+                                                        showConfirmButton: false,
+                                                        timer: 1500
+                                                    })
+                                                    navigate("/info")
+                                                }
+                                                else {
                                                     Swal.fire({
                                                     position: 'center',
                                                     icon: 'success',
