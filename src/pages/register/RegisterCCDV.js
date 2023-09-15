@@ -24,6 +24,7 @@ const validationSchema = Yup.object().shape({
 
 const RegisterCCDV =() =>{
     const [message, setMessage] = useState('');
+    const [message2, setMessage2] = useState('');
     // const [idAccount, setIdAccount] = useState('');
     const navigate = useNavigate();
     const localtion = useLocation();
@@ -57,8 +58,10 @@ const RegisterCCDV =() =>{
                                                 console.log(response.data)
                                                 if (response.data.validStatus === 'NAME_EXISTED') {
                                                     setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                                    return
                                                 } else if (response.data.validStatus === 'EMAIL_EXIST') {
-                                                    setMessage("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                                    setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                                    return
                                                 }  else if (response.data.validStatus === 'SUCCESSFULL') {
                                                     // alert("Đăng ký thành công.");
                                                     //  Swal.fire({
@@ -132,9 +135,9 @@ const RegisterCCDV =() =>{
 
                                                 </div>
                                                 <ErrorMessage name="email" component="div" className="error" />
-                                                {message && (
+                                                {message2 && (
                                                     <div className="error">
-                                                        {message}
+                                                        {message2}
                                                     </div>
                                                 )}
                                             </div>
