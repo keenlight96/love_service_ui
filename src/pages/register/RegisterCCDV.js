@@ -1,7 +1,7 @@
 import * as Yup from "yup";
-import {ErrorMessage, Field, Formik} from "formik";
+import formik, {ErrorMessage, Field, Formik} from "formik";
 import SignupCCDV from "../../service/custom/SignupCCDV";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "../../custom-css/cssRegister.css"
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
@@ -26,8 +26,18 @@ const RegisterCCDV =() =>{
     const [message, setMessage] = useState('');
     const [message2, setMessage2] = useState('');
     // const [idAccount, setIdAccount] = useState('');
+    useEffect(() => {
+        setMessage('');
+        setMessage2('');
+    }, []);
     const navigate = useNavigate();
-    const localtion = useLocation();
+    const location = useLocation();
+
+    const resetMessage = () => {
+        setMessage('');
+        setMessage2('');
+    }
+
     return(
         <>
             <div style={{display:'flex', backgroundColor:'lightpink',justifyContent:'center'}}>
@@ -51,7 +61,6 @@ const RegisterCCDV =() =>{
                                     onSubmit={(values, actions) => {
                                         // Đây là nơi xử lý submit form sau khi đã validate thành công
                                         console.log(values);
-
                                         SignupCCDV.registerUser(values)
                                             .then( async (response) => {
                                                 // setIdAccount(response.data.id)
@@ -84,6 +93,7 @@ const RegisterCCDV =() =>{
                                                 actions.setSubmitting(false);
                                             });
                                     }}
+
                                 >
                                     {({ handleSubmit, isSubmitting }) => (
                                         <form onSubmit={handleSubmit}>
@@ -94,10 +104,11 @@ const RegisterCCDV =() =>{
                                                     placeholder="Tên đăng nhập"
                                                     maxLength="5000"
                                                     autoComplete="false"
+                                                    onFocus = {resetMessage}
                                                     style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none' }}
                                                 />
                                                 <ErrorMessage name="username" component="div" className="error" />
-                                                {message && (
+                                                {message&& (
                                                     <div className="error">
                                                         {message}
                                                     </div>
@@ -121,6 +132,7 @@ const RegisterCCDV =() =>{
                                                     placeholder="Nhập lại mật khẩu"
                                                     maxLength="5000"
                                                     autoComplete="false"
+                                                    onFocus = {resetMessage}
                                                     style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
                                                 />
                                                 <ErrorMessage name="confirmPassword" component="div" className="error" />
@@ -133,6 +145,7 @@ const RegisterCCDV =() =>{
                                                         placeholder="Xác thực Email"
                                                         maxLength="5000"
                                                         autoComplete="false"
+                                                        onFocus = {resetMessage}
                                                         style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
 
                                                     />
