@@ -17,6 +17,11 @@ import HistoryProvider from "./pages/home/HistoryProvider";
 import ShowImages from "./pages/profile/ShowImages";
 import SidebarInformation from "./components/common/SidebarInformation";
 import Information from "./pages/information/Information";
+import ListBill from "./pages/admin/ListBill";
+import NewCCDVList from "./pages/admin/NewCCDVList";
+import AllUserList from "./pages/admin/AllUserList";
+import AllCCDVList from "./pages/admin/AllCCDVList";
+import AccountReport from "./pages/admin/AccountReport";
 
 function App() {
     return (
@@ -32,7 +37,6 @@ function App() {
                     <Route path={"register"} element={<Register/>}></Route>
                     <Route path={"registerCCDV"} element={<RegisterProfile/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
-                    <Route path={"/bills"} element={<Bills/>}></Route>
 
                     {/*Page Profile*/}
                     <Route path={"profile/:username"} element={<Detail/>}></Route>
@@ -50,7 +54,14 @@ function App() {
 
                 </Route>
                 <Route path="/" element={<LayoutAdmin />}>
-                    <Route path="/homeAdmin" index element={<HomeAdmin />}/>
+                    <Route path="/homeAdmin"  element={<HomeAdmin />}>
+                        <Route path={"allBills"} element={<ListBill/>}></Route>
+                        <Route path={"NewUser"} element={<NewCCDVList/>}></Route>
+                        <Route path={"allUser"} element={<AllUserList/>}></Route>
+                        <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
+                        <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>
+                        <Route path={"allListReport"} element={<AccountReport/>}></Route>
+                    </Route>
                 </Route>
             </Routes>
         </>

@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import AdminSlice from "../../redux/AdminSlice";
 import {blockAccount, getAllUser} from "../../service/AdminService";
 
-const UserList =() =>{
+const NewUserList =() =>{
     const dispatch = useDispatch();
     const allUserAc = useSelector((state) => {
         console.log(state.admin.admin.allUser);
@@ -52,7 +52,7 @@ const UserList =() =>{
                                 <div className="white_card_body">
                                     <div className="QA_section">
                                         <div className="white_box_tittle list_header">
-                                            <h4>Danh sách người dùng </h4>
+                                            <h4>Danh sách người dùng mới nhất </h4>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
                                                     <div className="search_inner">
@@ -122,7 +122,7 @@ const UserList =() =>{
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <div className="action_btns d-flex"  onClick={() => blockAccountUser(item)}>
+                                                        <div className="action_btns d-flex"  onClick={() => blockAccountUser(item.id)}>
                                                             <a href="#" className="action_btn">
                                                                 {" "}
                                                                 <i className="ti-unlock" />
@@ -166,4 +166,4 @@ const UserList =() =>{
         </>
     )
 }
-export default UserList;
+export default NewUserList;

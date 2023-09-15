@@ -1,5 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAccountCCDVFilter, getAccountUserFilter, getAllBill, getAllCCDV, getAllUser} from "../service/AdminService";
+import {
+    activeCCDV,
+    getAccountCCDVFilter,
+    getAccountUserFilter,
+    getAllBill,
+    getAllCCDV,
+    getAllUser, getListReport
+} from "../service/AdminService";
 
 const initialState = {
     admin: {
@@ -9,7 +16,8 @@ const initialState = {
         allUserFilter:[],
         allCCDVFilter:[],
         blockAccount: '',
-        activeCCDv:''
+        activeCCDv:'',
+        listReport:[]
     }
 }
 const AdminSlice = createSlice({
@@ -31,6 +39,12 @@ const AdminSlice = createSlice({
         })
         builder.addCase(getAccountCCDVFilter.fulfilled, (state, action) => {
             state.admin.allCCDVFilter = action.payload;
+        })
+        builder.addCase(activeCCDV.fulfilled, (state, action) => {
+            state.admin.activeCCDv = action.payload;
+        })
+        builder.addCase(getListReport.fulfilled, (state, action) => {
+            state.admin.listReport = action.payload;
         })
     }
 })
