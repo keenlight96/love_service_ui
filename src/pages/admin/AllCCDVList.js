@@ -99,9 +99,9 @@ const AllCCDVList = () => {
                                                     className="form-control gender" value={filter.status}
                                                     onChange={(e) => handleInputChange(e, 'status')}>
                                                 <option value="">Trạng thái</option>
-                                                <option value="active">Active</option>
-                                                <option value="register">Register</option>
-                                                <option value="block">Block</option>
+                                                <option value="active">Đã kích hoạt</option>
+                                                <option value="register">Chờ kích hoạt</option>
+                                                <option value="block">Khóa</option>
                                             </select>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
@@ -159,9 +159,21 @@ const AllCCDVList = () => {
                                                             <a href="#">{item.account.role.nameRole}</a>
                                                         </td>
                                                         <td>
-                                                            <a href="#" className="status_btn">
-                                                                {item.account.status.nameStatus}
-                                                            </a>
+                                                            {item.account.status.nameStatus === "block" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'red'}}>
+                                                                    Tài khoản bị khóa
+                                                                </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "active" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'#05d34e'}}>
+                                                                    Đã khích hoạt
+                                                                </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "register" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'orange'}}>
+                                                                    Chờ xác nhận
+                                                                </a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             {(item.account.status.nameStatus === "active" || item.account.status.nameStatus === "emailverify") && (
@@ -188,13 +200,6 @@ const AllCCDVList = () => {
                                                                                 onClick={() => activeAc(item.account.username)}>
                                                                             Active
                                                                         </button>
-                                                                        {/*<label className="toggle">*/}
-                                                                        {/*    <input type="checkbox"></input>*/}
-                                                                        {/*        <span className="slider"></span>*/}
-                                                                        {/*        <span className="labels" data-on="Active"*/}
-                                                                        {/*              data-off="Register"></span>*/}
-                                                                        {/*</label>*/}
-
                                                                     </div>
                                                                 </>
                                                             )}

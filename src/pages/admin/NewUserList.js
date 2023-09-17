@@ -86,12 +86,12 @@ const NewUserList =() =>{
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">id</th>
-                                                    <th scope="col">Nickname</th>
-                                                    <th scope="col">Username</th>
+                                                    <th scope="col">Biệt danh</th>
+                                                    <th scope="col">Tài khoản</th>
                                                     <th scope="col">Email</th>
-                                                    <th scope="col">Role</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Action</th>
+                                                    <th scope="col">Vai trò</th>
+                                                    <th scope="col">Trạng thái</th>
+                                                    <th scope="col">Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -114,7 +114,9 @@ const NewUserList =() =>{
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a href="#">{item.role.nameRole}</a>
+                                                        {item.role.nameRole === "ROLE_USER" &&
+                                                        <a href="#">Người dùng</a>
+                                                        }
                                                     </td>
                                                     <td>
                                                         <a href="#" className="status_btn">

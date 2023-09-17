@@ -69,9 +69,9 @@ const AllUserList =() =>{
                                             <h4>Danh sách người dùng </h4>
                                                 <select className="form-control gender " style={{width: 'auto'}} className="form-control gender" value={filter.status} onChange={(e) => handleInputChange(e, 'status')}>
                                                     <option value="">Trạng thái</option>
-                                                    <option value="active">Active</option>
-                                                    <option value="register">Register</option>
-                                                    <option value="block">Block</option>
+                                                    <option value="active">Đã kích hoạt</option>
+                                                    <option value="register">Chờ kích họat</option>
+                                                    <option value="block">Khóa</option>
                                                 </select>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
@@ -91,12 +91,12 @@ const AllUserList =() =>{
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">id</th>
-                                                    <th scope="col">Nickname</th>
-                                                    <th scope="col">Username</th>
+                                                    <th scope="col">Biệt danh</th>
+                                                    <th scope="col">Tài khoản</th>
                                                     <th scope="col">Email</th>
-                                                    <th scope="col">Role</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Action</th>
+                                                    <th scope="col">Vai trò</th>
+                                                    <th scope="col">Trạng thái</th>
+                                                    <th scope="col">Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -119,12 +119,26 @@ const AllUserList =() =>{
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="#">{item.account.role.nameRole}</a>
+                                                            {item.account.role.nameRole === "ROLE_USER" &&
+                                                            <a href="#">Người dùng</a>
+                                                            }
                                                         </td>
                                                         <td>
-                                                            <a href="#" className="status_btn">
-                                                                {item.account.status.nameStatus}
+                                                            {item.account.status.nameStatus === "block" &&
+                                                            <a href="#" className="status_btn" style={{backgroundColor :'red'}}>
+                                                                Tài khoản bị khóa
                                                             </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "active" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'#05d34e'}}>
+                                                                    Đã khích hoạt
+                                                                </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "register" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'orange'}}>
+                                                                    Chờ xác nhận
+                                                                </a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             {( item.account.status.nameStatus === "active" || item.account.status.nameStatus === "register" || item.account.status.nameStatus === "emailverify")   &&(
@@ -140,7 +154,7 @@ const AllUserList =() =>{
 
                                                             { item.account.status.nameStatus === "block" &&(
                                                                 <>
-                                                                <div className="action_btns d-flex"  >
+                                                                <div className="action_btns d-flex" >
                                                                     <a href="#" className="action_btn">
                                                                         {" "}
                                                                         <i className="ti-lock" />

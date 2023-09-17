@@ -113,49 +113,22 @@ const AccountReport =() =>{
                                                             </div>
                                                         </td>
                                                         <td>
+                                                            {item.receiver.status.nameStatus === "active" &&
                                                             <a href="#" className="status_btn">
-                                                                {item.receiver.status.nameStatus}
+                                                                đã kích hoạt
                                                             </a>
+                                                            }
+                                                            {item.receiver.status.nameStatus === "block" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor : 'red'}}>
+                                                                    đã bị khóa
+                                                                </a>
+                                                            }
+                                                            {item.receiver.status.nameStatus === "register" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor : 'orange'}}>
+                                                                    chờ xác nhận
+                                                                </a>
+                                                            }
                                                         </td>
-                                                        {/*<td>*/}
-                                                        {/*    {(item.account.status.nameStatus === "active" || item.account.status.nameStatus === "emailverify") && (*/}
-                                                        {/*        <>*/}
-                                                        {/*            <div className="action_btns d-flex"*/}
-                                                        {/*                 >*/}
-                                                        {/*                <a href="#" className="action_btn">*/}
-                                                        {/*                    {" "}*/}
-                                                        {/*                    <i className="ti-unlock"/>*/}
-                                                        {/*                </a>*/}
-                                                        {/*            </div>*/}
-                                                        {/*        </>*/}
-                                                        {/*    )}*/}
-                                                        {/*    {item.account.status.nameStatus === "register" && (*/}
-                                                        {/*        <>*/}
-                                                        {/*            <div className="action_btns d-flex">*/}
-                                                        {/*                <a href="#" className="action_btn">*/}
-                                                        {/*                    {" "}*/}
-                                                        {/*                    <i className="ti-unlock"/>*/}
-                                                        {/*                </a>*/}
-                                                        {/*                <button href="#" className="status_btn"*/}
-                                                        {/*                        style={{marginLeft: '10px'}}>*/}
-                                                        {/*                    Active*/}
-                                                        {/*                </button>*/}
-
-                                                        {/*            </div>*/}
-                                                        {/*        </>*/}
-                                                        {/*    )}*/}
-
-                                                        {/*    {item.account.status.nameStatus === "block" && (*/}
-                                                        {/*        <>*/}
-                                                        {/*            <div className="action_btns d-flex">*/}
-                                                        {/*                <a href="#" className="action_btn">*/}
-                                                        {/*                    {" "}*/}
-                                                        {/*                    <i className="ti-lock"/>*/}
-                                                        {/*                </a>*/}
-                                                        {/*            </div>*/}
-                                                        {/*        </>*/}
-                                                        {/*    )}*/}
-                                                        {/*</td>*/}
                                                     </tr>
                                                 ))}
                                                 </tbody>
