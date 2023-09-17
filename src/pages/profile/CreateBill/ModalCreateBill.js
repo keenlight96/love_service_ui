@@ -9,6 +9,9 @@ import Swal from "sweetalert2";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const user=useSelector(state => (state.user.user.current));
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
 
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
@@ -92,14 +95,20 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             }
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
-                console.log(data.data)
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: data.data,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                if (data.data != null) {
+                    sendNotification(data.data.id);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: "Thành công"
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: "Không đủ tiền"
+                    });
+                }
             }).catch(
                 (e) => {
                     console.log(e);
@@ -172,6 +181,20 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setBill({...bill, dateStart: a, dateEnd: b});
     }
 
+    const sendNotification = (billId) => {
+        try {
+            if (stompClient != null) {
+                let message = {
+                    "type": "notification",
+                    "subtype": billId,
+                }
+                stompClient.send("/gkz/hello", {}, JSON.stringify(message));
+            }
+        } catch (e) {
+            console.log("Send notification error:");
+            console.log(e);
+        }
+    }
 
     return isShowing ? ReactDOM.createPortal(
         <div role="dialog">

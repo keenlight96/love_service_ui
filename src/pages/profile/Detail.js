@@ -247,7 +247,7 @@ function Detail(){
                                 <div className="player-profile-right-wrap col-md-3 col-md-push-6">
                                     <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
                                         <div className="rateting-style">
-                                            {avgStar}
+                                            {avgStar.toFixed(1)}
                                             &nbsp;
                                             <i className="fas fa-star"></i>
                                             &nbsp;

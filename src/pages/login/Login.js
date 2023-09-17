@@ -6,6 +6,7 @@ import {useState} from "react";
 import Swal from "sweetalert2";
 import {useDispatch} from "react-redux";
 import {checkToken} from "../../service/UserService";
+import {getAllNotifications} from "../../service/ChattingService";
 
 
 function Login() {
@@ -51,6 +52,7 @@ function Login() {
             localStorage.setItem("account", JSON.stringify(data));
             if (data.status.nameStatus === "active" && data.isActive) {
                 dispatch(checkToken());
+                dispatch(getAllNotifications(data.id));
                 if (data.role.nameRole ==="ROLE_ADMIN") {
                     navigate("admin");
                 } else if (data.role.nameRole ==="ROLE_USER") {
