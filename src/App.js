@@ -23,6 +23,8 @@ import NewCCDVList from "./pages/admin/NewCCDVList";
 import AllUserList from "./pages/admin/AllUserList";
 import AllCCDVList from "./pages/admin/AllCCDVList";
 import AccountReport from "./pages/admin/AccountReport";
+import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
+import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
 
 function App() {
     return (
@@ -37,7 +39,9 @@ function App() {
                     <Route path={""} element={<Home/>}></Route>
                     <Route path={"register"} element={<Register/>}></Route>
                     <Route path={"registerCCDV"} element={<RegisterCCDV/>}></Route>
+                    <Route path={"registerUserOrCCDV"} element={<RegisterUserOrCCDV/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
+                    <Route path={"registerProfileGoogle"} element={<RegisterProfileGoogle/>}></Route>
 
                     {/*Page Profile*/}
                     <Route path={"profile/:username"} element={<Detail/>}></Route>
