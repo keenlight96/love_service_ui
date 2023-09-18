@@ -2,13 +2,15 @@ import LoginService from "../../service/custom/login";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router";
 import * as yup from "yup";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Swal from "sweetalert2";
 import {useDispatch} from "react-redux";
 import {checkToken} from "../../service/UserService";
-
+import {getAllNotifications} from "../../service/ChattingService";
+import jwt_decode from "jwt-decode";
 
 function Login() {
+    // const [loadScript, setLoadScript] = useState(false);
     // Lấy "source" từ URL
     const searchParams = new URLSearchParams(window.location.search);
     const sourceParam = searchParams.get('source');
@@ -51,12 +53,12 @@ function Login() {
             localStorage.setItem("account", JSON.stringify(data));
             if ((data.status.nameStatus === "active"||data.status.nameStatus === "inActive")&& data.isActive) {
                 dispatch(checkToken());
+                dispatch(getAllNotifications(data.id));
                 if (data.role.nameRole ==="ROLE_ADMIN") {
-                    navigate("admin");
+                    navigate("/homeAdmin");
                 } else if (data.role.nameRole ==="ROLE_USER") {
                     navigate("/");
                 } else if (data.role.nameRole ===("ROLE_CCDV")) {
-                    console.log("1")
                     navigate("/");
                 }
             } else if (data.status.nameStatus === "emailverify") {
@@ -81,6 +83,79 @@ function Login() {
             setMessage("tài khoản hoặc mật khẩu không chính xác");
         }
     }
+
+    const handleLoginGoogle = async (email) => {
+        try {
+            let account = {
+                email: email
+            }
+            const response = await LoginService.loginGoogle(account);
+            const data = response.data;
+            console.log(data);
+            if (data.id && data.isActive) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("account", JSON.stringify(data));
+                dispatch(checkToken());
+                dispatch(getAllNotifications(data.id));
+                if (data.role.nameRole ==="ROLE_ADMIN") {
+                    navigate("/homeAdmin");
+                } else if (data.role.nameRole ==="ROLE_USER") {
+                    navigate("/");
+                } else if (data.role.nameRole ===("ROLE_CCDV")) {
+                    navigate("/");
+                }
+            } else if (data === "Chưa có tài khoản") {
+                navigate("/registerUserOrCCDV");
+            } else {
+                navigate("/login");
+                setMessage(data);
+            }
+        } catch (error) {
+            navigate("/login");
+            setMessage("Chưa xác định catch");
+        }
+    }
+
+    function handleCallbackResponse(response) {
+        let userObj = jwt_decode(response.credential);
+        console.log(userObj)
+        localStorage.setItem("googleAccount", JSON.stringify(userObj));
+
+        handleLoginGoogle(userObj.email).then(r => {});
+    }
+
+    useEffect(() => {
+        /*global google*/
+        window.google.accounts.id.initialize({
+            client_id: "1037575977837-idj26a1rcc1tf4lvtqkkfbbt0mtbcd5i.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        });
+
+        window.google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            {theme: "outline", size: "large"}
+        )
+        localStorage.setItem("googleAccount", "");
+        localStorage.setItem("account", "");
+        localStorage.setItem("token", "");
+    }, [])
+
+    // useEffect(() => {
+    //     const script = document.createElement('script');
+    //     script.src = 'https://accounts.google.com/gsi/client';
+    //     // script.async = true;
+    //     script.defer = true;
+    //     document.body.appendChild(script);
+    //
+    //     setLoadScript(!loadScript);
+    //     console.log("------------------")
+    //
+    //     return () => {
+    //         // Clean up the script tag when the component unmounts
+    //         document.body.removeChild(script);
+    //     };
+    // }, []);
+
     return (
         <>
             <link rel="shortcut icon" href="../resources/raw/favicon.ico"/>
@@ -157,13 +232,25 @@ function Login() {
                                             <button type="submit"><span>Đăng nhập</span></button>
                                         </Form>
                                     </Formik>
-                                    <button className="btn btn-default">
-                                        <i className="fab fa-facebook"></i>
-                                        <span>Đăng nhập bằng Facebook</span>
-                                    </button>
-                                    <a className="create-new">
-                                        <p><span>Đăng ký tài khoản</span></p>
-                                    </a>
+                                    {/*<button className="btn btn-default">*/}
+                                    {/*    <i className="fab fa-facebook"></i>*/}
+                                    {/*    <span>Đăng nhập bằng Facebook</span>*/}
+                                    {/*</button>*/}
+
+                                    <div id={"signInDiv"}></div>
+
+                                    <div className={"row"}>
+                                        <div className={"col-md-6"}>
+                                            <a className="create-new" href={"/register"}>
+                                                <p><span>Đăng ký người dùng</span></p>
+                                            </a>
+                                        </div>
+                                        <div className={"col-md-6"}>
+                                            <a className="create-new" href={"/registerCCDV"}>
+                                                <p><span>Đăng ký cung cấp dịch vụ</span></p>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

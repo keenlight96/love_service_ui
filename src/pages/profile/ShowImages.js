@@ -35,7 +35,6 @@ const ShowImages = ({images}) => {
         let slideIndex2 = slideIndex;
         let i;
         let slides = document.getElementsByClassName("mySlides-showImages");
-        console.log(slides);
         let dots = document.getElementsByClassName("demo-showImages");
         let captionText = document.getElementById("caption");
         if (n > slides.length) {

@@ -1,13 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
 import '../../custom-css/cssRegister.css'
 import SignupCCDV from "../../service/custom/SignupCCDV";
+import {useNavigate} from "react-router";
 
 const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Tên đăng nhập là bắt buộc'),
-    password: Yup.string().required('Mật khẩu là bắt buộc'),
+    username: Yup.string()
+        .required('Tên đăng nhập là bắt buộc')
+        .min(8, 'Tên đăng nhập phải có ít nhất 8 ký tự'),
+    password: Yup.string()
+        .required('Mật khẩu là bắt buộc')
+        .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+        .matches(/(?=.*\d)/, 'Mật khẩu phải chứa ít nhất một chữ số'),
     confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không trùng khớp')
         .required('Nhập lại mật khẩu là bắt buộc'),
@@ -16,6 +22,18 @@ const validationSchema = Yup.object().shape({
 });
 const SignupForm = () => {
     const [message, setMessage] = useState('');
+    const [message2, setMessage2] = useState('');
+    useEffect(() => {
+        setMessage('');
+        setMessage2('');
+    }, []);
+
+
+    const resetMessage = () => {
+        setMessage('');
+        setMessage2('');
+    }
+    const navigate = useNavigate();
     return (
        <>
            <div className={'wrapper-register'}>
@@ -40,20 +58,25 @@ const SignupForm = () => {
                                        console.log(values);
                                        SignupCCDV.registerAndProfile(values)
                                            .then( async (response) => {
-                                               console.log(response)
-                                           if (response.data.validStatus === 'NAME_EXISTED') {
-                                               setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                               console.log('trave',response)
+                                               if (response.data.validStatus === 'NAME_EXISTED_EMAIL_EXIST') {
+                                                   setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                                                   setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               } else if (response.data.validStatus === 'NAME_EXISTED') {
+                                                   setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
-                                               setMessage("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
                                                }  else if (response.data.validStatus === 'SUCCESSFULL') {
-                                               Swal.fire({
+                                               await Swal.fire({
                                                    position: 'center',
                                                    icon: 'success',
                                                    title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
                                                    showConfirmButton: false,
                                                    timer: 1500
                                                });
+                                               navigate("/login")
                                                }
+
                                    })
                                            .finally(() => {
                                                actions.setSubmitting(false);
@@ -69,6 +92,7 @@ const SignupForm = () => {
                                                    placeholder="Tên đăng nhập"
                                                    maxLength="5000"
                                                    autoComplete="false"
+                                                   onFocus = {resetMessage}
                                                    style={{ textAlign: 'center' ,borderRadius: '7px',padding:'7px' ,margin:'10px', outline: 'none' }}
                                                />
                                                <ErrorMessage name="username" component="div" className="error" />
@@ -109,6 +133,7 @@ const SignupForm = () => {
                                                            placeholder="Email"
                                                            maxLength="5000"
                                                            autoComplete="false"
+                                                           onFocus = {resetMessage}
                                                            style={{ textAlign: 'center',borderRadius: '7px',padding:'7px',margin:'10px' , outline: 'none'}}
 
                                                            // style={{
@@ -146,9 +171,9 @@ const SignupForm = () => {
                                                    {/*</div>*/}
                                                </div>
                                                <ErrorMessage name="email" component="div" className="error" />
-                                               {message && (
+                                               {message2 && (
                                                    <div className="error">
-                                                       {message}
+                                                       {message2}
                                                    </div>
                                                )}
                                            </div>

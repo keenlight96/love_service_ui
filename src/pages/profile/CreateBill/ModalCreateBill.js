@@ -9,6 +9,10 @@ import Swal from "sweetalert2";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const user = useSelector(state => (state.user.user.current));
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
+
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const currentTime = new Date();
@@ -48,7 +52,6 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setMessage(message + 1);
     }
 
-    // nạp ngày để render
     const fillDay = () => {
         const b = [];
         for (let i = 0; i < 7; i++) {
@@ -58,13 +61,10 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         }
         setSevenDay(b)
     }
-
-    // tính tiền để render
     const pricing = (valueTag) => {
         setTotal(userDetail.price * valueTag.target.value);
         setHourRend(valueTag.target.value)
     }
-    //  hiển thị 24h
     const getData = (e) => {
         const number = e.target.value - currentTime.getDate();
         const temp = [];
@@ -74,7 +74,6 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setHourInDay(temp);
         setDayRend(e.target.value);
     }
-    // gửi dữ liệu
     const submit = () => {
         let check = false;
         for (let i = 0; i < hourInDay.length; i++) {
@@ -101,14 +100,20 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             }
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: data.data.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-
+                if (data.data != null) {
+                    sendNotification(data.data.bill.id);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: data.data.message
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: data.data.message
+                    });
+                }
             }).catch(
                 (e) => {
                     console.log(e);
@@ -182,6 +187,20 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setBill({...bill, dateStart: a, dateEnd: b});
     }
 
+    const sendNotification = (billId) => {
+        try {
+            if (stompClient != null) {
+                let message = {
+                    "type": "notification",
+                    "subtype": billId,
+                }
+                stompClient.send("/gkz/hello", {}, JSON.stringify(message));
+            }
+        } catch (e) {
+            console.log("Send notification error:");
+            console.log(e);
+        }
+    }
 
     return isShowing ? ReactDOM.createPortal(
         <div role="dialog">
@@ -239,7 +258,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 </tr>
                                 <tr>
                                     <td><span>Số dư hiện tại</span>:</td>
-                                    {user ? <td>
+                                    {user  ? <td>
                                         <span className="total-amount">{user.balance}đ</span><span
                                         className="load-more-credit">+</span></td> : <td>
                                         <span className="total-amount">0đ</span><span
@@ -264,35 +283,28 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                     <td>Chọn Ngày :</td>
                                     <td><select name="dateCreate" className="form-control" onChange={getData}>
                                         <option id="day0" value={sevenDay[0].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth()}-{sevenDay[2].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
                                         </option>
                                         <option id="day1" value={sevenDay[1].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth()}-{sevenDay[2].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
                                         </option>
                                         <option id="day2" value={sevenDay[2].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth()}-{sevenDay[2].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
                                         </option>
                                         <option id="day3" value={sevenDay[3].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth()}-{sevenDay[3].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth()+1}-{sevenDay[3].getFullYear()}
                                         </option>
 
                                         <option id="day4" value={sevenDay[4].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth()}-{sevenDay[4].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth()+1}-{sevenDay[4].getFullYear()}
                                         </option>
 
                                         <option id="day5" value={sevenDay[5].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth()}-{sevenDay[5].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth()+1}-{sevenDay[5].getFullYear()}
                                         </option>
 
                                         <option id="day6" value={sevenDay[6].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth()}-{sevenDay[6].getFullYear()}
+                                            Ngày :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth()+1}-{sevenDay[6].getFullYear()}
                                         </option>
 
                                     </select></td>

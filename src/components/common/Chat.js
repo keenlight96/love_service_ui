@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Stomp, Client} from "@stomp/stompjs";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    addChatWithReceiver,
+    addChatWithReceiver, addNotification,
     getAllChatReceivers,
     getChatWithReceiver,
     setActiveReceiver,
     setChatWithReceiver,
-    setMsgBoxToggle
+    setMsgBoxToggle, setStompClient
 } from "../../service/ChattingService";
 
 const Chat = () => {
@@ -38,7 +38,9 @@ const Chat = () => {
         dispatch(setMsgBoxToggle());
     }
 
-    const [stompClient, setStompClient] = useState(null);
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
 
     function connect() {
         if (stompClient !== null) {
@@ -47,22 +49,20 @@ const Chat = () => {
 
         let socket = new WebSocket('ws://localhost:8080/gkz-stomp-endpoint/websocket');
         let stompClient2 = Stomp.over(socket);
-        setStompClient(stompClient2);
+        dispatch(setStompClient(stompClient2));
 
         try {
             let userId = JSON.parse(localStorage.getItem("account")).id;
-            let room;
-            if (userId < activeReceiver.id) {
-                room = userId + "_" + activeReceiver.id;
-            } else {
-                room = activeReceiver.id + "_" + userId;
-            }
 
             stompClient2.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompClient2.subscribe("/topic/" + room, function (message) {
-                    console.log("test subscribe")
-                    showMessage(JSON.parse(message.body).greeting);
+                stompClient2.subscribe("/topic/" + userId, function (message) {
+                    let converter = JSON.parse(message.body)
+                    if (converter.type == "private") {
+                        showMessage(converter);
+                    } else if (converter.type == "notification") {
+                        dispatch(addNotification(converter));
+                    }
                 });
             });
         } catch (e) {
@@ -94,6 +94,7 @@ const Chat = () => {
                     "receiver": {
                         id: activeReceiver.id
                     },
+                    "type": "private",
                     'message': document.querySelector("#textMessage").value
                 }
                 stompClient.send("/gkz/hello", {}, JSON.stringify(message));

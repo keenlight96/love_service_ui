@@ -11,11 +11,20 @@ import Home from "./pages/home/Home";
 import UserInfo from "./pages/information/UserInfo";
 import AllBillByOfCCDV from "./pages/information/AllBillOfCCDV";
 import Bills from "./pages/information/Bills";
+import LayoutAdmin from "./components/layoutAdmin/LayoutAdmin";
+import HomeAdmin from "./pages/admin/HomeAdmin";
 import HistoryProvider from "./pages/home/HistoryProvider";
 import ShowImages from "./pages/profile/ShowImages";
 import SidebarInformation from "./components/common/SidebarInformation";
 import Information from "./pages/information/Information";
 import Test from "./pages/Test";
+import ListBill from "./pages/admin/ListBill";
+import NewCCDVList from "./pages/admin/NewCCDVList";
+import AllUserList from "./pages/admin/AllUserList";
+import AllCCDVList from "./pages/admin/AllCCDVList";
+import AccountReport from "./pages/admin/AccountReport";
+import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
+import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
 
 function App() {
     return (
@@ -29,9 +38,10 @@ function App() {
                     {/*Page Home*/}
                     <Route path={""} element={<Home/>}></Route>
                     <Route path={"register"} element={<Register/>}></Route>
-                    <Route path={"registerCCDV"} element={<RegisterProfile/>}></Route>
+                    <Route path={"registerCCDV"} element={<RegisterCCDV/>}></Route>
+                    <Route path={"registerUserOrCCDV"} element={<RegisterUserOrCCDV/>}></Route>
                     <Route path={"registerProfile"} element={<RegisterProfile/>}></Route>
-                    <Route path={"/bills"} element={<Bills/>}></Route>
+                    <Route path={"registerProfileGoogle"} element={<RegisterProfileGoogle/>}></Route>
 
                     {/*Page Profile*/}
                     <Route path={"profile/:username"} element={<Detail/>}></Route>
@@ -39,7 +49,7 @@ function App() {
                     {/*Page Information*/}
                     <Route path={"information"} element={<Information/>}>
                         <Route path={"info"} element={<UserInfo/>}></Route>
-                        <Route path={"bills"} element={<UserInfo/>}></Route>
+                        <Route path={"bills"} element={<Bills/>}></Route>
                         <Route path={"topup"} element={<UserInfo/>}></Route>
                         <Route path={"summary"} element={<UserInfo/>}></Route>
                         <Route path={"supplies"} element={<UserInfo/>}></Route>
@@ -47,6 +57,16 @@ function App() {
 
                     </Route>
 
+                </Route>
+                <Route path="/" element={<LayoutAdmin />}>
+                    <Route path="/homeAdmin"  element={<HomeAdmin />}>
+                        <Route path={"allBills"} element={<ListBill/>}></Route>
+                        <Route path={"NewUser"} element={<NewCCDVList/>}></Route>
+                        <Route path={"allUser"} element={<AllUserList/>}></Route>
+                        <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
+                        <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>
+                        <Route path={"allListReport"} element={<AccountReport/>}></Route>
+                    </Route>
                 </Route>
             </Routes>
         </>
