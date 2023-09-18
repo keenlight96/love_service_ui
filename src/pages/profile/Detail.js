@@ -19,9 +19,10 @@ import Pagination from "../../components/common/Pagination";
 
 // Số phần tử 1 trang
 let PageSize = 5;
+
 // End Pagination
 
-function Detail(){
+function Detail() {
     const [userDetail, setUserDetail] = useState(null);
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
@@ -48,7 +49,7 @@ function Detail(){
     // End Pagination
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/userDetail/` + username,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.get(`http://localhost:8080/userDetail/` + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(response => {
                 // console.log(response.data.userProfile);
                 // let {birthday} = response.data.userProfile;
@@ -62,10 +63,17 @@ function Detail(){
                 setBill(response.data.bills);
 
                 dispatch(getAllReviewsByProviderUsername(response.data.userProfile.account.username));
+
             })
             .catch(error => {
                 console.log(error);
             });
+        axios.get("http://localhost:8080/userDetail/increaseView?username=" + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+            .then(res => {
+                console.log(res.data)
+            }).catch(error => {
+            console.log(error);
+        });
     }, []);
     // useLayoutEffect(() => {
     //     window.scrollTo(0, 0)
@@ -97,47 +105,48 @@ function Detail(){
     const user = useSelector(state => (state.user.user.current));
     //Js function
 
-    return(
+    return (
         <>
-            {userDetail.id && < ModalCreateBill isShowing={isShowing}
-                                                hide={toggle}
-                                                userDetail={userDetail}
+            {userDetail && userDetail.id && < ModalCreateBill isShowing={isShowing}
+                                                              hide={toggle}
+                                                              userDetail={userDetail}
             />}
-        <title>User Profile</title>
-        <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
-        <link rel="manifest" href="https://playerduo.net/manifest.json" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
-        <meta name="theme-color" content="#ffffff" />
-        <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
-        <link href="../resources/all.css" rel="stylesheet" />
-        <link href="../resources/css.css" rel="stylesheet" />
-        <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet" />
-        <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="../resources/0.cbdbec7b.chunk.css" />
-        <link rel="stylesheet" type="text/css" href="../resources/3.fe7e74cf.chunk.css" />
-        <link rel="stylesheet" type="text/css" href="../resources/10.697bc269.chunk.css" />
-        <link rel="stylesheet" href="../resources/css-user-profile.css" />
+            <title>User Profile</title>
+            <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png"/>
+            <link rel="apple-touch-icon" sizes="60x60" href="https://playerduo.net/favicons/apple-icon-60x60.png"/>
+            <link rel="apple-touch-icon" sizes="72x72" href="https://playerduo.net/favicons/apple-icon-72x72.png"/>
+            <link rel="apple-touch-icon" sizes="76x76" href="https://playerduo.net/favicons/apple-icon-76x76.png"/>
+            <link rel="apple-touch-icon" sizes="114x114" href="https://playerduo.net/favicons/apple-icon-114x114.png"/>
+            <link rel="apple-touch-icon" sizes="120x120" href="https://playerduo.net/favicons/apple-icon-120x120.png"/>
+            <link rel="apple-touch-icon" sizes="144x144" href="https://playerduo.net/favicons/apple-icon-144x144.png"/>
+            <link rel="apple-touch-icon" sizes="152x152" href="https://playerduo.net/favicons/apple-icon-152x152.png"/>
+            <link rel="apple-touch-icon" sizes="180x180" href="https://playerduo.net/favicons/apple-icon-180x180.png"/>
+            <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png"/>
+            <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png"/>
+            <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png"/>
+            <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png"/>
+            <link rel="manifest" href="https://playerduo.net/manifest.json"/>
+            <meta name="msapplication-TileColor" content="#ffffff"/>
+            <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png"/>
+            <meta name="theme-color" content="#ffffff"/>
+            <link rel="shortcut icon" href="../resources/raw/favicon.ico"/>
+            <link href="../resources/all.css" rel="stylesheet"/>
+            <link href="../resources/css.css" rel="stylesheet"/>
+            <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
+            <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
+            <link rel="stylesheet" type="text/css" href="../resources/0.cbdbec7b.chunk.css"/>
+            <link rel="stylesheet" type="text/css" href="../resources/3.fe7e74cf.chunk.css"/>
+            <link rel="stylesheet" type="text/css" href="../resources/10.697bc269.chunk.css"/>
+            <link rel="stylesheet" href="../resources/css-user-profile.css"/>
 
             {/*Start Pagination Style*/}
-            <style dangerouslySetInnerHTML={{__html: "\n.pagination-container {\n  display: flex;\n  list-style-type: none;\n  justify-content: center;\n}\n.pagination-container .pagination-item {\n  padding: 0 12px;\n  height: 32px;\n  text-align: center;\n  margin: auto 4px;\n  color: rgba(0, 0, 0, 0.87);\n  display: flex;\n  box-sizing: border-box;\n  align-items: center;\n  letter-spacing: 0.01071em;\n  border-radius: 16px;\n  line-height: 1.43;\n  font-size: 13px;\n  min-width: 32px;\n}\n.pagination-container .pagination-item.dots:hover {\n  background-color: transparent;\n  cursor: default;\n}\n.pagination-container .pagination-item:hover {\n  background-color: rgba(0, 0, 0, 0.04);\n  cursor: pointer;\n}\n.pagination-container .pagination-item.selected {\n  background-color: rgba(0, 0, 0, 0.08);\n}\n.pagination-container .pagination-item .arrow::before {\n  position: relative;\n  /* top: 3pt; Uncomment this to lower the icons as requested in comments*/\n  content: '';\n  /* By using an em scale, the arrows will size with the font */\n  display: inline-block;\n  width: 0.4em;\n  height: 0.4em;\n  border-right: 0.12em solid rgba(0, 0, 0, 0.87);\n  border-top: 0.12em solid rgba(0, 0, 0, 0.87);\n}\n.pagination-container .pagination-item .arrow.left {\n  transform: rotate(-135deg) translate(-50%);\n}\n.pagination-container .pagination-item .arrow.right {\n  transform: rotate(45deg);\n}\n.pagination-container .pagination-item.disabled {\n  pointer-events: none;\n}\n.pagination-container .pagination-item.disabled .arrow::before {\n  border-right: 0.12em solid rgba(0, 0, 0, 0.43);\n  border-top: 0.12em solid rgba(0, 0, 0, 0.43);\n}\n.pagination-container .pagination-item.disabled:hover {\n  background-color: transparent;\n  cursor: default;\n}\n" }} />
+            <style
+                dangerouslySetInnerHTML={{__html: "\n.pagination-container {\n  display: flex;\n  list-style-type: none;\n  justify-content: center;\n}\n.pagination-container .pagination-item {\n  padding: 0 12px;\n  height: 32px;\n  text-align: center;\n  margin: auto 4px;\n  color: rgba(0, 0, 0, 0.87);\n  display: flex;\n  box-sizing: border-box;\n  align-items: center;\n  letter-spacing: 0.01071em;\n  border-radius: 16px;\n  line-height: 1.43;\n  font-size: 13px;\n  min-width: 32px;\n}\n.pagination-container .pagination-item.dots:hover {\n  background-color: transparent;\n  cursor: default;\n}\n.pagination-container .pagination-item:hover {\n  background-color: rgba(0, 0, 0, 0.04);\n  cursor: pointer;\n}\n.pagination-container .pagination-item.selected {\n  background-color: rgba(0, 0, 0, 0.08);\n}\n.pagination-container .pagination-item .arrow::before {\n  position: relative;\n  /* top: 3pt; Uncomment this to lower the icons as requested in comments*/\n  content: '';\n  /* By using an em scale, the arrows will size with the font */\n  display: inline-block;\n  width: 0.4em;\n  height: 0.4em;\n  border-right: 0.12em solid rgba(0, 0, 0, 0.87);\n  border-top: 0.12em solid rgba(0, 0, 0, 0.87);\n}\n.pagination-container .pagination-item .arrow.left {\n  transform: rotate(-135deg) translate(-50%);\n}\n.pagination-container .pagination-item .arrow.right {\n  transform: rotate(45deg);\n}\n.pagination-container .pagination-item.disabled {\n  pointer-events: none;\n}\n.pagination-container .pagination-item.disabled .arrow::before {\n  border-right: 0.12em solid rgba(0, 0, 0, 0.43);\n  border-top: 0.12em solid rgba(0, 0, 0, 0.43);\n}\n.pagination-container .pagination-item.disabled:hover {\n  background-color: transparent;\n  cursor: default;\n}\n"}}/>
             {/*End Pagination Style*/}
 
             {
                 userDetail ?
-                    <div >
+                    <div>
                         <div className="hidden">
                             <audio src="../resources/raw/notification-sound.805a8904.mp3"/>
                             <audio src="../resources/raw/notification-group-sound.4c7ac55b.mp3"/>
@@ -155,8 +164,9 @@ function Detail(){
                                         <div>
                                             <div className="avt avt-lg">
                                                 {
-                                                    userDetail.account && <img src={userDetail.account.avatar} alt="Avatar"
-                                                                               style={{width: "100%", height: "100%"}}/>
+                                                    userDetail.account &&
+                                                    <img src={userDetail.account.avatar} alt="Avatar"
+                                                         style={{width: "100%", height: "100%"}}/>
                                                 }
                                             </div>
                                         </div>
@@ -175,59 +185,67 @@ function Detail(){
                                         <span>
                                 {new Date(userDetail.dateCreate).toLocaleDateString()}
                             </span>
-                            </div>
-                        </div>
-                        <div className="player-profile-right-wrap col-md-3 col-md-push-6">
-                            <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
-                                <div className="rateting-style"><i className="fas fa-star"></i><i
-                                    className="fas fa-star"></i><i
-                                    className="fas fa-star"></i><i className="fas fa-star"></i><i
-                                    className="fas fa-star-half-alt"></i>&nbsp;<span>352 <span>Đánh giá</span></span>
-                                </div>
-                                <div className="text-center">
-                                    {user?                                    <button className="btn-my-style red"onClick={toggle}>Thuê</button>
-                                    :<></>}
-                                    {/*<button className="btn-my-style white">Donate</button>*/}
-                                    <button className="btn-my-style white" onClick={() => {addNewChat()}}>
-                                        <i className="fas fa-comment-alt"></i>Chat
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="player-profile-main-wrap col-md-6 col-md-pull-3">
-                            <div>
-                                <div className="row">
-                                    <div className="center-item col-md-12">
-                                        <span className="name-player-profile hidden-over-name">{userDetail.account && userDetail.account.nickname}</span>
-                                        {/*<button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;*/}
-                                        {/*    <span className="plus">*/}
-                                        {/*        <span>Theo dõi</span>*/}
-                                        {/*    </span>*/}
-                                        {/*</button>*/}
                                     </div>
                                 </div>
-                                <div className="nav-player-profile row">
-                                    <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Đã được thuê</span></div>
-                                        <div className="item-nav-value">{bill.length}&nbsp;<span> lần</span></div>
-                                    </div>
-                                    <div className="col-md-3 col-xs-6">
-                                        <div className="item-nav-name"><span>Số lượt xem</span></div>
-                                        <div className="item-nav-value">{userDetail.views} <span> lượt</span></div>
-                                    </div>
-                                    {/*<div className="col-md-3 col-xs-6">*/}
-                                    {/*    <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>*/}
-                                    {/*    <div className="item-nav-value">100&nbsp;%</div>*/}
-                                    {/*</div>*/}
-                                </div>
-                                <div>
-                                    <div className="game-category row">
-                                        <div className="title-player-profile row">
-                                            <div className="col-xs-6"><span>Dịch vụ</span></div>
+                                <div className="player-profile-right-wrap col-md-3 col-md-push-6">
+                                    <div className="right-player-profile"><p
+                                        className="price-player-profile">{userDetail.price} đ/h</p>
+                                        <div className="rateting-style"><i className="fas fa-star"></i><i
+                                            className="fas fa-star"></i><i
+                                            className="fas fa-star"></i><i className="fas fa-star"></i><i
+                                            className="fas fa-star-half-alt"></i>&nbsp;
+                                            <span>352 <span>Đánh giá</span></span>
                                         </div>
-                                        {userDetail.supplies && userDetail.supplies.length > 0 && userDetail.supplies.map((item, key) => (
-                                            <div className="choose-game" style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
-                                                    <p className="overlay" key={key}>{item.nameSupply}</p>
+                                        <div className="text-center">
+                                            {user ? <button className="btn-my-style red" onClick={toggle}>Thuê</button>
+                                                : <></>}
+                                            {/*<button className="btn-my-style white">Donate</button>*/}
+                                            <button className="btn-my-style white" onClick={() => {
+                                                addNewChat()
+                                            }}>
+                                                <i className="fas fa-comment-alt"></i>Chat
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="player-profile-main-wrap col-md-6 col-md-pull-3">
+                                    <div>
+                                        <div className="row">
+                                            <div className="center-item col-md-12">
+                                                <span
+                                                    className="name-player-profile hidden-over-name">{userDetail.account && userDetail.account.nickname}</span>
+                                                {/*<button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;*/}
+                                                {/*    <span className="plus">*/}
+                                                {/*        <span>Theo dõi</span>*/}
+                                                {/*    </span>*/}
+                                                {/*</button>*/}
+                                            </div>
+                                        </div>
+                                        <div className="nav-player-profile row">
+                                            <div className="col-md-3 col-xs-6">
+                                                <div className="item-nav-name"><span>Đã được thuê</span></div>
+                                                <div className="item-nav-value">{bill.length}&nbsp;<span> lần</span>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-3 col-xs-6">
+                                                <div className="item-nav-name"><span>Số lượt xem</span></div>
+                                                <div className="item-nav-value">{userDetail.views} <span> lượt</span>
+                                                </div>
+                                            </div>
+                                            {/*<div className="col-md-3 col-xs-6">*/}
+                                            {/*    <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>*/}
+                                            {/*    <div className="item-nav-value">100&nbsp;%</div>*/}
+                                            {/*</div>*/}
+                                        </div>
+                                        <div>
+                                            <div className="game-category row">
+                                                <div className="title-player-profile row">
+                                                    <div className="col-xs-6"><span>Dịch vụ</span></div>
+                                                </div>
+                                                {userDetail.supplies && userDetail.supplies.length > 0 && userDetail.supplies.map((item, key) => (
+                                                    <div className="choose-game"
+                                                         style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
+                                                        <p className="overlay" key={key}>{item.nameSupply}</p>
 
                                                     </div>
                                                 ))}
@@ -290,7 +308,8 @@ function Detail(){
                                                         <tr>
                                                             <td>Facebook</td>
                                                             <td><a href={userDetail.facebookLink} target="_blank"
-                                                                   rel="noopener noreferrer">{userDetail.facebookLink}</a></td>
+                                                                   rel="noopener noreferrer">{userDetail.facebookLink}</a>
+                                                            </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -299,7 +318,9 @@ function Detail(){
                                                     <div>
                                                         <div className="title-player-profile row">
                                                             <div className="col-xs-6"><span>Đánh giá</span></div>
-                                                            <textarea placeholder="message ..." name="message" type="text" className="form-control" defaultValue={""} />
+                                                            <textarea placeholder="message ..." name="message"
+                                                                      type="text" className="form-control"
+                                                                      defaultValue={""}/>
                                                             <div className={"customButton"}>
                                                                 <p>Gửi</p>
                                                             </div>
@@ -312,51 +333,56 @@ function Detail(){
                                                                     currentTableData && currentTableData.map((item, key) => {
                                                                         return (
                                                                             <div className="full-size" key={key}>
-                                                                            <div className="review-image-small">
-                                                                            <div className="avt-rank avt-md"><img
-                                                                            src={item.accountUser.avatar}
-                                                                            className="avt-1-15 avt-img" alt=""/>
-                                                                            </div>
-                                                                            </div>
-                                                                            <div className="wrapper-content-rating">
-                                                                            <div className="review-content"><a target="_blank"
-                                                                            href="https://playerduo.net/traiyeumeo">
-                                                                            <p className="name-player-review color-vip-1">{item.accountUser.nickname}</p></a>
-                                                                            <p className="time-player-review">
+                                                                                <div className="review-image-small">
+                                                                                    <div className="avt-rank avt-md"><img
+                                                                                        src={item.accountUser.avatar}
+                                                                                        className="avt-1-15 avt-img"
+                                                                                        alt=""/>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="wrapper-content-rating">
+                                                                                    <div className="review-content"><a
+                                                                                        target="_blank"
+                                                                                        href="https://playerduo.net/traiyeumeo">
+                                                                                        <p className="name-player-review color-vip-1">{item.accountUser.nickname}</p>
+                                                                                    </a>
+                                                                                        <p className="time-player-review">
                                                                             <span>{new Date(item.date).toLocaleTimeString() + " "
-                                                                            + new Date(item.date).toLocaleDateString()}</span>
-                                                                            </p>
-                                                                            </div>
-                                                                            <div className="review-rating">
-                                                                            <div className="rateting-style">
-                                                                            {
-                                                                                [1, 2, 3, 4, 5].map(e => {
-                                                                                    if (e <= item.rating) {
-                                                                                        return (<i className="fas fa-star"></i>)
-                                                                                    }
-                                                                                })
-                                                                            }
-                                                                            &nbsp;
-                                                                            </div>
-                                                                            </div>
-                                                                            <p className="content-player-review">{item.content}</p></div>
+                                                                                + new Date(item.date).toLocaleDateString()}</span>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className="review-rating">
+                                                                                        <div className="rateting-style">
+                                                                                            {
+                                                                                                [1, 2, 3, 4, 5].map(e => {
+                                                                                                    if (e <= item.rating) {
+                                                                                                        return (
+                                                                                                            <i className="fas fa-star"></i>)
+                                                                                                    }
+                                                                                                })
+                                                                                            }
+                                                                                            &nbsp;
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <p className="content-player-review">{item.content}</p>
+                                                                                </div>
                                                                             </div>
 
-                                                                                );
-                                                                            })
-                                                                        }
+                                                                        );
+                                                                    })
+                                                                }
 
-                                                                        <div>
-                                                                            <Pagination
-                                                                                className="pagination-bar"
-                                                                                currentPage={currentPage}
-                                                                                totalCount={reviews.length}
-                                                                                pageSize={PageSize}
-                                                                                onPageChange={page => setCurrentPage(page)}
-                                                                            />
-                                                                        </div>
+                                                                <div>
+                                                                    <Pagination
+                                                                        className="pagination-bar"
+                                                                        currentPage={currentPage}
+                                                                        totalCount={reviews.length}
+                                                                        pageSize={PageSize}
+                                                                        onPageChange={page => setCurrentPage(page)}
+                                                                    />
+                                                                </div>
                                                                 {/* reviews là mảng gốc các phần tử thật */}
-                                                            {/*    End Pagination*/}
+                                                                {/*    End Pagination*/}
                                                             </div>
                                                             {/*<div className="col-md-12">*/}
                                                             {/*    <div className="page_account"><p className="active">1</p>*/}
@@ -383,4 +409,5 @@ function Detail(){
         </>
     )
 }
+
 export default Detail

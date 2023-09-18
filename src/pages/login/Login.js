@@ -49,7 +49,7 @@ function Login() {
             console.log(data.isActive);
             localStorage.setItem("token", data.token);
             localStorage.setItem("account", JSON.stringify(data));
-            if (data.status.nameStatus === "active" && data.isActive) {
+            if ((data.status.nameStatus === "active"||data.status.nameStatus === "inActive")&& data.isActive) {
                 dispatch(checkToken());
                 if (data.role.nameRole ==="ROLE_ADMIN") {
                     navigate("admin");

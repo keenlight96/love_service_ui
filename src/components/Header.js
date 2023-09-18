@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {Outlet} from "react-router";
 import $ from "jquery";
@@ -6,9 +5,12 @@ import {Link} from "react-router-dom";
 import LoginService from "../service/custom/login";
 import {useDispatch, useSelector} from "react-redux";
 import {checkToken, setUser} from "../service/UserService";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Header = () => {
         const [isClicked, setIsClicked] = useState(true);
+        const [statusCCDV, setStatusCCDV] = useState(true);
         const dispatch = useDispatch();
         const [user, setUser] = useState(() => {
             try {
@@ -23,7 +25,22 @@ const Header = () => {
         const handleClick = (e) => {
             setIsClicked(!isClicked);
         };
-
+        const swapStatusCCDV = () => {
+            axios.get("http://localhost:8080/accounts/workOrRest?id=" + user.id).then(
+                res => {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'info',
+                        title: res.data,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            ).catch(e => {
+                console.log(e)
+            })
+            setStatusCCDV(!statusCCDV);
+        }
         const logout = () => {
             LoginService.logout().then(r => {
             });
@@ -42,7 +59,9 @@ const Header = () => {
 
         useEffect(() => {
             try {
+                const user = JSON.parse(localStorage.getItem("account"));
                 setUser(JSON.parse(localStorage.getItem("account")));
+                // user && user.role.id === 3 && user.status.id === 111 ? setStatusCCDV(false) : setStatusCCDV(true);
             } catch (e) {
                 setUser({});
             }
@@ -118,16 +137,20 @@ const Header = () => {
                                 {
                                     user && user.id ?
                                         <>
-                                            <li className="item-icon notificate dropdown"><a id="basic-nav-dropdown" role="button"
+                                            <li className="item-icon notificate dropdown"><a id="basic-nav-dropdown"
+                                                                                             role="button"
                                                                                              className="dropdown-toggle"
-                                                                                             aria-haspopup="true" aria-expanded="false"
+                                                                                             aria-haspopup="true"
+                                                                                             aria-expanded="false"
                                                                                              href="#">
                                                 <div className="item-title"><i className="fal fa-bell"/></div>
                                             </a>
-                                                <ul role="menu" className="dropdown-menu" aria-labelledby="basic-nav-dropdown">
+                                                <ul role="menu" className="dropdown-menu"
+                                                    aria-labelledby="basic-nav-dropdown">
                                                     <div className="content">
                                                         <div className="tab-notif-common"><h5><span>Thông báo</span></h5>
-                                                            <div className="tab-action"><p className="active"><span>Chính</span></p>
+                                                            <div className="tab-action"><p className="active">
+                                                                <span>Chính</span></p>
                                                                 <p className><span>Khác</span></p>
                                                                 <p className><span>Theo dõi</span></p>
                                                                 <p className><span>Tương tác</span></p></div>
@@ -139,7 +162,8 @@ const Header = () => {
                                                     </div>
                                                 </ul>
                                             </li>
-                                            <li className="item-icon balance"><a className="money-user"><i className="far fa-plus"/> {user && user.balance} đ</a>
+                                            <li className="item-icon balance"><a className="money-user"><i
+                                                className="far fa-plus"/> {user && user.balance} đ</a>
                                             </li>
                                             <li className={isClicked ? "item-icon item-avatar dropdown " : "item-icon item-avatar dropdown open"}
                                                 onClick={(e) => {
@@ -149,30 +173,38 @@ const Header = () => {
                                                    className="dropdown-toggle"
                                                    aria-haspopup="true" aria-expanded="false"
                                                    href="#"><img
-                                                    src={user.avatar} className="avt-img" alt="" style={{width: "45px", height: "45px", maxWidth: "45px"}}/></a>
-                                                <ul role="menu" className="dropdown-menu" aria-labelledby="header-nav-dropdown">
-                                                    <li role="presentation" className="page-user"><a role="menuitem" tabIndex={-1}
+                                                    src={user.avatar} className="avt-img" alt=""
+                                                    style={{width: "45px", height: "45px", maxWidth: "45px"}}/></a>
+                                                <ul role="menu" className="dropdown-menu"
+                                                    aria-labelledby="header-nav-dropdown">
+                                                    <li role="presentation" className="page-user"><a role="menuitem"
+                                                                                                     tabIndex={-1}
                                                                                                      href="#"><img
-                                                        src={user.avatar} className="avt-img" alt="" style={{maxWidth: "55px"}}/>
+                                                        src={user.avatar} className="avt-img" alt=""
+                                                        style={{maxWidth: "55px"}}/>
                                                         <div className="text-logo"><h5>{user.nickName}</h5>
                                                             <p>Username : <span>{user.username}</span></p>
                                                             {/*<p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>*/}
                                                         </div>
                                                     </a></li>
-                                                    <li role="presentation" className="menu-item hidden-lg hidden-md"><a role="menuitem"
-                                                                                                                         tabIndex={-1}
-                                                                                                                         href="#"><i
+                                                    <li role="presentation" className="menu-item hidden-lg hidden-md"><a
+                                                        role="menuitem"
+                                                        tabIndex={-1}
+                                                        href="#"><i
                                                         className="fas fa-plus"/> <span>Số dư</span> : <span
                                                         className="money">
                                                         {user.balance} đ
                                                     </span></a></li>
-                                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                    <li role="presentation" className="menu-item"><a role="menuitem"
+                                                                                                     tabIndex={-1}
                                                                                                      href="/information/topup"><i
                                                         className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>
-                                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                    <li role="presentation" className="menu-item"><a role="menuitem"
+                                                                                                     tabIndex={-1}
                                                                                                      href="/information/bills"><i
                                                         className="fas fa-clock"/> <span>Lịch sử thuê</span> </a></li>
-                                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
+                                                    <li role="presentation" className="menu-item"><a role="menuitem"
+                                                                                                     tabIndex={-1}
                                                                                                      href="/information/info"><i
                                                         className="fas fa-cogs"/> <span>Cài đặt tài khoản</span></a></li>
                                                     <li role="presentation" className="menu-item" onClick={() => {
@@ -182,11 +214,13 @@ const Header = () => {
                                                         className="fas fa-power-off"/> <span>Đăng xuất</span></a></li>
                                                     <div className="menu-item list-flag">
                                                         <div className="box-item">
-                                                            <div className="flag-all active"><img src="../resources/raw/2.png"
-                                                                                                  className="flag flag-vn" alt="PD"/>
+                                                            <div className="flag-all active"><img
+                                                                src="../resources/raw/2.png"
+                                                                className="flag flag-vn" alt="PD"/>
                                                             </div>
-                                                            <div className="flag-all false"><img src="../resources/raw/1.png"
-                                                                                                 className="flag flag-en" alt="PD"/>
+                                                            <div className="flag-all false"><img
+                                                                src="../resources/raw/1.png"
+                                                                className="flag flag-en" alt="PD"/>
                                                             </div>
                                                         </div>
                                                         <div className="box-item"><a href="#"
@@ -198,8 +232,15 @@ const Header = () => {
                                                     </div>
                                                 </ul>
                                             </li>
-                                            <li className="item-icon mode"><a className="group-user"><i className="fas fa-moon"/></a>
-                                            </li>
+                                            {user && user.role && user.role.id===3 ? <li className="item-icon mode" onClick={swapStatusCCDV}><a
+                                                className="group-user">
+                                                {statusCCDV ? <i className="fas fa-sun"/>
+                                                    : <i className="fas fa-moon"/>
+                                                }
+                                            </a>
+                                            </li> : <></>
+                                            }
+
                                         </>
                                         :
                                         <li className="item-icon authent"><a className="money-user" href={"/login"}><i
