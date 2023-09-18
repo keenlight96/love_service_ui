@@ -10,12 +10,17 @@ import {
 } from "../../service/BillsService";
 import {Link} from "react-router-dom";
 import Bills from "./Bills";
+import {checkToken} from "../../service/UserService";
 
 const AllBillByOfCCDV = () => {
 
     let idAccount = JSON.parse(localStorage.getItem("account")).id;
 
     const dispatch = useDispatch();
+
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
 
     const allBillOfCCDV = useSelector((state) => {
         console.log(state.BillByAccount.BillByAccount.allBillByCCDV);
@@ -70,10 +75,13 @@ const AllBillByOfCCDV = () => {
 
     const receivedBills = (idBill1) => {
         setBillRecevied(idBill1)
-        alert(stringReceivedBill)
     }
     useEffect(() => {
-        dispatch(receivedBill(idBillRecevied))
+        dispatch(receivedBill(idBillRecevied)).then(() =>{
+            dispatch(checkToken());
+            dispatch(getAllBillByIdCCDV(idAccount));
+            sendNotification(idBillRecevied);
+        })
     }, [idBillRecevied]);
 
     const confirmCancelBill = (idBill1) => {
@@ -83,15 +91,30 @@ const AllBillByOfCCDV = () => {
 
     useEffect(() => {
         dispatch(cancelBill({idBill, idAccount, message})).then(() => {
-            dispatch(getAllBillByIdCCDV(idAccount))
+            dispatch(checkToken());
+            dispatch(getAllBillByIdCCDV(idAccount));
+            sendNotification(idBill);
         });
     }, [idBill, idAccount, message]);
 
+    const sendNotification = (billId) => {
+        try {
+            if (stompClient != null) {
+                let message = {
+                    "type": "notification",
+                    "subtype": billId
+                }
+                stompClient.send("/gkz/hello", {}, JSON.stringify(message));
+            }
+        } catch (e) {
+            console.log("Send notification error:");
+            console.log(e);
+        }
+    }
+
     return (
         <>
-            <div className="setting__main row" style={{marginTop: "70px"}}>
-                <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                    <div className="aside">
+
                         <h3>Lịch sử đơn thuê</h3>
                         <div className="transaction-table">
                             <div className="table-responsive">
@@ -193,9 +216,6 @@ const AllBillByOfCCDV = () => {
                                 <span>Không có dữ liệu</span>
                             </div>
                         )}
-                    </div>
-                </div>
-            </div>
             {objects && modal && (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
@@ -405,7 +425,6 @@ const AllBillByOfCCDV = () => {
             {/*        :*/}
             {/*        <></>*/}
             {/*}*/}
-            {stringCancelBill ? alert(stringCancelBill) : <div></div>}
         </>
     );
 };

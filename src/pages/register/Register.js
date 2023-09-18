@@ -65,16 +65,16 @@ const SignupForm = () => {
                                                } else if (response.data.validStatus === 'NAME_EXISTED') {
                                                    setMessage("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
                                                } else if (response.data.validStatus === 'EMAIL_EXIST') {
-                                                   setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
-                                               } else if (response.data.validStatus === 'SUCCESSFULL') {
-                                                   Swal.fire({
-                                                       position: 'center',
-                                                       icon: 'success',
-                                                       title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
-                                                       showConfirmButton: false,
-                                                       timer: 1500
-                                                   });
-                                                   navigate("/login")
+                                               setMessage2("Email đã được đăng ký. Vui lòng sử dụng email khác.");
+                                               }  else if (response.data.validStatus === 'SUCCESSFULL') {
+                                               await Swal.fire({
+                                                   position: 'center',
+                                                   icon: 'success',
+                                                   title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
+                                                   showConfirmButton: false,
+                                                   timer: 1500
+                                               });
+                                               navigate("/login")
                                                }
 
                                    })

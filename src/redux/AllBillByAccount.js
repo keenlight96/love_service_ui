@@ -3,24 +3,25 @@ import {
     cancelBill,
     completes,
     getAllBillByIdCCDV,
-    getAllBillByIdUser,
+    getAllBillByIdUser, getAllBillIn7DayByCCDV,
     receivedBill,
     setCancelBill
 } from "../service/BillsService";
 
 const initialState = {
     BillByAccount: {
-        allBillByCCDV : [],
+        allBillByCCDV: [],
         allBillByUser: [],
         completeString: '',
         receivedBill: '',
-        cancelBill:'',
+        cancelBill: '',
+        bill7DayByCCDV:[]
     }
 }
-const  AllBillByAccount= createSlice({
-    name : "AllBills",
+const AllBillByAccount = createSlice({
+    name: "AllBills",
     initialState,
-    reducers : {},
+    reducers: {},
     extraReducers: builder => {
         builder.addCase(getAllBillByIdCCDV.fulfilled, (state, action) => {
             state.BillByAccount.allBillByCCDV = action.payload;
@@ -39,6 +40,9 @@ const  AllBillByAccount= createSlice({
         })
         builder.addCase(receivedBill.fulfilled, (state, action) => {
             state.BillByAccount.receivedBill = action.payload;
+        })
+        builder.addCase(getAllBillIn7DayByCCDV.fulfilled,(state, action)=>{
+            state.BillByAccount.bill7DayByCCDV=action.payload;
         })
     }
 })

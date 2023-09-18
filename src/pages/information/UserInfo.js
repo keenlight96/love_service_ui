@@ -13,37 +13,28 @@ const UserInfo = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/accounts/account-profile/${accountId}`).then(res => {
+        axios.get(`http://localhost:8080/accounts/account-profile/${accountId}`).then ( res  => {
             console.log('thongtin:', res.data)
             setAccounts(res.data);
             setInitialGender(res.data.gender)
             setzone(res.data.zone.zone)
-            setInitialBirthday(res.data.birthday)
-
-
         })
     }, [])
     //supplies
-    const userSupply = useSelector(state => {
-        try {
-            return state.supplies.supplies.userSupplies;
-        } catch (e) {
-            return [];
-        }
-    });
+    // const userSupply = useSelector(state => {
+    //     try {
+    //         return state.supplies.supplies.userSupplies;
+    //     } catch (e) {
+    //         return [];
+    //     }
+    // });
     //chon sinh nhat
     const [selectedDate, setSelectedDate] = useState(null);
     const handleDateChange = (date) => {
         // Chuyển đổi giá trị DatePicker thành đối tượng ngày
         setSelectedDate(date);
     };
-    //chon sinh nhat
-    const [initialBirthday, setInitialBirthday] = useState(accounts.birthday || '');
-    const [birthday, setBirthday] = useState(initialBirthday);
 
-    const handleBirthdayChange = (event) => {
-        setBirthday(event.target.value);
-    };
 //chon gioi tinh
     const [initialGender, setInitialGender] = useState(accounts.gender || '');
     const [gender, setGender] = useState(initialGender);
@@ -63,6 +54,26 @@ const UserInfo = () => {
     const closeModal = () => {
         setIsOpen(false);
     };
+    //birthday
+    // const originalDate = accounts.birthday;
+    // const dateObject = new Date(originalDate);
+    // const year = dateObject.getFullYear();
+    // const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Cộng thêm 1 vì tháng trong JavaScript bắt đầu từ 0
+    // const day = String(dateObject.getDate()).padStart(2, '0');
+    //
+    // const formattedDate = `${year}-${month}-${day}`;
+    // console.log(formattedDate);
+    // const [birthday, setBirthday] = useState(formattedDate);
+    //
+    // const handleBirthdayChange = (e) => {
+    //     const newValue = e.target.value;
+    //     setBirthday(newValue);
+    // };
+
+
+
+    //message
+    const [message, setMessage] = useState('');
     return (
         <>
             <div className="row flowaccount">
@@ -84,349 +95,324 @@ const UserInfo = () => {
                             </button>
                         </div>
                     </div>
-                    <Formik initialValues={{
-                        firstName: '',
-                        lastName: '',
-                        birthday: '',
-                        nickName: '',
-                        gender: '',
-                        height:'',
-                        weight:'',
-                        describes:'',
-                        basicRequest:'',
-                        facebookLink:'',
-                        zone: {
-                            id: ''
-                        },
-                        supplies: [{
-                            id: ""
-                        },],
-
-                    }}
-
+                    <Formik initialValues= {accounts }
+                            enableReinitialize={true}
                             onSubmit={(values) => {
-                                values.birthday = selectedDate
-                                values.supplies = userSupply;
-                                values.birthday = birthday;
+                                // values.birthday = selectedDate
+                                // values.supplies = userSupply;
+                                // values.birthday = birthday;
                                 console.log("mau gui di", values)
-                                axios.post(`http://localhost:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
-                                    alert("thanh cong")
-                                })
-
-
-                            }}>
-                        {({ handleSubmit, isSubmitting }) => (
-                            <form onSubmit={handleSubmit} className="from-userinfo">
+                                    axios.post(`http://localhost:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
+                                        alert("thanh cong")
+                                        console.log("ketqua",res.data)
+                                    })
+                                }
+                            }>
+                            <Form className="from-userinfo">
                             <div className="fieldGroup "><p className="control-label">Họ</p><Field type="text"
                                                                                                    name="firstName"
-                                                                                                   placeholder={accounts.firstName || 'Nhập họ của bạn'}
                                                                                                    maxLength={5000}
                                                                                                    autoComplete="false"
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Tên</p><Field type="text"
                                                                                                     name="lastName"
-                                                                                                    placeholder={accounts.lastName || 'Nhập tên của bạn'}
+                                                                                                    // placeholder  ={accounts.lastName || 'Nhập tên của bạn'}
+                                                                                                    // defaultValue ={accounts.lastName || 'Nhập tên của bạn'}
                                                                                                     maxLength={5000}
                                                                                                     autoComplete="false"
+
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Nick Name</p><Field type="text"
-                                                                                                          name="nickName"
-                                                                                                          placeholder={accounts.nickname || 'Nhập nick name của bạn'}
+                                                                                                          name="nickname"
                                                                                                           maxLength={5000}
                                                                                                           autoComplete="false"
                             />
                             </div>
+                                <div className="fieldGroup "><p className="control-label">Số điện thoại</p><Field type="text"
+                                                                                                              name="phoneNumber"
+                                                                                                              maxLength={5000}
+                                                                                                              autoComplete="false"
+                                />
+                                </div>
+
+                                <div className="fieldGroup "><p className="control-label">Email</p><Field type="text"
+                                                                                                              name="email"
+                                                                                                              maxLength={5000}
+                                                                                                              autoComplete="false"
+                                />
+                                    {message&& (<div className="error">{message}</div>)}
+                                </div>
                             <p className="control-label">Ngày sinh</p>
                                 <div>
-                                    <div
-                                        style={{
-                                            width: '90%',
-                                            display: 'inline-block', // Để đảm bảo nằm cạnh nhau
-                                            textAlign: 'center',
-                                            height: '55px',
-                                            padding: '17px',
-                                            border: '1px solid #777',
-                                            borderRadius: '7px',
-                                        }}
-                                    >
-                                        {birthday || initialBirthday}
-                                    </div>
+                                    {/*<div*/}
+                                    {/*    style={{*/}
+                                    {/*        width: '90%',*/}
+                                    {/*        display: 'inline-block', // Để đảm bảo nằm cạnh nhau*/}
+                                    {/*        textAlign: 'center',*/}
+                                    {/*        height: '55px',*/}
+                                    {/*        padding: '17px',*/}
+                                    {/*        border: '1px solid #777',*/}
+                                    {/*        borderRadius: '7px',*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    {birthday || initialBirthday}*/}
+                                    {/*</div>*/}
                                     <Field
                                         type="date"
                                         name="birthday"
-                                        placeholder={initialBirthday || 'Nhập sinh nhật của bạn'}
                                         maxLength={5000}
                                         autoComplete="false"
-                                        onChange={handleBirthdayChange}
                                         style={{
-                                            width: '10%', // Chiếm 10% chiều rộng
+                                            width: '100%', // Chiếm 10% chiều rộng
                                             verticalAlign: 'top', // Để thẻ input nằm trên thẻ div
                                         }}
                                     />
                                 </div>
-
-
-
-
-                                {/*<DatePicker*/}
-                            {/*    selected={selectedDate}*/}
-                            {/*    onChange={handleDateChange}*/}
-                            {/*    dateFormat="yyyy-MM-dd" // Định dạng hiển thị của DatePicker*/}
-                            {/*/>*/}
-                            {/*<p>*/}
-                            {/*    Giá trị đã chọn: {selectedDate ? selectedDate.toISOString().slice(0, 10) : "Chưa chọn"}*/}
-                            {/*</p>*/}
-
-
-                            <p className="control-label">Ngôn ngữ</p><select name="language">
-                            <option disabled>--- Chọn ngôn ngữ ---</option>
-                            <option value="5b99f97c978dff3d115260c7" selected="selected">Tiếng Việt</option>
-                        </select>
-                            <p className="control-label">Quốc gia</p><select name="country">
-                            <option value="5b99f97c978dff3d115260e3">Afghanistan</option>
-                            <option value="5b99f97c978dff3d115260e4">Albania</option>
-                            <option value="5b99f97c978dff3d115260e5">Algeria</option>
-                            <option value="5b99f97c978dff3d115260e6">Andorra</option>
-                            <option value="5b99f97c978dff3d115260e7">Angola</option>
-                            <option value="5b99f97c978dff3d115260e8">Anguilla</option>
-                            <option value="5b99f97c978dff3d115260e9">Antigua and Barbuda</option>
-                            <option value="5b99f97c978dff3d115260ea">Argentina</option>
-                            <option value="5b99f97c978dff3d115260eb">Armenia</option>
-                            <option value="5b99f97c978dff3d115260ec">Aruba</option>
-                            <option value="5b99f97c978dff3d115260ed">Australia</option>
-                            <option value="5b99f97c978dff3d115260ee">Austria</option>
-                            <option value="5b99f97c978dff3d115260ef">Azerbaijan</option>
-                            <option value="5b99f97c978dff3d115260f0">Bahamas</option>
-                            <option value="5b99f97c978dff3d115260f1">Bahrain</option>
-                            <option value="5b99f97c978dff3d115260f2">Bangladesh</option>
-                            <option value="5b99f97c978dff3d115260f3">Barbados</option>
-                            <option value="5b99f97c978dff3d115260f4">Belarus</option>
-                            <option value="5b99f97c978dff3d115260f5">Belgium</option>
-                            <option value="5b99f97c978dff3d115260f6">Belize</option>
-                            <option value="5b99f97c978dff3d115260f7">Benin</option>
-                            <option value="5b99f97c978dff3d115260f8">Bermuda</option>
-                            <option value="5b99f97c978dff3d115260f9">Bhutan</option>
-                            <option value="5b99f97c978dff3d115260fa">Bolivia</option>
-                            <option value="5b99f97c978dff3d115260fb">Bonaire</option>
-                            <option value="5b99f97c978dff3d115260fc">Bosnia-Herzegovina</option>
-                            <option value="5b99f97c978dff3d115260fd">Botswana</option>
-                            <option value="5b99f97c978dff3d115260fe">Bouvet Island</option>
-                            <option value="5b99f97c978dff3d115260ff">Brazil</option>
-                            <option value="5b99f97c978dff3d11526100">Brunei</option>
-                            <option value="5b99f97c978dff3d11526101">Bulgaria</option>
-                            <option value="5b99f97c978dff3d11526102">Burkina Faso</option>
-                            <option value="5b99f97c978dff3d11526103">Burundi</option>
-                            <option value="5b99f97c978dff3d11526104">Cambodia</option>
-                            <option value="5b99f97c978dff3d11526105">Cameroon</option>
-                            <option value="5b99f97c978dff3d11526106">Canada</option>
-                            <option value="5b99f97c978dff3d11526107">Cape Verde</option>
-                            <option value="5b99f97c978dff3d11526108">Cayman Islands</option>
-                            <option value="5b99f97c978dff3d11526109">Central African Republic</option>
-                            <option value="5b99f97c978dff3d1152610a">Chad</option>
-                            <option value="5b99f97c978dff3d1152610b">Chile</option>
-                            <option value="5b99f97c978dff3d1152610c">China</option>
-                            <option value="5b99f97c978dff3d1152610d">Christmas Island</option>
-                            <option value="5b99f97c978dff3d1152610e">Cocos (Keeling) Islands</option>
-                            <option value="5b99f97c978dff3d1152610f">Colombia</option>
-                            <option value="5b99f97c978dff3d11526110">Comoros</option>
-                            <option value="5b99f97c978dff3d11526111">Congo, Democratic Republic of the (Zaire)</option>
-                            <option value="5b99f97c978dff3d11526112">Congo, Republic of</option>
-                            <option value="5b99f97c978dff3d11526113">Cook Islands</option>
-                            <option value="5b99f97c978dff3d11526114">Costa Rica</option>
-                            <option value="5b99f97c978dff3d11526115">Croatia</option>
-                            <option value="5b99f97c978dff3d11526116">Cuba</option>
-                            <option value="5b99f97c978dff3d11526117">Curacao</option>
-                            <option value="5b99f97c978dff3d11526118">Cyprus</option>
-                            <option value="5b99f97c978dff3d11526119">Czech Republic</option>
-                            <option value="5b99f97c978dff3d1152611a">Denmark</option>
-                            <option value="5b99f97c978dff3d1152611b">Djibouti</option>
-                            <option value="5b99f97c978dff3d1152611c">Dominica</option>
-                            <option value="5b99f97c978dff3d1152611d">Dominican Republic</option>
-                            <option value="5b99f97c978dff3d1152611e">Ecuador</option>
-                            <option value="5b99f97c978dff3d1152611f">Egypt</option>
-                            <option value="5b99f97c978dff3d11526120">El Salvador</option>
-                            <option value="5b99f97c978dff3d11526121">Equatorial Guinea</option>
-                            <option value="5b99f97c978dff3d11526122">Eritrea</option>
-                            <option value="5b99f97c978dff3d11526123">Estonia</option>
-                            <option value="5b99f97c978dff3d11526124">Ethiopia</option>
-                            <option value="5b99f97c978dff3d11526125">Falkland Islands</option>
-                            <option value="5b99f97c978dff3d11526126">Faroe Islands</option>
-                            <option value="5b99f97c978dff3d11526127">Fiji</option>
-                            <option value="5b99f97c978dff3d11526128">Finland</option>
-                            <option value="5b99f97c978dff3d11526129">France</option>
-                            <option value="5b99f97c978dff3d1152612a">French Guiana</option>
-                            <option value="5b99f97c978dff3d1152612b">Gabon</option>
-                            <option value="5b99f97c978dff3d1152612c">Gambia</option>
-                            <option value="5b99f97c978dff3d1152612d">Georgia</option>
-                            <option value="5b99f97c978dff3d1152612e">Germany</option>
-                            <option value="5b99f97c978dff3d1152612f">Ghana</option>
-                            <option value="5b99f97c978dff3d11526130">Gibraltar</option>
-                            <option value="5b99f97c978dff3d11526131">Greece</option>
-                            <option value="5b99f97c978dff3d11526132">Greenland</option>
-                            <option value="5b99f97c978dff3d11526133">Grenada</option>
-                            <option value="5b99f97c978dff3d11526134">Guadeloupe (French)</option>
-                            <option value="5b99f97c978dff3d11526135">Guam (USA)</option>
-                            <option value="5b99f97c978dff3d11526136">Guatemala</option>
-                            <option value="5b99f97c978dff3d11526137">Guinea</option>
-                            <option value="5b99f97c978dff3d11526138">Guyana</option>
-                            <option value="5b99f97c978dff3d11526139">Haiti</option>
-                            <option value="5b99f97c978dff3d1152613a">Holy See</option>
-                        <option value="5b99f97c978dff3d1152613b">Honduras</option>
-                        <option value="5b99f97c978dff3d1152613c">Hong Kong</option>
-                        <option value="5b99f97c978dff3d1152613d">Hungary</option>
-                        <option value="5b99f97c978dff3d1152613e">Iceland</option>
-                        <option value="5b99f97c978dff3d1152613f">India</option>
-                        <option value="5b99f97c978dff3d11526140">Indonesia</option>
-                        <option value="5b99f97c978dff3d11526141">Iran</option>
-                        <option value="5b99f97c978dff3d11526142">Iraq</option>
-                        <option value="5b99f97c978dff3d11526143">Ireland</option>
-                        <option value="5b99f97c978dff3d11526144">Israel</option>
-                        <option value="5b99f97c978dff3d11526145">Italy</option>
-                        <option value="5b99f97c978dff3d11526146">Ivory Coast (Cote D`Ivoire)</option>
-                        <option value="5b99f97c978dff3d11526147">Jamaica</option>
-                        <option value="5b99f97c978dff3d11526148">Japan</option>
-                        <option value="5b99f97c978dff3d11526149">Jordan</option>
-                        <option value="5b99f97c978dff3d1152614a">Kazakhstan</option>
-                        <option value="5b99f97c978dff3d1152614b">Kenya</option>
-                        <option value="5b99f97c978dff3d1152614c">Kiribati</option>
-                        <option value="5b99f97c978dff3d1152614d">Kosovo</option>
-                        <option value="5b99f97c978dff3d1152614e">Kuwait</option>
-                        <option value="5b99f97c978dff3d1152614f">Kyrgyzstan</option>
-                        <option value="5b99f97c978dff3d11526150">Laos</option>
-                        <option value="5b99f97c978dff3d11526151">Latvia</option>
-                        <option value="5b99f97c978dff3d11526152">Lebanon</option>
-                        <option value="5b99f97c978dff3d11526153">Lesotho</option>
-                        <option value="5b99f97c978dff3d11526154">Liberia</option>
-                        <option value="5b99f97c978dff3d11526155">Libya</option>
-                        <option value="5b99f97c978dff3d11526156">Liechtenstein</option>
-                        <option value="5b99f97c978dff3d11526157">Lithuania</option>
-                        <option value="5b99f97c978dff3d11526158">Luxembourg</option>
-                        <option value="5b99f97c978dff3d11526159">Macau</option>
-                        <option value="5b99f97c978dff3d1152615a">Macedonia</option>
-                        <option value="5b99f97c978dff3d1152615b">Madagascar</option>
-                        <option value="5b99f97c978dff3d1152615c">Malawi</option>
-                        <option value="5b99f97c978dff3d1152615d">Malaysia</option>
-                        <option value="5b99f97c978dff3d1152615e">Maldives</option>
-                        <option value="5b99f97c978dff3d1152615f">Mali</option>
-                        <option value="5b99f97c978dff3d11526160">Malta</option>
-                        <option value="5b99f97c978dff3d11526161">Marshall Islands</option>
-                        <option value="5b99f97c978dff3d11526162">Martinique (French)</option>
-                        <option value="5b99f97c978dff3d11526163">Mauritania</option>
-                        <option value="5b99f97c978dff3d11526164">Mauritius</option>
-                        <option value="5b99f97c978dff3d11526165">Mayotte</option>
-                        <option value="5b99f97c978dff3d11526166">Mexico</option>
-                        <option value="5b99f97c978dff3d11526167">Micronesia</option>
-                        <option value="5b99f97c978dff3d11526168">Moldova</option>
-                        <option value="5b99f97c978dff3d11526169">Monaco</option>
-                        <option value="5b99f97c978dff3d1152616a">Mongolia</option>
-                        <option value="5b99f97c978dff3d1152616b">Montenegro</option>
-                        <option value="5b99f97c978dff3d1152616c">Montserrat</option>
-                        <option value="5b99f97c978dff3d1152616d">Morocco</option>
-                        <option value="5b99f97c978dff3d1152616e">Mozambique</option>
-                        <option value="5b99f97c978dff3d1152616f">Myanmar</option>
-                        <option value="5b99f97c978dff3d11526170">Namibia</option>
-                        <option value="5b99f97c978dff3d11526171">Nauru</option>
-                        <option value="5b99f97c978dff3d11526172">Nepal</option>
-                        <option value="5b99f97c978dff3d11526173">Netherlands</option>
-                        <option value="5b99f97c978dff3d11526174">New Caledonia (French)</option>
-                        <option value="5b99f97c978dff3d11526175">New Zealand</option>
-                        <option value="5b99f97c978dff3d11526176">Nicaragua</option>
-                        <option value="5b99f97c978dff3d11526177">Niger</option>
-                        <option value="5b99f97c978dff3d11526178">Nigeria</option>
-                        <option value="5b99f97c978dff3d11526179">Niue</option>
-                        <option value="5b99f97c978dff3d1152617a">Norfolk Island</option>
-                            <option value="5b99f97c978dff3d1152617b">North Korea</option>
-                            <option value="5b99f97c978dff3d1152617c">Northern Mariana Islands</option>
-                            <option value="5b99f97c978dff3d1152617d">Norway</option>
-                            <option value="5b99f97c978dff3d1152617e">Oman</option>
-                            <option value="5b99f97c978dff3d1152617f">Pakistan</option>
-                            <option value="5b99f97c978dff3d11526180">Palau</option>
-                            <option value="5b99f97c978dff3d11526181">Panama</option>
-                            <option value="5b99f97c978dff3d11526182">Papua New Guinea</option>
-                            <option value="5b99f97c978dff3d11526183">Paraguay</option>
-                            <option value="5b99f97c978dff3d11526184">Peru</option>
-                            <option value="5b99f97c978dff3d11526185">Philippines</option>
-                            <option value="5b99f97c978dff3d11526186">Pitcairn Island</option>
-                            <option value="5b99f97c978dff3d11526187">Poland</option>
-                            <option value="5b99f97c978dff3d11526188">Polynesia (French)</option>
-                            <option value="5b99f97c978dff3d11526189">Portugal</option>
-                            <option value="5b99f97c978dff3d1152618a">Puerto Rico</option>
-                            <option value="5b99f97c978dff3d1152618b">Qatar</option>
-                            <option value="5b99f97c978dff3d1152618c">Reunion</option>
-                            <option value="5b99f97c978dff3d1152618d">Romania</option>
-                            <option value="5b99f97c978dff3d1152618e">Russia</option>
-                            <option value="5b99f97c978dff3d1152618f">Rwanda</option>
-                            <option value="5b99f97c978dff3d11526190">Saint Helena</option>
-                            <option value="5b99f97c978dff3d11526191">Saint Kitts and Nevis</option>
-                            <option value="5b99f97c978dff3d11526192">Saint Lucia</option>
-                            <option value="5b99f97c978dff3d11526193">Saint Pierre and Miquelon</option>
-                            <option value="5b99f97c978dff3d11526194">Saint Vincent and Grenadines</option>
-                            <option value="5b99f97c978dff3d11526195">Samoa</option>
-                            <option value="5b99f97c978dff3d11526196">San Marino</option>
-                            <option value="5b99f97c978dff3d11526197">Sao Tome and Principe</option>
-                            <option value="5b99f97c978dff3d11526198">Saudi Arabia</option>
-                            <option value="5b99f97c978dff3d11526199">Senegal</option>
-                            <option value="5b99f97c978dff3d1152619a">Serbia</option>
-                            <option value="5b99f97c978dff3d1152619b">Seychelles</option>
-                            <option value="5b99f97c978dff3d1152619c">Sierra Leone</option>
-                            <option value="5b99f97c978dff3d1152619d">Singapore</option>
-                            <option value="5b99f97c978dff3d1152619e">Sint Maarten</option>
-                            <option value="5b99f97c978dff3d1152619f">Slovakia</option>
-                            <option value="5b99f97c978dff3d115261a0">Slovenia</option>
-                            <option value="5b99f97c978dff3d115261a1">Solomon Islands</option>
-                            <option value="5b99f97c978dff3d115261a2">Somalia</option>
-                            <option value="5b99f97c978dff3d115261a3">South Africa</option>
-                            <option value="5b99f97c978dff3d115261a4">South Georgia and South Sandwich Islands</option>
-                            <option value="5b99f97c978dff3d115261a5">South Korea</option>
-                            <option value="5b99f97c978dff3d115261a6">South Sudan</option>
-                            <option value="5b99f97c978dff3d115261a7">Spain</option>
-                            <option value="5b99f97c978dff3d115261a8">Sri Lanka</option>
-                            <option value="5b99f97c978dff3d115261a9">Sudan</option>
-                            <option value="5b99f97c978dff3d115261aa">Suriname</option>
-                            <option value="5b99f97c978dff3d115261ab">Svalbard and Jan Mayen Islands</option>
-                            <option value="5b99f97c978dff3d115261ac">Swaziland</option>
-                            <option value="5b99f97c978dff3d115261ad">Sweden</option>
-                            <option value="5b99f97c978dff3d115261ae">Switzerland</option>
-                            <option value="5b99f97c978dff3d115261af">Syria</option>
-                            <option value="5b99f97c978dff3d115261b0">Taiwan</option>
-                            <option value="5b99f97c978dff3d115261b1">Tajikistan</option>
-                            <option value="5b99f97c978dff3d115261b2">Tanzania</option>
-                            <option value="5b99f97c978dff3d115261b3">Thailand</option>
-                            <option value="5b99f97c978dff3d115261b4">Timor-Leste (East Timor)</option>
-                            <option value="5b99f97c978dff3d115261b5">Togo</option>
-                            <option value="5b99f97c978dff3d115261b6">Tokelau</option>
-                            <option value="5b99f97c978dff3d115261b7">Tonga</option>
-                            <option value="5b99f97c978dff3d115261b8">Trinidad and Tobago</option>
-                            <option value="5b99f97c978dff3d115261b9">Tunisia</option>
-                            <option value="5b99f97c978dff3d115261ba">Turkey</option>
-                            <option value="5b99f97c978dff3d115261bb">Turkmenistan</option>
-                            <option value="5b99f97c978dff3d115261bc">Turks and Caicos Islands</option>
-                            <option value="5b99f97c978dff3d115261bd">Tuvalu</option>
-                            <option value="5b99f97c978dff3d115261be">Uganda</option>
-                            <option value="5b99f97c978dff3d115261bf">Ukraine</option>
-                            <option value="5b99f97c978dff3d115261c0">United Arab Emirates</option>
-                            <option value="5b99f97c978dff3d115261c1">United Kingdom</option>
-                            <option value="5b99f97c978dff3d115261c2">United States</option>
-                            <option value="5b99f97c978dff3d115261c3">Uruguay</option>
-                            <option value="5b99f97c978dff3d115261c4">Uzbekistan</option>
-                            <option value="5b99f97c978dff3d115261c5">Vanuatu</option>
-                            <option value="5b99f97c978dff3d115261c6">Venezuela</option>
-                            <option value="5b99f97c978dff3d115261c7" selected="selected">Vietnam</option>
-                            <option value="5b99f97c978dff3d115261c8">Virgin Islands</option>
-                            <option value="5b99f97c978dff3d115261c9">Wallis and Futuna Islands</option>
-                            <option value="5b99f97c978dff3d115261ca">Yemen</option>
-                            <option value="5b99f97c978dff3d115261cb">Zambia</option>
-                            <option value="5b99f97c978dff3d115261cc">Zimbabwe</option>
-                            <option value="5b99f97c978dff3d115261cd">Åland Islands</option>
-                        </select>
+                            <p className="control-label">Quốc gia</p><Field as="select"
+                                                                            name="country">
+                            <option value="Afghanistan">Afghanistan</option>
+                            <option value="Albania">Albania</option>
+                            <option value="Algeria">Algeria</option>
+                            <option value="Andorra">Andorra</option>
+                            <option value="Angola">Angola</option>
+                            <option value="Anguilla">Anguilla</option>
+                            <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Armenia">Armenia</option>
+                            <option value="Aruba">Aruba</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Austria">Austria</option>
+                            <option value="Azerbaijan">Azerbaijan</option>
+                            <option value="Bahamas">Bahamas</option>
+                            <option value="Bahrain">Bahrain</option>
+                            <option value="Bangladesh">Bangladesh</option>
+                            <option value="Barbados">Barbados</option>
+                            <option value="Belarus">Belarus</option>
+                            <option value="Belgium">Belgium</option>
+                            <option value="Belize">Belize</option>
+                            <option value="Benin">Benin</option>
+                            <option value="Bermuda">Bermuda</option>
+                            <option value="Bhutan">Bhutan</option>
+                            <option value="Bolivia">Bolivia</option>
+                            <option value="Bonaire">Bonaire</option>
+                            <option value="Bosnia-Herzegovina">Bosnia-Herzegovina</option>
+                            <option value="Botswana">Botswana</option>
+                            <option value="Bouvet Island">Bouvet Island</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Brunei">Brunei</option>
+                            <option value="Bulgaria">Bulgaria</option>
+                            <option value="Burkina Faso">Burkina Faso</option>
+                            <option value="Burundi">Burundi</option>
+                            <option value="Cambodia">Cambodia</option>
+                            <option value="Cameroon">Cameroon</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Cayman Islands">Cayman Islands</option>
+                            <option value="Central African Republic">Central African Republic</option>
+                            <option value="Chad"></option>
+                            <option value="Chile"></option>
+                            <option value="China">China</option>
+                            <option value="Christmas Island">Christmas Island</option>
+                            <option value="Cocos (Keeling) Cocos">Cocos (Keeling) Islands</option>
+                            <option value="Comoros">Comoros</option>
+                            <option value="Congo">Congo, Democratic Republic of the (Zaire)</option>
+                            <option value="Congo">Congo, Republic of</option>
+                            <option value="Cook">Cook Islands</option>
+                            <option value="Costa">Costa Rica</option>
+                            <option value="Croatia">Croatia</option>
+                            <option value="Cuba">Cuba</option>
+                            <option value="Curacao">Curacao</option>
+                            <option value="Cyprus">Cyprus</option>
+                            <option value="Czech">Czech Republic</option>
+                            <option value="Denmark">Denmark</option>
+                            <option value="Djibouti">Djibouti</option>
+                            <option value="Dominica">Dominica</option>
+                            <option value="Dominican">Dominican Republic</option>
+                            <option value="Ecuador">Ecuador</option>
+                            <option value="Egypt">Egypt</option>
+                            <option value="Salvador">El Salvador</option>
+                            <option value="Equatorial">Equatorial Guinea</option>
+                            <option value="Eritrea">Eritrea</option>
+                            <option value="Estonia">Estonia</option>
+                            <option value="Ethiopia">Ethiopia</option>
+                            <option value="Falkland">Falkland Islands</option>
+                            <option value="Fiji">Fiji Islands</option>
+                            <option value="Fiji">Fiji</option>
+                            <option value="Finland">Finland</option>
+                            <option value="France">France</option>
+                            <option value="French">French Guiana</option>
+                            <option value="Gabon">Gabon</option>
+                            <option value="Gambia">Gambia</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Ghana">Ghana</option>
+                            <option value="Gibraltar">Gibraltar</option>
+                            <option value="Greece">Greece</option>
+                            <option value="Greenland">Greenland</option>
+                            <option value="Grenada">Grenada</option>
+                            <option value="Guadeloupe">Guadeloupe (French)</option>
+                            <option value="Guam">Guam (USA)</option>
+                            <option value="Guatemala">Guatemala</option>
+                            <option value="Guinea">Guinea</option>
+                            <option value="Guyana">Guyana</option>
+                            <option value="Haiti">Haiti</option>
+                            <option value="v">Holy See</option>
+                        <option value="v">Honduras</option>
+                        <option value="v">Hong Kong</option>
+                        <option value="v">Hungary</option>
+                        <option value="v">Iceland</option>
+                        <option value="India">India</option>
+                        <option value="Indonesia">Indonesia</option>
+                        <option value="Iran">Iran</option>
+                        <option value="v">Iraq</option>
+                        <option value="v">Ireland</option>
+                        <option value="v">Israel</option>
+                        <option value="v">Italy</option>
+                        <option value="Coast">Ivory Coast (Cote D`Ivoire)</option>
+                        <option value="Jamaica">Jamaica</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Jordan">Jordan</option>
+                        <option value="Kazakhstan">Kazakhstan</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="v">Kuwait</option>
+                        <option value="b">Kuwait</option>
+                        <option value="Kuwait">Kuwait</option>
+                        <option value="Kyrgyzstan">Kyrgyzstan</option>
+                        <option value="Laos">Laos</option>
+                        <option value="Latvia">Latvia</option>
+                        <option value="Lebanon">Lebanon</option>
+                        <option value="Lesotho">Lesotho</option>
+                        <option value="Liberia">Liberia</option>
+                        <option value="Libya">Libya</option>
+                        <option value="Liechtenstein">Liechtenstein</option>
+                        <option value="Lithuania">Liechtenstein</option>
+                        <option value="Luxembourg">Luxembourg</option>
+                        <option value="Macau">Macau</option>
+                        <option value="Macedonia">Macedonia</option>
+                        <option value="Madagascar">Madagascar</option>
+                        <option value="Malawi">Malawi</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Maldives">Maldives</option>
+                        <option value="Mali">Mali</option>
+                        <option value="Malta">Malta</option>
+                        <option value="Marshall">Marshall Islands</option>
+                        <option value="Martinique">Martinique (French)</option>
+                        <option value="Mauritania">Mauritania</option>
+                        <option value="Mauritius">Mauritius</option>
+                        <option value="Mayotte">Mayotte</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Micronesia">Micronesia</option>
+                        <option value="Moldova">Moldova</option>
+                        <option value="Monaco">Monaco</option>
+                        <option value="Mongolia">Mongolia</option>
+                        <option value="Montenegro">Montenegro</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Morocco">Morocco</option>
+                        <option value="Mozambique">Mozambique</option>
+                        <option value="Myanmar">Myanmar</option>
+                        <option value="Namibia">Namibia</option>
+                        <option value="Nauru">Nauru</option>
+                        <option value="Nepal">Nepal</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="New">New Caledonia (French)</option>
+                        <option value="New">New Zealand</option>
+                        <option value="Nicaragua">Nicaragua</option>
+                        <option value="Niger">Niger</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Niue">Niue</option>
+                        <option value="Norfolk">Norfolk Island</option>
+                            <option value="North">North Korea</option>
+                            <option value="Northern">Northern Mariana Islands</option>
+                            <option value="Norway">Norway</option>
+                            <option value="Oman">Oman</option>
+                            <option value="Pakistan">Pakistan</option>
+                            <option value="Palau">Palau</option>
+                            <option value="Panama">Panama</option>
+                            <option value="Papua New">Papua New Guinea</option>
+                            <option value="Paraguay">Paraguay</option>
+                            <option value="Peru">Peru</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="Pitcairn">Pitcairn Island</option>
+                            <option value="Poland">Poland</option>
+                            <option value="Polynesia">Polynesia (French)</option>
+                            <option value="Portugal">Portugal</option>
+                            <option value="Puerto">Puerto Rico</option>
+                            <option value="Qatar">Qatar</option>
+                            <option value="Reunion">Reunion</option>
+                            <option value="Romania">Romania</option>
+                            <option value="Russia">Russia</option>
+                            <option value="Rwanda">Rwanda</option>
+                            <option value="Saint Helena">Saint Helena</option>
+                            <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                            <option value="Saint Lucia">Saint Lucia</option>
+                            <option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option>
+                            <option value="Saint Vincent and Grenadines">Saint Vincent and Grenadines</option>
+                            <option value="Samoa">Samoa</option>
+                            <option value="an Marino<">San Marino</option>
+                            <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                            <option value="Saudi Arabia">Saudi Arabia</option>
+                            <option value="Senegal">Senegal</option>
+                            <option value="Serbia">Serbia</option>
+                            <option value="Seychelles">Seychelles</option>
+                            <option value="Sierra Leone">Sierra Leone</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Sint Maarten">Sint Maarten</option>
+                            <option value="Slovakia">Slovakia</option>
+                            <option value="Slovenia">Slovenia</option>
+                            <option value="Solomon Islands">Solomon Islands</option>
+                            <option value="Somalia">Somalia</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="South Georgia and South Sandwich Islands">South Georgia and South Sandwich Islands</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="outh Sudan">South Sudan</option>
+                            <option value="Spain">Spain</option>
+                            <option value="Sri Lanka">Sri Lanka</option>
+                            <option value="Sudan">Sudan</option>
+                            <option value="Suriname">Suriname</option>
+                            <option value="Svalbard and Jan Mayen Islands">Svalbard and Jan Mayen Islands</option>
+                            <option value="Swaziland">Swaziland</option>
+                            <option value="Sweden">Sweden</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="Syria">Syria</option>
+                            <option value="Taiwan">Taiwan</option>
+                            <option value="Tajikistan">Tajikistan</option>
+                            <option value="Tanzania">Tanzania</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="Timor-Leste (East Timor)">Timor-Leste (East Timor)</option>
+                            <option value="Togo">Togo</option>
+                            <option value="Tokelau">Tokelau</option>
+                            <option value="Tonga">Tonga</option>
+                            <option value="Trinidad and Tonga">Trinidad and Tobago</option>
+                            <option value="Tunisia">Tunisia</option>
+                            <option value="Turkey">Turkey</option>
+                            <option value="Turkmenistan">Turkmenistan</option>
+                            <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
+                            <option value="Tuvalu">Tuvalu</option>
+                            <option value="Uganda">Uganda</option>
+                            <option value="Ukraine">Ukraine</option>
+                            <option value="United Arab Emirates">United Arab Emirates</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="United States">United States</option>
+                            <option value="Uruguay">Uruguay</option>
+                            <option value="Uzbekistan">Uzbekistan</option>
+                            <option value="Vanuatu">Vanuatu</option>
+                            <option value="Venezuela">Venezuela</option>
+                            <option value="Vietnam" selected="selected">Vietnam</option>
+                            <option value="Virgin Islands">Virgin Islands</option>
+                            <option value="Wallis and Futuna Islands">Wallis and Futuna Islands</option>
+                            <option value="Yemen">Yemen</option>
+                            <option value="Zambia">Zambia</option>
+                            <option value="Zimbabwe">Zimbabwe</option>
+                            <option value="Åland Islands">Åland Islands</option>
+                        </Field>
 
                             <div className="fieldGroup "><p className="control-label">Địa chỉ</p><Field type="text"
                                                                                                         name="address"
-                                                                                                        placeholder={accounts.address || 'Nhập địa chỉ của bạn'}
+                                                                                                        // placeholder={accounts.address || 'Nhập địa chỉ của bạn'}
                                                                                                         maxLength={5000}
                                                                                                         autoComplete="false"
+                                                                                                        // enableReInitial = "true"
                             />
                             </div>
                             <div>
@@ -533,6 +519,7 @@ const UserInfo = () => {
                                             <option value="">{initialGender}</option>
                                             <option value="Nam">Nam</option>
                                             <option value="Nữ">Nữ</option>
+
                                         </Field>
                                     {/*</div>*/}
                                 </div>
@@ -571,50 +558,53 @@ const UserInfo = () => {
 
                             <div className="fieldGroup "><p className="control-label">Chiểu cao (cm)</p><Field type="text"
                                                                                                         name="height"
-                                                                                                        placeholder={accounts.height || 'Nhập chiều cao của bạn'}
+                                                                                                        // placeholder={accounts.height || 'Nhập chiều cao của bạn'}
                                                                                                         maxLength={5000}
                                                                                                         autoComplete="false"
+                                                                                                               // enableReInitial = "true"
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Cân nặng (kg)</p><Field type="text"
                                                                                                           name="weight"
-                                                                                                          placeholder={accounts.weight || 'Nhập cân nặng của bạn'}
+                                                                                                          // placeholder={accounts.weight || 'Nhập cân nặng của bạn'}
                                                                                                           maxLength={5000}
                                                                                                           autoComplete="false"
+                                                                                                              // enableReInitial = "true"
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Giới thiệu</p><Field type="text"
                                                                                                               name="describes"
-                                                                                                              placeholder={accounts.describes || 'Nhập giới thiệu của bạn'}
+                                                                                                              // placeholder={accounts.describes || 'Nhập giới thiệu của bạn'}
                                                                                                               maxLength={5000}
                                                                                                               autoComplete="false"
+                                                                                                           // enableReInitial = "true"
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Yêu cầu</p><Field type="text"
                                                                                                            name="basicRequest"
-                                                                                                           placeholder={accounts.basicRequest || 'Nhập yêu cầu của bạn'}
+                                                                                                           // placeholder={accounts.basicRequest || 'Nhập yêu cầu của bạn'}
                                                                                                            maxLength={5000}
                                                                                                            autoComplete="false"
+                                                                                                        // enableReInitial = "true"
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Trang cá nhân</p><Field type="text"
                                                                                                         name="facebookLink"
-                                                                                                        placeholder={accounts.facebookLink || 'Nhập địa chỉ trang cá nhân của bạn'}
+                                                                                                        // placeholder={accounts.facebookLink || 'Nhập địa chỉ trang cá nhân của bạn'}
                                                                                                         maxLength={5000}
                                                                                                         autoComplete="false"
+                                                                                                              // enableReInitial = "true"
                             />
                             </div>
-                            <div  className={"col-md-18"} style={{textAlign: "center"}}>
-                                <div>
-                                    <p className="control-label">Dịch vụ</p>
-                                    <RegisterSupply isRegister={true}/>
-                                </div>
-
-                            </div>
+                            {/*<div  className={"col-md-18"} style={{textAlign: "center"}}>*/}
+                            {/*    <div>*/}
+                            {/*        <p className="control-label">Dịch vụ</p>*/}
+                            {/*        <RegisterSupply isRegister={true} name='supplies.id'/>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                             <hr/>
-                            <button type="submit" disabled={isSubmitting} className="btn-update">Cập nhật</button>
-                        </form>
-                        )}
+                            <button type="submit" className="btn-update">Cập nhật</button>
+                        </Form>
                     </Formik>
                 </div>
             </div>
