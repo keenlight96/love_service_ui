@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getCCDVProperGender,
+    getCCDVProperGender, getCCDVsByTopViews,
     getNewestCCDVs,
     getSupplyByUserID,
     getTopFemale,
@@ -45,6 +45,7 @@ const Home = () => {
         dispatch(getTopFemale(5));
         dispatch(getSupplyByUserID(iduser()));
         dispatch(getCCDVProperGender(iduser()));
+        dispatch(getCCDVsByTopViews(5));
     }, [])
     return (
         <>

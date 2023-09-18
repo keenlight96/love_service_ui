@@ -66,7 +66,8 @@
 }
 
 .title-player-profile {
-    margin-top: 30px;
+    margin-top: 15px;
+    margin-bottom: 8px;
     font-size: 24px;
     font-weight: 700;
     font-style: normal;
@@ -265,7 +266,11 @@
     text-align: center;
     background-color: #000;
     border: 1px solid #e2e6ea;
-    vertical-align: middle
+    vertical-align: middle;
+    border: 0;
+    height: auto;
+    max-width: 100%;
+    width: auto;
 }
 
 .album-of-player div {
@@ -2875,3 +2880,47 @@
     background-color: #f3f3f3;
     font-weight: 600
 }
+
+.container-showImages a {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: transparent;
+    overflow: initial;
+    margin-bottom: initial;
+    margin-right: initial;
+    height: initial;
+    text-align: initial;
+    border: initial;
+    vertical-align: initial;
+}
+
+.customButton {
+    margin-top: 20px;
+    text-align: end;
+    margin-bottom: 50px
+}
+
+.customButton p {
+    border: 1px solid #f0564a;
+    cursor: pointer;
+    display: inline-block;
+    padding: 13px 0;
+    margin: 5px 2px 0;
+    width: 75px;
+    height: 45px;
+    border-radius: 40px;
+    text-align: center;
+
+    background-color: #f0564a;
+    color: #fff
+}
+
