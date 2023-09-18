@@ -54,31 +54,31 @@ const NewUserList =() =>{
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách người dùng mới nhất </h4>
                                             <div className="box_right d-flex lms_block">
-                                                <div className="serach_field_2">
-                                                    <div className="search_inner">
-                                                        <form active="#">
-                                                            <div className="search_field">
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Search content here..."
-                                                                />
-                                                            </div>
-                                                            <button type="submit">
-                                                                <i className="ti-search" />
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div className="add_button ms-2">
-                                                    <a
-                                                        href="#"
-                                                        data-toggle="modal"
-                                                        data-target="#addcategory"
-                                                        className="btn_1"
-                                                    >
-                                                        search
-                                                    </a>
-                                                </div>
+                                                {/*<div className="serach_field_2">*/}
+                                                {/*    <div className="search_inner">*/}
+                                                {/*        <form active="#">*/}
+                                                {/*            <div className="search_field">*/}
+                                                {/*                <input*/}
+                                                {/*                    type="text"*/}
+                                                {/*                    placeholder="Search content here..."*/}
+                                                {/*                />*/}
+                                                {/*            </div>*/}
+                                                {/*            <button type="submit">*/}
+                                                {/*                <i className="ti-search" />*/}
+                                                {/*            </button>*/}
+                                                {/*        </form>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="add_button ms-2">*/}
+                                                {/*    <a*/}
+                                                {/*        href="#"*/}
+                                                {/*        data-toggle="modal"*/}
+                                                {/*        data-target="#addcategory"*/}
+                                                {/*        className="btn_1"*/}
+                                                {/*    >*/}
+                                                {/*        search*/}
+                                                {/*    </a>*/}
+                                                {/*</div>*/}
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">

@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {activeCCDV, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
+import {activeAccount, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
 import DetailCCDV from "./DetailCCDV";
 
 const AllCCDVList = () => {
@@ -22,13 +22,11 @@ const AllCCDVList = () => {
         setUsername(str);
     }
     const allCCDVFilter = useSelector((state) => {
-        console.log(state.admin.admin.allCCDVFilter);
         return state.admin.admin.allCCDVFilter;
     });
     const [account, setAccount] = useState({});
     const blockAc = (object) => {
         setAccount(object);
-        console.log(account);
     };
     useEffect(() => {
         dispatch(blockAccount(account)).then(() => {
@@ -41,8 +39,7 @@ const AllCCDVList = () => {
     }, [filter])
 
     useEffect(() => {
-        console.log(username + 11111)
-        dispatch(activeCCDV(username)).then(() => {
+        dispatch(activeAccount(username)).then(() => {
             dispatch(getAccountCCDVFilter(filter))
         })
     }, [username])
@@ -67,9 +64,9 @@ const AllCCDVList = () => {
     }
     const [showDetail, setShowDetail] = useState(false);
 
-    const toggleDetail = () => {
-        setShowDetail(!showDetail);
-    };
+    // const toggleDetail = () => {
+    //     setShowDetail(!showDetail);
+    // };
 
     return (
         <>
@@ -95,14 +92,6 @@ const AllCCDVList = () => {
                                     <div className="QA_section">
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách nguời CCDV </h4>
-                                            <select className="form-control gender " style={{width: 'auto'}}
-                                                    className="form-control gender" value={filter.status}
-                                                    onChange={(e) => handleInputChange(e, 'status')}>
-                                                <option value="">Trạng thái</option>
-                                                <option value="active">Đã kích hoạt</option>
-                                                <option value="register">Chờ kích hoạt</option>
-                                                <option value="block">Khóa</option>
-                                            </select>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
                                                     <div className="search_inner">
@@ -116,6 +105,14 @@ const AllCCDVList = () => {
                                                         </form>
                                                     </div>
                                                 </div>
+                                                <select className="form-control gender " style={{width: 'auto'}}
+                                                        className="form-control gender" value={filter.status}
+                                                        onChange={(e) => handleInputChange(e, 'status')}>
+                                                    <option value="">Trạng thái</option>
+                                                    <option value="active">Đã kích hoạt</option>
+                                                    <option value="register">Chờ kích hoạt</option>
+                                                    <option value="block">Khóa</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">
@@ -156,7 +153,9 @@ const AllCCDVList = () => {
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="#">{item.account.role.nameRole}</a>
+                                                            {item.account.role.nameRole === "ROLE_CCDV" &&
+                                                            <a href="#">Người CCDV</a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             {item.account.status.nameStatus === "block" &&
@@ -207,7 +206,7 @@ const AllCCDVList = () => {
                                                             {item.account.status.nameStatus === "block" && (
                                                                 <>
                                                                     <div className="action_btns d-flex">
-                                                                        <a href="#" className="action_btn">
+                                                                        <a href="#" className="action_btn" onClick={() => activeAc(item.account.username)}>
                                                                             {" "}
                                                                             <i className="ti-lock"/>
                                                                         </a>

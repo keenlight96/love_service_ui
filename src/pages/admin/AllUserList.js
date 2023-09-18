@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {blockAccount, getAccountUserFilter} from "../../service/AdminService";
+import {activeAccount, blockAccount, getAccountUserFilter} from "../../service/AdminService";
 
 const AllUserList =() =>{
     const dispatch = useDispatch();
@@ -17,9 +17,14 @@ const AllUserList =() =>{
         });
     };
     const allUserFilter = useSelector((state) => {
-        console.log(state.admin.admin.allUserFilter);
         return state.admin.admin.allUserFilter;
     });
+
+    const [user, setUsername] = useState('')
+    const activeAc = (str) => {
+        setUsername(str);
+    }
+
     const [account, setAccount] =useState({});
     const blockAc = (object) => {
         setAccount(object);
@@ -28,11 +33,18 @@ const AllUserList =() =>{
     useEffect(() =>{
         dispatch(blockAccount(account)).then(() =>{
             dispatch(getAccountUserFilter(filter));
-        })
+        });
     },[account]);
+
     useEffect(() =>{
         dispatch(getAccountUserFilter(filter));
-    },[filter])
+    },[filter]);
+
+    useEffect(() =>{
+        dispatch(activeAccount(user)).then(() =>{
+            dispatch(getAccountUserFilter(filter));
+        })
+    },[user])
     const [currentPage, setCurrentPage] = useState(1);
 
     const allAccountUser = 5;
@@ -67,12 +79,6 @@ const AllUserList =() =>{
                                     <div className="QA_section">
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách người dùng </h4>
-                                                <select className="form-control gender " style={{width: 'auto'}} className="form-control gender" value={filter.status} onChange={(e) => handleInputChange(e, 'status')}>
-                                                    <option value="">Trạng thái</option>
-                                                    <option value="active">Đã kích hoạt</option>
-                                                    <option value="register">Chờ kích họat</option>
-                                                    <option value="block">Khóa</option>
-                                                </select>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
                                                     <div className="search_inner">
@@ -84,6 +90,12 @@ const AllUserList =() =>{
                                                         </form>
                                                     </div>
                                                 </div>
+                                                <select className="form-control gender " style={{width: 'auto'}} className="form-control gender" value={filter.status} onChange={(e) => handleInputChange(e, 'status')}>
+                                                    <option value="">Trạng thái</option>
+                                                    <option value="active">Đã kích hoạt</option>
+                                                    <option value="register">Chờ kích họat</option>
+                                                    <option value="block">Khóa</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">
@@ -155,7 +167,7 @@ const AllUserList =() =>{
                                                             { item.account.status.nameStatus === "block" &&(
                                                                 <>
                                                                 <div className="action_btns d-flex" >
-                                                                    <a href="#" className="action_btn">
+                                                                    <a href="#" className="action_btn" onClick={() => activeAc(item.account.username)}>
                                                                         {" "}
                                                                         <i className="ti-lock" />
                                                                     </a>

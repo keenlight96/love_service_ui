@@ -41,7 +41,15 @@ const ListBill =() =>{
     };
     return(
         <>
+            <div className="white_box_tittle list_header" >
             <h3>Tất cả đơn thuê</h3>
+            <select className="form-control gender " style={{width: 'auto'}} className="form-control gender">
+                <option>Trạng thái</option>
+                <option>Đã hoàn thành</option>
+                <option>Chờ xác nhận</option>
+                <option>Đã hủy</option>
+            </select>
+            </div>
             <div className="transaction-table">
                 <div className="table-responsive">
                     {/* {allBill && SON.parse(localStorage.getItem("account")).role.nameRole === "ROLE_CCDV" && */}

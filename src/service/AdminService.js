@@ -46,8 +46,8 @@ export const getAccountCCDVFilter = createAsyncThunk(
         return res.data;
     }
 )
-export const activeCCDV = createAsyncThunk(
-    "activeCCDV",
+export const activeAccount = createAsyncThunk(
+    "activeAccount",
     async (usernameCCDV) => {
         const res = await customAxios.post("admin/" + usernameCCDV , {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return res.data;

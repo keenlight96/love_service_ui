@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import DetailCCDV from "./DetailCCDV";
 import {useDispatch, useSelector} from "react-redux";
-import {getListReport} from "../../service/AdminService";
+import {activeAccount, blockAccount, getListReport} from "../../service/AdminService";
 
 const AccountReport =() =>{
     const dispatch = useDispatch();
@@ -31,6 +31,26 @@ const AccountReport =() =>{
 
     const currenAllListReport = reportList.slice(indexOfFirstAlLCCDV, indexOfLastAllCCDV);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const [idAccount, setIdAccount] = useState({});
+    const [username, setUsername] = useState('');
+    const activeAc = (str) => {
+        setUsername(str);
+    };
+    const blockAc = (object) => {
+        setIdAccount(object);
+        console.log(idAccount)
+    };
+    useEffect(() =>{
+        dispatch(blockAccount(idAccount)).then(() =>{
+            dispatch(getListReport(userParam));
+        })
+    },[idAccount])
+    useEffect(() =>{
+        dispatch(activeAccount(username)).then(() =>{
+            dispatch(getListReport(userParam));
+        })
+    },[username]);
     return(
         <>
             <link rel="stylesheet" href="/template_admin/css/css_sidebar.css"/>
@@ -105,7 +125,12 @@ const AccountReport =() =>{
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="#">{item.receiver.role.nameRole}</a>
+                                                            {item.receiver.role.nameRole === "ROLE_CCDV" &&
+                                                            <a href="#">Người CCDV</a>
+                                                            }
+                                                            {item.receiver.role.nameRole === "ROLE_USER" &&
+                                                                <a href="#">Người dùng</a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             <div >
@@ -128,6 +153,29 @@ const AccountReport =() =>{
                                                                     chờ xác nhận
                                                                 </a>
                                                             }
+                                                        </td>
+                                                        <td>
+                                                            {item.receiver.status.nameStatus === "active"   &&(
+                                                                <>
+                                                                    <div className="action_btns d-flex">
+                                                                        <a href="#" className="action_btn" onClick={() => blockAc(item.receiver.id)}>
+                                                                            {" "}
+                                                                            <i className="ti-unlock" />
+                                                                        </a>
+                                                                    </div>
+                                                                </>
+                                                            )}
+
+                                                            { item.receiver.status.nameStatus === "block" &&(
+                                                                <>
+                                                                    <div className="action_btns d-flex" >
+                                                                        <a href="#" className="action_btn" onClick={() => activeAc(item.receiver.username)}>
+                                                                            {" "}
+                                                                            <i className="ti-lock" />
+                                                                        </a>
+                                                                    </div>
+                                                                </>
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 ))}
