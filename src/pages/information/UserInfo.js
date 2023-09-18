@@ -3,6 +3,7 @@ import axios from "axios";
 import {Field, Form, Formik, useFormikContext} from "formik";
 import {DatePicker, Modal} from "antd";
 import RegisterSupply from "../../components/common/RegisterSupply";
+import {useSelector} from "react-redux";
 
 const UserInfo = () => {
 
@@ -17,15 +18,31 @@ const UserInfo = () => {
             setAccounts(res.data);
             setInitialGender(res.data.gender)
             setzone(res.data.zone.zone)
+            setInitialBirthday(res.data.birthday)
 
 
         })
     }, [])
+    //supplies
+    const userSupply = useSelector(state => {
+        try {
+            return state.supplies.supplies.userSupplies;
+        } catch (e) {
+            return [];
+        }
+    });
     //chon sinh nhat
     const [selectedDate, setSelectedDate] = useState(null);
     const handleDateChange = (date) => {
         // Chuyển đổi giá trị DatePicker thành đối tượng ngày
         setSelectedDate(date);
+    };
+    //chon sinh nhat
+    const [initialBirthday, setInitialBirthday] = useState(accounts.birthday || '');
+    const [birthday, setBirthday] = useState(initialBirthday);
+
+    const handleBirthdayChange = (event) => {
+        setBirthday(event.target.value);
     };
 //chon gioi tinh
     const [initialGender, setInitialGender] = useState(accounts.gender || '');
@@ -89,11 +106,17 @@ const UserInfo = () => {
 
                             onSubmit={(values) => {
                                 values.birthday = selectedDate
+                                values.supplies = userSupply;
+                                values.birthday = birthday;
                                 console.log("mau gui di", values)
+                                axios.post(`http://localhost:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
+                                    alert("thanh cong")
+                                })
 
 
                             }}>
-                        <Form className="from-userinfo">
+                        {({ handleSubmit, isSubmitting }) => (
+                            <form onSubmit={handleSubmit} className="from-userinfo">
                             <div className="fieldGroup "><p className="control-label">Họ</p><Field type="text"
                                                                                                    name="firstName"
                                                                                                    placeholder={accounts.firstName || 'Nhập họ của bạn'}
@@ -116,14 +139,45 @@ const UserInfo = () => {
                             />
                             </div>
                             <p className="control-label">Ngày sinh</p>
-                            <DatePicker
-                                selected={selectedDate}
-                                onChange={handleDateChange}
-                                dateFormat="yyyy-MM-dd" // Định dạng hiển thị của DatePicker
-                            />
-                            <p>
-                                Giá trị đã chọn: {selectedDate ? selectedDate.toISOString().slice(0, 10) : "Chưa chọn"}
-                            </p>
+                                <div>
+                                    <div
+                                        style={{
+                                            width: '90%',
+                                            display: 'inline-block', // Để đảm bảo nằm cạnh nhau
+                                            textAlign: 'center',
+                                            height: '55px',
+                                            padding: '17px',
+                                            border: '1px solid #777',
+                                            borderRadius: '7px',
+                                        }}
+                                    >
+                                        {birthday || initialBirthday}
+                                    </div>
+                                    <Field
+                                        type="date"
+                                        name="birthday"
+                                        placeholder={initialBirthday || 'Nhập sinh nhật của bạn'}
+                                        maxLength={5000}
+                                        autoComplete="false"
+                                        onChange={handleBirthdayChange}
+                                        style={{
+                                            width: '10%', // Chiếm 10% chiều rộng
+                                            verticalAlign: 'top', // Để thẻ input nằm trên thẻ div
+                                        }}
+                                    />
+                                </div>
+
+
+
+
+                                {/*<DatePicker*/}
+                            {/*    selected={selectedDate}*/}
+                            {/*    onChange={handleDateChange}*/}
+                            {/*    dateFormat="yyyy-MM-dd" // Định dạng hiển thị của DatePicker*/}
+                            {/*/>*/}
+                            {/*<p>*/}
+                            {/*    Giá trị đã chọn: {selectedDate ? selectedDate.toISOString().slice(0, 10) : "Chưa chọn"}*/}
+                            {/*</p>*/}
 
 
                             <p className="control-label">Ngôn ngữ</p><select name="language">
@@ -550,23 +604,17 @@ const UserInfo = () => {
                                                                                                         autoComplete="false"
                             />
                             </div>
-                            <div>
-                                <div className="fieldGroup">
+                            <div  className={"col-md-18"} style={{textAlign: "center"}}>
+                                <div>
                                     <p className="control-label">Dịch vụ</p>
-                                    <button onClick={openModal}>danh sách dịch vụ</button>
+                                    <RegisterSupply isRegister={true}/>
                                 </div>
-                                <Modal
-                                    isOpen={isOpen}
-                                    onRequestClose={closeModal}
-                                    contentLabel="Register Supply Modal"
-                                >
-                                    <h2>Register Supply</h2>
-                                    <RegisterSupply isOpen={isOpen} onRequestClose={closeModal} />
-                                </Modal>
+
                             </div>
                             <hr/>
-                            <button type="submit" className="btn-update">Cập nhật</button>
-                        </Form>
+                            <button type="submit" disabled={isSubmitting} className="btn-update">Cập nhật</button>
+                        </form>
+                        )}
                     </Formik>
                 </div>
             </div>
