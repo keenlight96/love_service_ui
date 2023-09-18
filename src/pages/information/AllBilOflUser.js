@@ -60,6 +60,7 @@ const AllBillOfUser = () => {
         setModal(true);
     };
     const closeModal = () => {
+        setMessage("")
         setModal(false);
     };
     const  complete = (idBill) =>{
@@ -375,6 +376,15 @@ const AllBillOfUser = () => {
                                                     <span className="price">{objects.adminMessage}</span>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td>
+                                                    <span> helo </span>:
+                                                </td>
+                                                <td>
+                                                    <span> helo2 </span>
+                                                </td>
+                                            </tr>
+
                                             </tbody>
                                         </table>
                                     </div>

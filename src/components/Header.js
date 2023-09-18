@@ -12,7 +12,6 @@ import {getAllNotifications} from "../service/ChattingService";
 const Header = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [isClicked2, setIsClicked2] = useState(false);
-    const [isClickedChangeStatus, setIsChangeStatus] = useState(true);
     const [statusCCDV, setStatusCCDV] = useState(true);
     const dispatch = useDispatch();
     const [user, setUser] = useState(() => {
@@ -46,7 +45,8 @@ const Header = () => {
             res => {
                 Swal.fire({
                     position: 'center',
-                    icon: 'info',
+                    icon: 'inf' +
+                        'o',
                     title: res.data,
                     showConfirmButton: false,
                     timer: 1500
@@ -82,7 +82,8 @@ const Header = () => {
         useEffect(() => {
             try {
                 const userTemp = JSON.parse(localStorage.getItem("account"));
-                setUser(JSON.parse(localStorage.getItem("account")));
+                setUser(userTemp);
+                console.log(userTemp)
                 userTemp && userTemp.role.id === 3 && user.status.id === 111 ? setStatusCCDV(false) : setStatusCCDV(true);
             } catch (e) {
                 setUser({});

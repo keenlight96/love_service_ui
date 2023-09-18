@@ -8,6 +8,7 @@ import {checkToken} from "../../service/UserService";
 const SidebarInformation = (current) => {
     const location = useLocation();
     const storeUser = useSelector(state => {
+        console.log(state)
         return state.user.user.current
     });
 

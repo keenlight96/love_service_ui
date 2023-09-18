@@ -77,7 +77,7 @@ const AllBillByOfCCDV = () => {
         setBillRecevied(idBill1)
     }
     useEffect(() => {
-        dispatch(receivedBill(idBillRecevied)).then(() =>{
+        dispatch(receivedBill(idBillRecevied)).then(() => {
             dispatch(checkToken());
             dispatch(getAllBillByIdCCDV(idAccount));
             sendNotification(idBillRecevied);
@@ -115,107 +115,107 @@ const AllBillByOfCCDV = () => {
     return (
         <>
 
-                        <h3>Lịch sử đơn thuê</h3>
-                        <div className="transaction-table">
-                            <div className="table-responsive">
-                                {/* {allBillOfCCDV && SON.parse(localStorage.getItem("account")).role.nameRole === "ROLE_CCDV" && */}
-                                <table className="table table-striped table-bordered table-condensed table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Tên người thuê</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số giờ thuê</th>
-                                        <th>Ngày bắt đầu</th>
-                                        <th>Ngày kết thúc</th>
-                                        <th>Ngày tạo đơn</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Tình trạng</th>
-                                        <th>Xem chi tiết</th>
-                                        <th>Hoạt động</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {currentBills.length > 0 &&
-                                        currentBills.map((item) => (
-                                            <tr key={item.id}>
-                                                <td>{item.accountUser.nickname}</td>
-                                                <td>{item.address}</td>
-                                                <td>{item.hour}</td>
-                                                <td>
-                                                    {new Date(item.dateStart).toLocaleString()}
-                                                </td>
-                                                <td>
-                                                    {new Date(item.dateEnd).toLocaleString()}
-                                                </td>
-                                                <td>{new Date(item.dateCreate).toLocaleString()}</td>
-                                                <td>{item.total}</td>
-                                                <td>
-                                                    {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
-                                                </td>
-                                                <td style={{width: "150px"}}>
-                                                    <button className="action-button detail-button"
-                                                            style={{width: "auto"}}
-                                                            onClick={() => openBillDetail(item)}>
-                                                        xem chi tiết
-                                                    </button>
-                                                </td>
-                                                <td className="actions" style={{width: "200px"}}>
-                                                    {item.status.nameStatus === "wait" && (
-                                                        <>
-                                                            <button type="button"
-                                                                    className="action-button cancel-button"
-                                                                    onClick={() => openModal(item)}>
-                                                                Hủy đơn
-                                                            </button>
-                                                            <button className="action-button confirm-button"
-                                                                    onClick={() => receivedBills(item.id)}>
-                                                                Xác nhận
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                    {item.status.nameStatus === "recevied" && (
-                                                        <>
-                                                            <button className="action-button cancel-button"
-                                                                    onClick={() => openModal(item)}>
-                                                                Hủy đơn
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div className="pagination-container">
-                            <ul className="pagination">
-                                {currentPage === 1 ? (
-                                    <li className="disabled">
-                                        <button>&lt; Trang trước</button>
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <button onClick={() => paginate(currentPage - 1)}>&lt; Trang trước</button>
-                                    </li>
-                                )}
-                                {currentPage < Math.ceil(allBillOfCCDV.length / billsPerPage) ? (
-                                    <li>
-                                        <button onClick={() => paginate(currentPage + 1)}>Trang tiếp theo &gt;</button>
-                                    </li>
-                                ) : (
-                                    <li className="disabled">
-                                        <button>Trang tiếp theo &gt;</button>
-                                    </li>
-                                )}
-                            </ul>
-                        </div>
+            <h3>Lịch sử đơn thuê</h3>
+            <div className="transaction-table">
+                <div className="table-responsive">
+                    {/* {allBillOfCCDV && SON.parse(localStorage.getItem("account")).role.nameRole === "ROLE_CCDV" && */}
+                    <table className="table table-striped table-bordered table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Tên người thuê</th>
+                            <th>Địa chỉ</th>
+                            <th>Số giờ thuê</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th>Ngày tạo đơn</th>
+                            <th>Tổng tiền</th>
+                            <th>Tình trạng</th>
+                            <th>Xem chi tiết</th>
+                            <th>Hoạt động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {currentBills.length > 0 &&
+                            currentBills.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.accountUser.nickname}</td>
+                                    <td>{item.address}</td>
+                                    <td>{item.hour}</td>
+                                    <td>
+                                        {new Date(item.dateStart).toLocaleString()}
+                                    </td>
+                                    <td>
+                                        {new Date(item.dateEnd).toLocaleString()}
+                                    </td>
+                                    <td>{new Date(item.dateCreate).toLocaleString()}</td>
+                                    <td>{item.total}</td>
+                                    <td>
+                                        {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
+                                    </td>
+                                    <td style={{width: "150px"}}>
+                                        <button className="action-button detail-button"
+                                                style={{width: "auto"}}
+                                                onClick={() => openBillDetail(item)}>
+                                            xem chi tiết
+                                        </button>
+                                    </td>
+                                    <td className="actions" style={{width: "200px"}}>
+                                        {item.status.nameStatus === "wait" && (
+                                            <>
+                                                <button type="button"
+                                                        className="action-button cancel-button"
+                                                        onClick={() => openModal(item)}>
+                                                    Hủy đơn
+                                                </button>
+                                                <button className="action-button confirm-button"
+                                                        onClick={() => receivedBills(item.id)}>
+                                                    Xác nhận
+                                                </button>
+                                            </>
+                                        )}
+                                        {item.status.nameStatus === "recevied" && (
+                                            <>
+                                                <button className="action-button cancel-button"
+                                                        onClick={() => openModal(item)}>
+                                                    Hủy đơn
+                                                </button>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div className="pagination-container">
+                <ul className="pagination">
+                    {currentPage === 1 ? (
+                        <li className="disabled">
+                            <button>&lt; Trang trước</button>
+                        </li>
+                    ) : (
+                        <li>
+                            <button onClick={() => paginate(currentPage - 1)}>&lt; Trang trước</button>
+                        </li>
+                    )}
+                    {currentPage < Math.ceil(allBillOfCCDV.length / billsPerPage) ? (
+                        <li>
+                            <button onClick={() => paginate(currentPage + 1)}>Trang tiếp theo &gt;</button>
+                        </li>
+                    ) : (
+                        <li className="disabled">
+                            <button>Trang tiếp theo &gt;</button>
+                        </li>
+                    )}
+                </ul>
+            </div>
 
-                        {allBillOfCCDV.length == 0 && (
-                            <div className="text-center mt-20 col-md-12">
-                                <span>Không có dữ liệu</span>
-                            </div>
-                        )}
+            {allBillOfCCDV.length == 0 && (
+                <div className="text-center mt-20 col-md-12">
+                    <span>Không có dữ liệu</span>
+                </div>
+            )}
             {objects && modal && (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
@@ -401,10 +401,19 @@ const AllBillByOfCCDV = () => {
                                                     <span className="price">{objects.adminMessage}</span>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td>
+                                                    <span> helo </span>:
+                                                </td>
+                                                <td>
+                                                    <span> helo2 </span>
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" ><span>Hello</span></button>
                                         <button type="button" className="btn btn-default" onClick={closeBillDetail}>
                                             <span>Đóng</span>
                                         </button>
