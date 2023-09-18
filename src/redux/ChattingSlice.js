@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
-    addChatReceivers, addChatWithReceiver, addNotification,
+    addChatReceivers, addChatWithReceiver, addNotification, confirmReadNotification,
     getAllChatReceivers, getAllNotifications,
     getChatWithReceiver,
     setActiveReceiver,
@@ -55,6 +55,17 @@ const ChattingSlice = createSlice({
         })
         builder.addCase(addNotification.fulfilled, (state, action) => {
             state.chatting.notifications.unshift(action.payload);
+        })
+        builder.addCase(confirmReadNotification.fulfilled, (state, action) => {
+            state.chatting.notifications.map((item) => {
+                if (item.id == action.payload) {
+                    let newItem = {...item, "isRead": true};
+                    console.log(newItem)
+                    return newItem;
+                } else {
+                    return item;
+                }
+            });
         })
     }
 })

@@ -6,6 +6,7 @@ import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
 import {getAllBillIn7DayByCCDV} from "../../../service/BillsService";
 import Swal from "sweetalert2";
+import {checkToken} from "../../../service/UserService";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const user = useSelector(state => (state.user.user.current));
@@ -98,10 +99,12 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                     id: JSON.parse(localStorage.getItem("account")).id
                 }
             }
+            console.log(tempBill);
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
                 if (data.data != null) {
                     sendNotification(data.data.bill.id);
+                    dispatch(checkToken());
                     Swal.fire({
                         position: 'center',
                         icon: 'success',

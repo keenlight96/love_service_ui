@@ -16,6 +16,7 @@ import ModalCreateBill from "./CreateBill/ModalCreateBill";
 // import
 import {useMemo} from "react";
 import Pagination from "../../components/common/Pagination";
+import {checkToken} from "../../service/UserService";
 
 // Số phần tử 1 trang
 let PageSize = 5;
@@ -118,6 +119,7 @@ function Detail() {
             }).catch(error => {
             console.log(error);
         });
+        dispatch(checkToken());
     }, []);
 
     useEffect(() => {
@@ -255,7 +257,7 @@ function Detail() {
                                 <div className="player-profile-right-wrap col-md-3 col-md-push-6">
                                     <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
                                         <div className="rateting-style">
-                                            {avgStar.toFixed(1)}
+                                            {avgStar.toFixed(1).replace(".", ",")}
                                             &nbsp;
                                             <i className="fas fa-star"></i>
                                             &nbsp;

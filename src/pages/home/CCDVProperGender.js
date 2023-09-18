@@ -39,7 +39,7 @@ const CCDVProperGender = () => {
                                         <div className="div--flex">
                                             <div className="rate">
                                                 <i className="fas fa-star"/>
-                                                <p>{item.rate == null ? 0 : item.rate.toFixed(1)}
+                                                <p>{item.rate == null ? 0 : item.rate.toFixed(1).replace(".", ",")}
                                                     <i>({item.countRate})</i></p>
                                             </div>
                                             <div className="rate">

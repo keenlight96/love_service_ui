@@ -74,3 +74,11 @@ export const addNotification = createAsyncThunk(
         return newNotification;
     }
 )
+
+export const confirmReadNotification = createAsyncThunk(
+    "confirmReadNotification",
+    async (notificationId) => {
+        const res = await customAxios.post("message/confirmReadNotification/" + notificationId, "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return notificationId;
+    }
+)

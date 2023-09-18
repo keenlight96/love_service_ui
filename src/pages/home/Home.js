@@ -13,6 +13,7 @@ import TopServiceCCDV from "./TopServiceCCDV";
 import TopMaleAndFemale from "./TopMaleAndFemale";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
 import CCDVProperGender from "./CCDVProperGender";
+import {checkToken} from "../../service/UserService";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const Home = () => {
         dispatch(getSupplyByUserID(iduser()));
         dispatch(getCCDVProperGender(iduser()));
         dispatch(getCCDVsByTopViews(5));
+        dispatch(checkToken());
     }, [])
     return (
         <>

@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkToken, setUser} from "../service/UserService";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {getAllNotifications} from "../service/ChattingService";
+import {confirmReadNotification, getAllNotifications} from "../service/ChattingService";
 
 const Header = () => {
     const [isClicked, setIsClicked] = useState(false);
@@ -41,6 +41,11 @@ const Header = () => {
         }
         setIsClicked2(!isClicked2);
     };
+
+    const handleReadInformation = (value) => {
+        dispatch(confirmReadNotification(value));
+    }
+
     const swapStatusCCDV = () => {
         axios.get("http://localhost:8080/accounts/workOrRest?id=" + user.id).then(
             res => {
@@ -57,7 +62,6 @@ const Header = () => {
         })
         setStatusCCDV(!statusCCDV);
     }
-
 
     const logout = () => {
         LoginService.logout().then(r => {
@@ -79,15 +83,14 @@ const Header = () => {
         }
     }, [])
 
-        useEffect(() => {
-            try {
-                const userTemp = JSON.parse(localStorage.getItem("account"));
-                setUser(JSON.parse(localStorage.getItem("account")));
-                userTemp && userTemp.role.id === 3 && user.status.id === 111 ? setStatusCCDV(false) : setStatusCCDV(true);
-            } catch (e) {
-                setUser({});
-            }
-        }, [storeUser])
+    useEffect(() => {
+        try {
+            setUser(JSON.parse(localStorage.getItem("account")));
+            storeUser && storeUser.account.role.id === 3 && storeUser.account.status.id === 111 ? setStatusCCDV(false) : setStatusCCDV(true);
+        } catch (e) {
+            setUser({});
+        }
+    }, [storeUser])
 
     return (
         <>
@@ -169,11 +172,11 @@ const Header = () => {
                                                 aria-labelledby="basic-nav-dropdown">
                                                 <div className="content">
                                                     <div className="tab-notif-common"><h5><span>Thông báo</span></h5>
-                                                        <div className="tab-action"><p className="active">
-                                                            <span>Chính</span></p>
-                                                            <p className><span>Khác</span></p>
-                                                            <p className><span>Theo dõi</span></p>
-                                                            <p className><span>Tương tác</span></p></div>
+                                                        {/*<div className="tab-action"><p className="active">*/}
+                                                        {/*    <span>Chính</span></p>*/}
+                                                        {/*    <p className><span>Khác</span></p>*/}
+                                                        {/*    <p className><span>Theo dõi</span></p>*/}
+                                                        {/*    <p className><span>Tương tác</span></p></div>*/}
                                                     </div>
                                                     <div>
                                                         <div className="infinite-scroll-component"
@@ -181,18 +184,29 @@ const Header = () => {
                                                             <div className={"container"} style={{width: "410px", margin: "10px", padding: "5px"}}>
                                                                 {
                                                                     notifications && notifications.map((item, key) => (
-                                                                        <div className={"row notif-content"} key={key}>
+                                                                        <div className={"row notif-content"} key={key} style={{paddingBottom: "10px"}}>
                                                                             <div className={"col-md-2 col-centered"}>
                                                                                 <ul style={{float: "left", paddingLeft: "0px"}}>
                                                                                     <li className={"item-icon"}>
-                                                                                        <a href="#" className={"group-user"} style={{textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
-                                                                                            <i className="fal fa-camera-movie"></i>
+                                                                                        <a href="/information/bills" className={"group-user"} style={{textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
+                                                                                            {
+                                                                                                item.subtype == "wait" ?
+                                                                                                    <i className="fal fa-plus"></i>
+                                                                                                    :
+                                                                                                    item.subtype == "recevied" ?
+                                                                                                        <i className="fal fa-check-double"></i>
+                                                                                                        :
+                                                                                                        item.subtype == "complete" ?
+                                                                                                            <i className="fal fa-check-double"></i>
+                                                                                                            :
+                                                                                                            <i className="fal fa-xmark"></i>
+                                                                                            }
                                                                                         </a>
                                                                                     </li>
                                                                                 </ul>
                                                                             </div>
                                                                             <Link to={"/information/bills"}>
-                                                                                <div className={"col-md-9 col-centered"}>
+                                                                                <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id)}}>
                                                                                     <strong style={{margin: "0px"}}>
                                                                                         {
                                                                                             item.subtype == "wait" ?
@@ -207,9 +221,21 @@ const Header = () => {
                                                                                                         "Đơn thuê bị hủy"
                                                                                         }
                                                                                     </strong>
-                                                                                    <p style={{paddingLeft: "10px"}}><b>{item.sender.nickname}</b> {item.message}</p>
+                                                                                    <p style={{paddingLeft: "10px", fontSize: "13px"}}><b>{item.sender.nickname}</b> {item.message}</p>
                                                                                 </div>
                                                                             </Link>
+                                                                            <div className={"col-md-1 col-centered"}>
+                                                                                <ul style={{float: "left", paddingLeft: "0px"}}>
+                                                                                    <li className={"item-icon"}>
+                                                                                        {
+                                                                                            item.isRead == false ?
+                                                                                                <i className="fal fa-circle"></i>
+                                                                                                :
+                                                                                                <></>
+                                                                                        }
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
                                                                         </div>
                                                                     ))
                                                                 }
@@ -235,8 +261,8 @@ const Header = () => {
                                                 </div>
                                             </ul>
                                         </li>
-                                        <li className="item-icon balance"><a className="money-user"><i
-                                            className="far fa-plus"/> {user && user.balance} đ</a>
+                                        <li className="item-icon balance"><a className="money-user">
+                                            {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ</a>
                                         </li>
                                         <li className={isClicked ? "item-icon item-avatar dropdown open" : "item-icon item-avatar dropdown "}
                                             onClick={(e) => {
@@ -266,7 +292,7 @@ const Header = () => {
                                                     href="#"><i
                                                     className="fas fa-plus"/> <span>Số dư</span> : <span
                                                     className="money">
-                                                    {user && user.balance} đ
+                                                    {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                                                 </span></a></li>
                                                 <li role="presentation" className="menu-item"><a role="menuitem"
                                                                                                  tabIndex={-1}
@@ -367,7 +393,7 @@ const Header = () => {
                                                                                                          href="#"><i
                                         className="fas fa-plus"/> <span>Số dư</span> : <span
                                         className="money">
-                                        {user && user.balance} đ
+                                        {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                                     </span></a></li>
                                     <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                      href="/information/topup"><i
