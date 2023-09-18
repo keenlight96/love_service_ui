@@ -3,13 +3,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     getCCDVProperGender, getCCDVsByTopViews,
     getNewestCCDVs,
-    getSupplyByUserID,
     getTopFemale,
     getTopMale
 } from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import SidebarSupplies from "./SidebarSupplies";
-import {getAllActiveSupplies} from "../../service/SupplyService";
+import {getAllActiveSupplies, getSupplyByUserID} from "../../service/SupplyService";
 import TopServiceCCDV from "./TopServiceCCDV";
 import TopMaleAndFemale from "./TopMaleAndFemale";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
@@ -141,47 +140,6 @@ const Home = () => {
                                     <div className="item"><a href="https://www.facebook.com/groups/playerduovn" target="_blank" rel="noopener noreferrer"><img src="../resources/raw/715867c6-698f-411a-b4f9-1e9093130b60__ff5aee00-79ee-11ed-a19f-23a3b10d190e__admin_banner.jpg" className="img-responsive" alt="banner" /></a></div>
                                 </div>
                                 <a className="carousel-control left" role="button" href="src/pages/home/Home#"><span className="glyphicon glyphicon-chevron-left" /><span className="sr-only">Previous</span></a><a className="carousel-control right" role="button" href="src/pages/home/Home#"><span className="glyphicon glyphicon-chevron-right" /><span className="sr-only">Next</span></a></div>
-                            <div className="action__box">
-                                <div className="styles-module_sliderBase__swkx1 action__box--carousel" data-testid="carousel">
-                                    <div data-testid="sliderList" className="styles-module_slider__o0fqa">
-                                        <div className="action__box--list">
-                                            <div className="box-item create"><img src="../resources/raw/avatar6.png" className alt="PD" id="avt-img-reponsiver" />
-                                                <div className="box-item-plus"><i className="fal fa-plus" /></div>
-                                            </div>
-                                            <p className="player-name">Đăng Story</p></div>
-                                        <div className="action__box--list">
-                                            <div className="box-item"><img src="../resources/raw/e49ffbe1-9391-4177-98ee-c7ac8c7ad135__a5b80762-5e2c-40d2-a860-ec358a4a5dbd__post_video.jpg" className alt="PD" id="avt-img-reponsiver" />
-                                                <div className="box-item-label"><p><i className="far fa-eye" /> 10</p></div>
-                                            </div>
-                                            <div className="player-name">
-                                                <div className="avt-rank avt-sm"><img src="../resources/raw/e49ffbe1-9391-4177-98ee-c7ac8c7ad135__fe79ec80-b751-11ec-ba81-7bfd4ef70d64__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/2-1.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>
-                                                <p>Cải Xanh</p></div>
-                                        </div>
-                                        <div className="action__box--list">
-                                            <div className="box-item"><img src="../resources/raw/f9e96a5f-cc17-49ca-9582-30b97da6eac1__84d6d119-03ff-453d-8c75-63a7aafe557e__post_video.jpg" className alt="PD" id="avt-img-reponsiver" />
-                                                <div className="box-item-label"><p><i className="far fa-eye" /> 32</p></div>
-                                            </div>
-                                            <div className="player-name">
-                                                <div className="avt-rank avt-sm"><img src="../resources/raw/f9e96a5f-cc17-49ca-9582-30b97da6eac1__1a4d2da0-4270-11ee-a657-a54d6be1d46a__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /></div>
-                                                <p>Hà Minh Thanh</p></div>
-                                        </div>
-                                        <div className="action__box--list">
-                                            <div className="box-item"><img src="../resources/raw/df2e4657-c62d-4a9a-b21a-2302983ebb17__1ee7059e-1e2a-45ce-a271-a2980603fb39__post_video.jpg" className alt="PD" id="avt-img-reponsiver" />
-                                                <div className="box-item-label"><p><i className="far fa-eye" /> 85</p></div>
-                                            </div>
-                                            <div className="player-name">
-                                                <div className="avt-rank avt-sm"><img src="../resources/raw/df2e4657-c62d-4a9a-b21a-2302983ebb17__dd30a020-4655-11ee-a657-a54d6be1d46a__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /></div>
-                                                <p>XynXynhh</p></div>
-                                        </div>
-
-                                        <div className="action__box--list"><a href="https://playerduo.net/stories">
-                                            <div className="box-item create">
-                                                <div className="box-item-plus"><i className="fas fa-arrow-right" /></div>
-                                            </div>
-                                            <p className="player-name">Xem thêm</p></a></div>
-                                    </div>
-                                </div>
-                            </div>
                             <br />
                             <div className="mobile-cate">
                                 <div className="label-cate"><p><span>Danh mục game</span></p>

@@ -1,12 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAllActiveSupplies, setChosenSupplies} from "../service/SupplyService";
-import {getSupplyByUserID} from "../service/CCDVsService";
+import {getAllActiveSupplies, setChosenSupplies, updateUserSupply, getSupplyByUserID, getSupplyByUserID2} from "../service/SupplyService";
 
 const initialState = {
     supplies : {
         all : [],
         chosen : [],
-        user:[]
+        user:[],
+        userSupplies: []
     },
 }
 
@@ -23,6 +23,12 @@ const SupplySlice = createSlice({
         })
         builder.addCase(getSupplyByUserID.fulfilled, (state, action) => {
             state.supplies.user = action.payload;
+        })
+        builder.addCase(getSupplyByUserID2.fulfilled, (state, action) => {
+            state.supplies.userSupplies = action.payload;
+        })
+        builder.addCase(updateUserSupply.fulfilled, (state, action) => {
+            state.supplies.userSupplies = action.payload;
         })
     }
 })

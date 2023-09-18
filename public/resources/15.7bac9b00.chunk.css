@@ -1142,3 +1142,9 @@
     50% { color: #fff;  }
     100% { color: red;  }
 }
+
+/*custom css*/
+.notif-content {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dcdcdc;
+}

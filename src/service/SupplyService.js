@@ -15,3 +15,26 @@ export const setChosenSupplies = createAsyncThunk(
         return supplies;
     }
 )
+
+export const getSupplyByUserID = createAsyncThunk(
+    "getSupplyByUserID",
+    async (idUser) => {
+        const rs = await customAxios.get("supplies/getSupplyByUserID?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return rs.data;
+    }
+)
+
+export const getSupplyByUserID2 = createAsyncThunk(
+    "getSupplyByUserID2",
+    async (idUser) => {
+        const rs = await customAxios.get("supplies/getSupplyByUserID2?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return rs.data;
+    }
+)
+
+export const updateUserSupply = createAsyncThunk(
+    "updateUserSupply",
+    async (supplies) => {
+        return supplies;
+    }
+)
