@@ -122,8 +122,7 @@ const AllBillOfUser = () => {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {currentBills.length > 0 &&
-                                        currentBills.map((item) => (
+                                    {currentBills.length > 0 && currentBills.map((item) => (
                                             <tr key={item.id}>
                                                 <td>{item.accountCCDV.nickname}</td>
                                                 <td>{item.address}</td>

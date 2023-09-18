@@ -23,6 +23,9 @@ import NewCCDVList from "./pages/admin/NewCCDVList";
 import AllUserList from "./pages/admin/AllUserList";
 import AllCCDVList from "./pages/admin/AllCCDVList";
 import AccountReport from "./pages/admin/AccountReport";
+import AccountSettings from "./pages/home/AccountSettings";
+import Album from "./pages/home/Album";
+import Revenue from "./pages/profile/Revenue";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
 
@@ -53,7 +56,8 @@ function App() {
                         <Route path={"topup"} element={<UserInfo/>}></Route>
                         <Route path={"summary"} element={<UserInfo/>}></Route>
                         <Route path={"supplies"} element={<UserInfo/>}></Route>
-                        <Route path={"album"} element={<UserInfo/>}></Route>
+                        <Route path={"album"} element={<Album/>}></Route>
+                        <Route path={"revenue"} element={<Revenue/>}></Route>
 
                     </Route>
 
