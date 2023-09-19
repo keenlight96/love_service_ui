@@ -22,7 +22,7 @@ const TopMaleAndFemale = () =>{
                                     <div className="player-avatar">
                                         <a style={{width:'auto',height:'30px'}} target="_blank" className="FoE4bG" href="/profile/female5">{item.countRent == null ? 0 : item.countRent.toFixed()}: Lượt thuê</a>
                                         <a target="_blank" href={"/profile/" + item.userProfile.account.username}>
-                                            <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" />
+                                            <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" style={{objectFit: "cover"}} />
                                         </a>
                                         <a target="_blank" className="player-price" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.price} đ/h</a>
                                     </div>
@@ -58,7 +58,7 @@ const TopMaleAndFemale = () =>{
                                 <div className="player-avatar">
                                     <a style={{width:'auto',height:'30px'}} target="_blank" className="FoE4bG" href="/profile/female5">{item.countRent == null ? 0 : item.countRent.toFixed()}: Lượt thuê</a>
                                     <a target="_blank" href={"/profile/" + item.userProfile.account.username}>
-                                        <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" />
+                                        <img src={item.userProfile.account.avatar} className alt="PD" id="avt-img-reponsiver" style={{objectFit: "cover"}} />
                                     </a>
                                     <a target="_blank" className="player-price" href={"/profile/" + item.userProfile.account.username}>{item.userProfile.price} đ/h</a>
                                 </div>

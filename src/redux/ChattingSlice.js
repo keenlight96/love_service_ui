@@ -5,7 +5,7 @@ import {
     getChatWithReceiver,
     setActiveReceiver,
     setChatWithReceiver,
-    setMsgBoxToggle, setStompClient
+    setMsgBoxToggle, setStompClient, updateChatReceivers
 } from "../service/ChattingService";
 
 const initialState = {
@@ -32,7 +32,25 @@ const ChattingSlice = createSlice({
             state.chatting.receivers = action.payload;
         })
         builder.addCase(addChatReceivers.fulfilled, (state, action) => {
-            state.chatting.receivers = [action.payload, ...state.chatting.receivers];
+            let check = false;
+            for (let i = 0; i < state.chatting.receivers.length; i++) {
+                if (state.chatting.receivers[i].id == action.payload.id) {
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                state.chatting.receivers = [action.payload, ...state.chatting.receivers];
+            }
+        })
+        builder.addCase(updateChatReceivers.fulfilled, (state, action) => {
+            state.chatting.receivers = state.chatting.receivers.map((item) => {
+                if (item.id == action.payload.sender.id || item.id == action.payload.receiver.id) {
+                    return {...item, "lastMessage": action.payload};
+                } else {
+                    return item;
+                }
+            })
         })
         builder.addCase(getChatWithReceiver.fulfilled, (state, action) => {
             state.chatting.chatContent = action.payload;

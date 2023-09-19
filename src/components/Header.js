@@ -280,8 +280,10 @@ const Header = () => {
                                                 </div>
                                             </ul>
                                         </li>
-                                        <li className="item-icon balance"><a className="money-user">
-                                            {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ</a>
+                                        <li className="item-icon balance" style={{marginLeft: "5px", marginRight: "5px"}}>
+                                            <a className="money-user">
+                                                {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
+                                            </a>
                                         </li>
                                         <li className={isClicked ? "item-icon item-avatar dropdown open" : "item-icon item-avatar dropdown "}
                                             onClick={(e) => {
@@ -292,19 +294,19 @@ const Header = () => {
                                                aria-haspopup="true" aria-expanded="false"
                                                href="#"><img
                                                 src={user.avatar} className="avt-img" alt=""
-                                                style={{width: "45px", height: "45px", maxWidth: "45px"}}/></a>
+                                                style={{width: "45px", height: "45px", objectFit: "cover"}}/></a>
                                             <ul role="menu" className="dropdown-menu"
                                                 aria-labelledby="header-nav-dropdown">
-                                                <li role="presentation" className="page-user"><a role="menuitem"
-                                                                                                 tabIndex={-1}
-                                                                                                 href="#"><img
-                                                    src={user.avatar} className="avt-img" alt=""
-                                                    style={{maxWidth: "55px"}}/>
-                                                    <div className="text-logo"><h5>{user.nickName}</h5>
-                                                        <p>Username : <span>{user.username}</span></p>
-                                                        {/*<p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>*/}
-                                                    </div>
-                                                </a></li>
+                                                <li role="presentation" className="page-user">
+                                                    <a role="menuitem" tabIndex={-1} href={user.role.id == 3 ? `/profile/${user.username}` : `#`}><img
+                                                            src={user.avatar} className="avt-img" alt=""
+                                                            style={{width: "55px", height: "55px", objectFit: "cover"}}/>
+                                                        <div className="text-logo"><h5>{user.nickName}</h5>
+                                                            <p>Username : <span>{user.username}</span></p>
+                                                            {/*<p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>*/}
+                                                        </div>
+                                                    </a>
+                                                </li>
                                                 <li role="presentation" className="menu-item hidden-lg hidden-md"><a
                                                     role="menuitem"
                                                     tabIndex={-1}

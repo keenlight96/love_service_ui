@@ -58,7 +58,7 @@ const CCDVProperGender = () => {
                 {/*    <div className="player-information-card-wrap">*/}
                 {/*        <div className="player-avatar">*/}
                 {/*            <a target="_blank" href="/ngocngayngohihihehe">*/}
-                {/*                <img src="https://playerduo.net/api/upload-service/images/a0b07166-1e65-4e77-a651-b2fef639aa86__25eed2b0-417d-11ee-a657-a54d6be1d46a__player_avatar.jpg" className alt="PD" id="avt-img-reponsiver" />*/}
+                {/*                <img src="https://playerduo.net/api/upload-service/images/a0b07166-1e65-4e77-a651-b2fef639aa86__25eed2b0-417d-11ee-a657-a54d6be1d46a__player_avatar.jpg" className alt="PD" id="avt-img-reponsiver" style={{objectFit: "cover"}} />*/}
                 {/*            </a>*/}
                 {/*            <a target="_blank" className="player-price" href="/ngocngayngohihihehe">69,000 đ/h</a>*/}
                 {/*        </div>*/}

@@ -23,6 +23,13 @@ export const addChatReceivers = createAsyncThunk(
     }
 )
 
+export const updateChatReceivers = createAsyncThunk(
+    "updateChatReceivers",
+    async (message) => {
+        return message;
+    }
+)
+
 export const getChatWithReceiver = createAsyncThunk(
     "getChatWithReceiver",
     async (id) => {

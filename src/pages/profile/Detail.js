@@ -149,26 +149,28 @@ function Detail() {
     }, [reviews])
 
     const addNewChat = () => {
-        let newReceiver = {
-            id: userDetail.account.id,
-            username: userDetail.account.username,
-            nickname: userDetail.account.nickname,
-            avatar: userDetail.account.avatar,
-            role: {
-                id: userDetail.account.role.id,
-                nameRole: userDetail.account.role.nameRole,
-            },
-            status: {
-                id: userDetail.account.status.id,
-                nameStatus: userDetail.account.status.nameStatus,
-            },
-            isActive: userDetail.account.isActive
-        }
-        dispatch(addChatReceivers(newReceiver));
-        dispatch(setActiveReceiver(newReceiver));
+        if (userDetail.account.id != storeUser.account.id) {
+            let newReceiver = {
+                id: userDetail.account.id,
+                username: userDetail.account.username,
+                nickname: userDetail.account.nickname,
+                avatar: userDetail.account.avatar,
+                role: {
+                    id: userDetail.account.role.id,
+                    nameRole: userDetail.account.role.nameRole,
+                },
+                status: {
+                    id: userDetail.account.status.id,
+                    nameStatus: userDetail.account.status.nameStatus,
+                },
+                isActive: userDetail.account.isActive
+            }
+            dispatch(addChatReceivers(newReceiver));
+            dispatch(setActiveReceiver(newReceiver));
 
-        if (!msgBoxToggle) {
-            dispatch(setMsgBoxToggle());
+            if (!msgBoxToggle) {
+                dispatch(setMsgBoxToggle());
+            }
         }
     }
     const user = useSelector(state => (state.user.user.current));
@@ -233,7 +235,7 @@ function Detail() {
                                             <div className="avt avt-lg">
                                                 {
                                                     userDetail.account && <img src={userDetail.account.avatar} alt="Avatar"
-                                                                               style={{width: "100%", height: "100%"}}/>
+                                                                               style={{objectFit: "cover", height: "100%"}}/>
                                                 }
                                             </div>
                                         </div>
