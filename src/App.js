@@ -55,7 +55,7 @@ function App() {
                     </Route>
 
                 </Route>
-                <Route path="/" element={<LayoutAdmin />}>
+                <Route path="/" element={<LayoutAdmin/>}>
                     <Route path="/homeAdmin"  element={<HomeAdmin />}>
                         <Route path={"allBills"} element={<ListBill/>}></Route>
                         <Route path={"NewUser"} element={<NewUserList/>}></Route>

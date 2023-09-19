@@ -92,13 +92,13 @@ const AccountReport =() =>{
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Tài khoản người tố cáo</th>
-                                                    <th scope="col">Tài khoản người bị tố cáo</th>
-                                                    <th scope="col">Quyền người bị tố cáo</th>
-                                                    <th scope="col">Nội dung tố cáo</th>
-                                                    <th scope="col">Trạng thái tài khoản người bị tố cáo</th>
-                                                    <th scope="col">Hoạt động</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản người tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản người bị tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Quyền người bị tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Nội dung tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái tài khoản người bị tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

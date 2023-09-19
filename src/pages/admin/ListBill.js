@@ -56,17 +56,17 @@ const ListBill =() =>{
                     <table className="table table-striped table-bordered table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th>Tên tài khoản người thuê</th>
-                            <th>Tên tài khoản người thuê</th>
-                            <th>Địa chỉ</th>
-                            <th>Số giờ thuê</th>
-                            <th>Ngày bắt đầu</th>
-                            <th>Ngày kết thúc</th>
-                            <th>Ngày tạo đơn</th>
-                            <th>Tổng tiền</th>
-                            <th>Tình trạng</th>
-                            <th>Xem chi tiết</th>
-                            <th>Hoạt động</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản người thuê</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản người thuê</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Địa chỉ</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Số giờ thuê</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Ngày bắt đầu</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Ngày kết thúc</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Ngày tạo đơn</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tổng tiền</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tình trạng</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Xem chi tiết</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                         </tr>
                         </thead>
                         <tbody>

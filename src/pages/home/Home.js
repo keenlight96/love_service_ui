@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
     getCCDVProperGender, getCCDVsByTopViews,
     getNewestCCDVs,
     getTopFemale,
-    getTopMale
+    getTopMale, searchCCDV
 } from "../../service/CCDVsService";
 import NewCcdVs from "./NewCCDVs";
 import SidebarSupplies from "./SidebarSupplies";
@@ -13,6 +13,7 @@ import TopServiceCCDV from "./TopServiceCCDV";
 import TopMaleAndFemale from "./TopMaleAndFemale";
 import CcdVsByChosenSupplies from "./CCDVsByChosenSupplies";
 import CCDVProperGender from "./CCDVProperGender";
+import SearchCCDV from "./SearchCCDV";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -46,6 +47,17 @@ const Home = () => {
         dispatch(getCCDVProperGender(iduser()));
         dispatch(getCCDVsByTopViews(5));
     }, [])
+
+    const [filter, setFilter] = useState({
+        nickname:'',
+        zone:'',
+        gender:'',
+        year:null
+    });
+
+    useEffect(()=>{
+        dispatch(searchCCDV(filter));
+    },[filter])
     return (
         <>
             <title>Trang Chủ</title>
@@ -223,26 +235,23 @@ const Home = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="filter-player  hidden"><select className="form-control gender ">
-                                <option value selected="selected">Giới tính</option>
-                                <option value="female">Nữ</option>
-                                <option value="male">Nam</option>
-                            </select><select className="form-control type ">
-                                <option value selected="selected">Thể loại</option>
-                                <option value="new">Người mới</option>
-                                <option value="hot">Hot</option>
-                                <option value="vip">Vip</option>
-                            </select>
-                                <div className="form-control ready false">Sẵn sàng</div>
-                                <div className="form-control online false">Online</div>
-                                <button type="button" className="form-control price false btn btn-default">Khoảng giá</button>
-                                <input type="text" className="form-control city" placeholder="Sống tại" readOnly defaultValue /><input type="text" className="form-control name" placeholder="Tên/Url Player" autoComplete="off" maxLength={32} defaultValue /><input type="text" className="form-control category" placeholder="Tên game" autoComplete="off" defaultValue />
-                                <button type="button" className="form-control btn-filter btn btn-default"><i className="fa fa-search" />
-                                    Tìm kiếm
-                                </button>
+                            <div className="filter-player hidden">
+                                <select className="form-control gender" onChange={(e) => setFilter({ ...filter, gender: e.target.value })}>
+                                    <option value="" selected="selected">Giới tính</option>
+                                    <option value="nữ">Nữ</option>
+                                    <option value="nam">Nam</option>
+                                </select>
+                                <select className="form-control type" onChange={(e) => setFilter({ ...filter, zone: e.target.value })}>
+                                    <option value="" selected="selected">Khu vực</option>
+                                    <option value="Miền Bắc">Miền Bắc</option>
+                                    <option value="Miền Trung">Miền Trung</option>
+                                    <option value="Miền Nam">Miền Nam</option>
+                                </select>
+                                <input type="text" className="form-control ready false" placeholder="Nhập năm sinh" onChange={(e) => setFilter({ ...filter, year: e.target.value })}/>
+                                <input type="text" style={{width:'250px',height:'32px',borderRadius:'25px'}}  placeholder="Nhập nick name để tìm kiếm" onChange={(e) => setFilter({ ...filter, nickname: e.target.value })}/>
                             </div>
                             <div className="list-player">
-
+                                {(filter.nickname !='' ||filter.zone !='' ||filter.gender !='' ||filter.year != '' && filter.year != null )&& <SearchCCDV/>}
                                 {chosenSupplies.length > 0 ? <CcdVsByChosenSupplies/> : <div></div>}
 
                                 <TopServiceCCDV/>

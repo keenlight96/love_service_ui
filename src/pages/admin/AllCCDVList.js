@@ -119,13 +119,13 @@ const AllCCDVList = () => {
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Biệt danh</th>
-                                                    <th scope="col">Tên tài khoản</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Vai trò</th>
-                                                    <th scope="col">Trạng thái</th>
-                                                    <th scope="col">Hoạt động</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Biệt danh</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Email</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Vai trò</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

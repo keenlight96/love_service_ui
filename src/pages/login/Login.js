@@ -47,12 +47,12 @@ function Login() {
             const response = await LoginService.login(values);
             const data = response.data;
             console.log(data.isActive);
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("account", JSON.stringify(data));
             if (data.status.nameStatus === "active" && data.isActive) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("account", JSON.stringify(data));
                 dispatch(checkToken());
                 if (data.role.nameRole ==="ROLE_ADMIN") {
-                    navigate("admin");
+                    navigate("/");
                 } else if (data.role.nameRole ==="ROLE_USER") {
                     navigate("/");
                 } else if (data.role.nameRole ===("ROLE_CCDV")) {

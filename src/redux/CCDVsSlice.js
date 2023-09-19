@@ -1,5 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getCCDVProperGender, getCCDVsBySupplies, getCCDVsByTopViews, getNewestCCDVs, getTopFemale, getTopMale} from "../service/CCDVsService";
+import {
+    getCCDVProperGender,
+    getCCDVsBySupplies,
+    getCCDVsByTopViews,
+    getNewestCCDVs,
+    getTopFemale,
+    getTopMale,
+    searchCCDV
+} from "../service/CCDVsService";
 
 const initialState = {
     CCDVs: {
@@ -8,7 +16,8 @@ const initialState = {
         byChosenSupplies : [],
         topFemaleCCDV : [],
         topMaleCCDV : [],
-        topViews: []
+        topViews: [],
+        search:[]
     }
 }
 
@@ -34,6 +43,9 @@ const CCDVsSlice = createSlice({
         })
         builder.addCase(getCCDVsByTopViews.fulfilled, (state, action) => {
             state.CCDVs.topViews = action.payload;
+        })
+        builder.addCase(searchCCDV.fulfilled, (state, action) => {
+            state.CCDVs.search = action.payload;
         })
     }
 })
