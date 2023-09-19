@@ -22,6 +22,7 @@ const AllBillOfUser = () => {
     });
 
     const stringCancelBill = useSelector((state) => {
+        console.log(state)
         return state.BillByAccount.BillByAccount.cancelBill;
     });
     const [billDetail, setBillDetail] = useState(false);

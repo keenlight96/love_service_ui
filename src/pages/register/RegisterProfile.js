@@ -1,13 +1,10 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
 import SignupCCDV from "../../service/custom/SignupCCDV";
-// import React, {useState} from "react";
 import * as Yup from "yup";
-// import  from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
-import {DatePicker, Select, Space, TimePicker} from 'antd';
-import {useLocation, useNavigate, useParams} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import Swal from "sweetalert2";
 import RegisterSupply from "../../components/common/RegisterSupply";
 import {useSelector} from "react-redux"; // Import CSS cho DatePicker

@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkToken, setUser} from "../service/UserService";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {confirmReadNotification, getAllNotifications} from "../service/ChattingService";
+import {confirmReadAllNotifications, confirmReadNotification, getAllNotifications} from "../service/ChattingService";
 
 const Header = () => {
     const [isClicked, setIsClicked] = useState(false);
@@ -27,7 +27,10 @@ const Header = () => {
     });
     const notifications = useSelector(state => {
         return state.chatting.chatting.notifications;
-    })
+    });
+    const countUnreadNotifications = useSelector(state => {
+        return state.chatting.chatting.countUnreadNotifications;
+    });
 
     const handleClick = (e) => {
         if (isClicked2) {
@@ -163,15 +166,31 @@ const Header = () => {
                                 user && user.id ?
                                     <>
                                         <li className={isClicked2 ? "item-icon notificate dropdown open" : "item-icon notificate dropdown"}
-                                            onClick={(e) => {handleClick2(e)}}>
+                                            onClick={(e) => {handleClick2(e)}} style={{display: "flex"}}>
                                             <a id="basic-nav-dropdown" role="button" className="dropdown-toggle"
                                                aria-haspopup="true" aria-expanded="false" href="#">
                                             <div className="item-title"><i className="fal fa-bell"/></div>
                                         </a>
+                                            {
+                                                countUnreadNotifications && countUnreadNotifications > 0 ?
+                                                    <div style={{position: "absolute", marginLeft: "70%", marginTop: "60%"}}>
+                                                        <a href="/information/bills" className={"group-user"} style={{marginLeft: "0px", padding: "0px 0px", background: "#F0564A", width: "24px", height: "24px", textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
+                                                            <p style={{padding: "0px", color: "white", fontSize: "12px"}}>{countUnreadNotifications}</p></a>
+                                                    </div>
+                                                    :
+                                                    <></>
+                                            }
                                             <ul role="menu" className="dropdown-menu"
                                                 aria-labelledby="basic-nav-dropdown">
                                                 <div className="content">
-                                                    <div className="tab-notif-common"><h5><span>Thông báo</span></h5>
+                                                    <div className="tab-notif-common">
+                                                        <h5 style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                                                            <span style={{flex: 1, textAlign: "center"}}>Thông báo</span>
+                                                            <span style={{fontSize: "13px"}}><a href="#" onClick={(e) => {
+                                                                dispatch(confirmReadAllNotifications(storeUser.account.id));
+                                                                e.stopPropagation();
+                                                            }}>Đã đọc</a></span>
+                                                        </h5>
                                                         {/*<div className="tab-action"><p className="active">*/}
                                                         {/*    <span>Chính</span></p>*/}
                                                         {/*    <p className><span>Khác</span></p>*/}
@@ -188,7 +207,7 @@ const Header = () => {
                                                                             <div className={"col-md-2 col-centered"}>
                                                                                 <ul style={{float: "left", paddingLeft: "0px"}}>
                                                                                     <li className={"item-icon"}>
-                                                                                        <a href="/information/bills" className={"group-user"} style={{textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
+                                                                                        <a href="/information/bills" className={"group-user"} style={{padding: "12px 0px", textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
                                                                                             {
                                                                                                 item.subtype == "wait" ?
                                                                                                     <i className="fal fa-plus"></i>
@@ -207,7 +226,7 @@ const Header = () => {
                                                                             </div>
                                                                             <Link to={"/information/bills"}>
                                                                                 <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id)}}>
-                                                                                    <strong style={{margin: "0px"}}>
+                                                                                    <strong style={{margin: "0px", color: item.isRead == false ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)"}}>
                                                                                         {
                                                                                             item.subtype == "wait" ?
                                                                                                 "Đơn thuê mới"
@@ -221,7 +240,7 @@ const Header = () => {
                                                                                                         "Đơn thuê bị hủy"
                                                                                         }
                                                                                     </strong>
-                                                                                    <p style={{paddingLeft: "10px", fontSize: "13px"}}><b>{item.sender.nickname}</b> {item.message}</p>
+                                                                                    <p style={{paddingLeft: "10px", fontSize: "13px", color: item.isRead == false ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)"}}><b>{item.sender.nickname}</b> {item.message}</p>
                                                                                 </div>
                                                                             </Link>
                                                                             <div className={"col-md-1 col-centered"}>

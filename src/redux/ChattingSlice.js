@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
-    addChatReceivers, addChatWithReceiver, addNotification, confirmReadNotification,
+    addChatReceivers, addChatWithReceiver, addNotification, confirmReadAllNotifications, confirmReadNotification,
     getAllChatReceivers, getAllNotifications,
     getChatWithReceiver,
     setActiveReceiver,
@@ -10,20 +10,21 @@ import {
 
 const initialState = {
     stompClient: null,
-    chatting : {
-        receivers : [],
-        chatContent : [],
-        msgBoxToggle : false,
+    chatting: {
+        receivers: [],
+        chatContent: [],
+        msgBoxToggle: false,
         activeReceiver: {},
         notifications: [],
+        countUnreadNotifications: 0,
     }
 }
 
 const ChattingSlice = createSlice({
-    name : "chatting",
+    name: "chatting",
     initialState,
-    reducers : {},
-    extraReducers : builder => {
+    reducers: {},
+    extraReducers: builder => {
         builder.addCase(setStompClient.fulfilled, (state, action) => {
             state.stompClient = action.payload;
         })
@@ -52,20 +53,41 @@ const ChattingSlice = createSlice({
         // Notification
         builder.addCase(getAllNotifications.fulfilled, (state, action) => {
             state.chatting.notifications = action.payload;
+            let count = 0;
+            state.chatting.notifications.map((item) => {
+                if (item.isRead == false) {
+                    count++;
+                }
+            })
+            state.chatting.countUnreadNotifications = count;
         })
         builder.addCase(addNotification.fulfilled, (state, action) => {
             state.chatting.notifications.unshift(action.payload);
+            state.chatting.countUnreadNotifications = state.chatting.countUnreadNotifications + 1;
         })
         builder.addCase(confirmReadNotification.fulfilled, (state, action) => {
-            state.chatting.notifications.map((item) => {
+            let count = 0;
+            state.chatting.notifications = state.chatting.notifications.map((item) => {
                 if (item.id == action.payload) {
-                    let newItem = {...item, "isRead": true};
-                    console.log(newItem)
-                    return newItem;
+                    return {...item, isRead: true};
+                } else {
+                    if (item.isRead == false) {
+                        count++;
+                    }
+                    return item;
+                }
+            });
+            state.chatting.countUnreadNotifications = count;
+        })
+        builder.addCase(confirmReadAllNotifications.fulfilled, (state, action) => {
+            state.chatting.notifications = state.chatting.notifications.map((item) => {
+                if (item.isRead == false) {
+                    return {...item, isRead: true};
                 } else {
                     return item;
                 }
             });
+            state.chatting.countUnreadNotifications = 0;
         })
     }
 })

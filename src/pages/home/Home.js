@@ -97,45 +97,45 @@ const Home = () => {
                         <SidebarSupplies/>
 
                         <div className="home-flex-content">
-                            <p className="btn-chat-global false"><span>Trò Chuyện</span></p>
-                            <div className="hided">
-                                <div className="slide extend-box">
-                                    <div className="global-chat">
-                                        <div id="global-chat" className="global-chat-display">
-                                            <div>
-                                                <div className="text-center"><i className="fa fa-spinner fa-spin" /></div>
-                                                <div className="global_message__item media">
-                                                    <div className="media-left"><a target="_blank" href="https://playerduo.net/cheneiiiv">
-                                                        <div className="avt-rank avt-sm"><img src="../resources/raw/91d31b69-d5d7-451a-8a66-d7acfea3afe0__59c39300-3454-11ed-838c-b120e70abb59__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/7.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>
-                                                    </a></div>
-                                                    <div className="media-body"><p className="chat-name"><strong className="name-player-review color-vip-6"><span className="cursor-pointer">VyVy </span> </strong> : </p>
-                                                        <p className="mess-global">ướt đc rent</p></div>
-                                                </div>
-                                                <div className="global_message__item media">
-                                                    <div className="media-left"><a target="_blank" href="https://playerduo.net/betiss">
-                                                        <div className="avt-rank avt-sm"><img src="../resources/raw/05a9716a-d354-4818-aefa-47093bfe1cc5__d6e85150-27b4-11ee-a657-a54d6be1d46a__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/9.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>
-                                                    </a></div>
-                                                    <div className="media-body"><p className="chat-name"><strong className="name-player-review color-vip-6"><span className="cursor-pointer">Baby Tis </span>
-                                                    </strong><i className="fas fa-check-circle" /> : </p>
-                                                        <p className="mess-global"><a target="_blank" href="https://playerduo.net/betis" className="link">betis</a> nhận duo liên quân , pubgmb
-                                                            ,tốc chiến , tft , hát , NHẬN NẠP RÚT PLD SLL ) ,</p></div>
-                                                </div>
+                            {/*<p className="btn-chat-global false"><span>Trò Chuyện</span></p>*/}
+                            {/*<div className="hided">*/}
+                            {/*    <div className="slide extend-box">*/}
+                            {/*        <div className="global-chat">*/}
+                            {/*            <div id="global-chat" className="global-chat-display">*/}
+                            {/*                <div>*/}
+                            {/*                    <div className="text-center"><i className="fa fa-spinner fa-spin" /></div>*/}
+                            {/*                    <div className="global_message__item media">*/}
+                            {/*                        <div className="media-left"><a target="_blank" href="https://playerduo.net/cheneiiiv">*/}
+                            {/*                            <div className="avt-rank avt-sm"><img src="../resources/raw/91d31b69-d5d7-451a-8a66-d7acfea3afe0__59c39300-3454-11ed-838c-b120e70abb59__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/7.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>*/}
+                            {/*                        </a></div>*/}
+                            {/*                        <div className="media-body"><p className="chat-name"><strong className="name-player-review color-vip-6"><span className="cursor-pointer">VyVy </span> </strong> : </p>*/}
+                            {/*                            <p className="mess-global">ướt đc rent</p></div>*/}
+                            {/*                    </div>*/}
+                            {/*                    <div className="global_message__item media">*/}
+                            {/*                        <div className="media-left"><a target="_blank" href="https://playerduo.net/betiss">*/}
+                            {/*                            <div className="avt-rank avt-sm"><img src="../resources/raw/05a9716a-d354-4818-aefa-47093bfe1cc5__d6e85150-27b4-11ee-a657-a54d6be1d46a__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/9.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>*/}
+                            {/*                        </a></div>*/}
+                            {/*                        <div className="media-body"><p className="chat-name"><strong className="name-player-review color-vip-6"><span className="cursor-pointer">Baby Tis </span>*/}
+                            {/*                        </strong><i className="fas fa-check-circle" /> : </p>*/}
+                            {/*                            <p className="mess-global"><a target="_blank" href="https://playerduo.net/betis" className="link">betis</a> nhận duo liên quân , pubgmb*/}
+                            {/*                                ,tốc chiến , tft , hát , NHẬN NẠP RÚT PLD SLL ) ,</p></div>*/}
+                            {/*                    </div>*/}
 
-                                                <div className="global_message__item media">
-                                                    <div className="media-left"><a target="_blank" href="https://playerduo.net/janny259">
-                                                        <div className="avt-rank avt-sm"><img src="../resources/raw/f3b23cf6-54a1-4756-b465-93cb4ab77536__3ef82970-44be-11ee-a657-a54d6be1d46a__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/10.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>
-                                                    </a></div>
-                                                    <div className="media-body"><p className="chat-name"><strong className="name-player-review color-vip-10"><span className="cursor-pointer">Janny trader - ng chơi hệ LHD ✨ </span>
-                                                    </strong><i className="fas fa-check-circle" /> : </p>
-                                                        <p className="mess-global">trade pld, bán steamcode sll ib là onl</p></div>
-                                                </div>
-                                                <div />
-                                            </div>
-                                        </div>
-                                        <div className="form-group"><span className="input-group"><input placeholder="Enter để gửi tin nhắn!" maxLength={255} type="text" id="formChatText" className="form-control" defaultValue /><p className="send-chat"><i className="fas fa-paper-plane" /></p><span className="scope-icon input-group-addon" /></span></div>
-                                    </div>
-                                </div>
-                            </div>
+                            {/*                    <div className="global_message__item media">*/}
+                            {/*                        <div className="media-left"><a target="_blank" href="https://playerduo.net/janny259">*/}
+                            {/*                            <div className="avt-rank avt-sm"><img src="../resources/raw/f3b23cf6-54a1-4756-b465-93cb4ab77536__3ef82970-44be-11ee-a657-a54d6be1d46a__page_avatar.jpg" className="avt-1-15 avt-img" alt="PD" /><img src="../resources/raw/10.png" className="rank-1-15 rank-img" alt="PlayerDuo" /></div>*/}
+                            {/*                        </a></div>*/}
+                            {/*                        <div className="media-body"><p className="chat-name"><strong className="name-player-review color-vip-10"><span className="cursor-pointer">Janny trader - ng chơi hệ LHD ✨ </span>*/}
+                            {/*                        </strong><i className="fas fa-check-circle" /> : </p>*/}
+                            {/*                            <p className="mess-global">trade pld, bán steamcode sll ib là onl</p></div>*/}
+                            {/*                    </div>*/}
+                            {/*                    <div />*/}
+                            {/*                </div>*/}
+                            {/*            </div>*/}
+                            {/*            <div className="form-group"><span className="input-group"><input placeholder="Enter để gửi tin nhắn!" maxLength={255} type="text" id="formChatText" className="form-control" defaultValue /><p className="send-chat"><i className="fas fa-paper-plane" /></p><span className="scope-icon input-group-addon" /></span></div>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                             <div className="slide banner carousel slide">
                                 <div className="carousel-inner">
                                     <div className="item active"><a href="src/pages/home/Home" target="_blank" rel="noopener noreferrer"><img src="../resources/raw/446982ba-1aeb-4730-8d52-8e4308776e4b__ca8ef380-0f15-11ee-a657-a54d6be1d46a__admin_banner.jpg" className="img-responsive" alt="banner" /></a></div>
