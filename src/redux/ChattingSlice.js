@@ -5,8 +5,9 @@ import {
     getChatWithReceiver,
     setActiveReceiver,
     setChatWithReceiver,
-    setMsgBoxToggle, setStompClient, updateChatReceivers
+    setMsgBoxToggle, setReadMessageReceiver, setStompClient, updateChatReceivers
 } from "../service/ChattingService";
+import customAxios from "../service/api";
 
 const initialState = {
     stompClient: null,
@@ -15,6 +16,7 @@ const initialState = {
         chatContent: [],
         msgBoxToggle: false,
         activeReceiver: {},
+        countUnreadReceivers: 0,
         notifications: [],
         countUnreadNotifications: 0,
     }
@@ -29,7 +31,19 @@ const ChattingSlice = createSlice({
             state.stompClient = action.payload;
         })
         builder.addCase(getAllChatReceivers.fulfilled, (state, action) => {
-            state.chatting.receivers = action.payload;
+            let count = 0;
+            state.chatting.receivers = action.payload.map(item => {
+                if (state.chatting.activeReceiver && item.lastMessage && state.chatting.activeReceiver.id == item.id) {
+                        let newLastMessage = {...item.lastMessage, isRead: true};
+                        customAxios.post("message/setReadMessage/" + item.lastMessage.id, "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(r => {});
+                        return {...item, lastMessage: newLastMessage};
+                    }
+                if (item.lastMessage && !item.lastMessage.isRead && (item.lastMessage.sender.id == item.id)) {
+                    count++;
+                }
+                return item;
+            });
+            state.chatting.countUnreadReceivers = count;
         })
         builder.addCase(addChatReceivers.fulfilled, (state, action) => {
             let check = false;
@@ -43,6 +57,8 @@ const ChattingSlice = createSlice({
                 state.chatting.receivers = [action.payload, ...state.chatting.receivers];
             }
         })
+
+        // unused, wrong function
         builder.addCase(updateChatReceivers.fulfilled, (state, action) => {
             state.chatting.receivers = state.chatting.receivers.map((item) => {
                 if (item.id == action.payload.sender.id || item.id == action.payload.receiver.id) {
@@ -52,6 +68,8 @@ const ChattingSlice = createSlice({
                 }
             })
         })
+        //
+
         builder.addCase(getChatWithReceiver.fulfilled, (state, action) => {
             state.chatting.chatContent = action.payload;
         })
@@ -66,6 +84,22 @@ const ChattingSlice = createSlice({
         })
         builder.addCase(setActiveReceiver.fulfilled, (state, action) => {
             state.chatting.activeReceiver = action.payload;
+            try {
+                for (let i = 0; i < state.chatting.receivers.length; i++) {
+                    if (state.chatting.receivers[i].id == action.payload.id && state.chatting.receivers[i].lastMessage) {
+                        state.chatting.receivers[i].lastMessage.isRead = true;
+                    }
+                }
+            } catch (e) {
+            }
+        })
+        builder.addCase(setReadMessageReceiver.fulfilled, (state, action) => {
+            console.log(state)
+            state.chatting.receivers = state.chatting.receivers.map((item) => {
+                if (item.id == action.payload && item.lastMessage) {
+                    item.lastMessage.isRead = true;
+                }
+            })
         })
 
         // Notification
