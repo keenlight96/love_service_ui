@@ -133,60 +133,62 @@ const SidebarInformation = (current) => {
                                                     </Link>
                                                    {/* bắt đầu để xem doanh thu*/}
                                                    {/* <Link to={"/information/revenue"}>*/}
+                                                    <Link to={"/information/revenue"}>
                                                     <div className="menu__setting--sub panel panel-default">
                                                         <div className="panel-heading">
-                                                            <div className="  panel-title" onClick={openModal}><i
+                                                            <div className="  panel-title" ><i
                                                                 className="fas fa-sliders-h"/>
                                                                 Thống kê
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    </Link>
                                                     {/*</Link>*/}
                                                     {/*bắt đầu mở modal nhập mật khẩu*/}
-                                                    {modalIsOpen && (
-                                                        <>
-                                                        <div className="fade modal-backdrop in"/>
-                                                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"
-                                                             style={{display: "block"}}>
-                                                            <div className="modal-dialog">
-                                                                <div className="modal-content" role="document">
-                                                                    <div className="modal-header">
-                                                                        <button type="button" className="close" onClick={closeModal}>
-                                                                            <span aria-hidden="true">×</span>
-                                                                        </button>
-                                                                        <h4 className="modal-title">
-                                                                            <span>Nhập Mật Khẩu Xác Nhận </span>
-                                                                        </h4>
-                                                                    </div>
-                                                                    <div className="modal-body">
-                                                                        <table>
-                                                                            <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    Mật Khẩu:
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input id="nickNameInput" style={{
-                                                                                        width: "300px",
-                                                                                        height: "30px",
-                                                                                        borderRadius: "5px",
-                                                                                        padding: "8px"
-                                                                                    }} type="password" placeholder="Vui lòng nhập mật khẩu"/>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                    <div className="modal-footer">
-                                                                        <button type="button" className="btn btn-default" onClick={handleConfirmClick}>
-                                                                            <span>Xác Nhận </span>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        </>
-                                                    )}
+                                                    {/*{modalIsOpen && (*/}
+                                                    {/*    <>*/}
+                                                    {/*    <div className="fade modal-backdrop in"/>*/}
+                                                    {/*    <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"*/}
+                                                    {/*         style={{display: "block"}}>*/}
+                                                    {/*        <div className="modal-dialog">*/}
+                                                    {/*            <div className="modal-content" role="document">*/}
+                                                    {/*                <div className="modal-header">*/}
+                                                    {/*                    <button type="button" className="close" onClick={closeModal}>*/}
+                                                    {/*                        <span aria-hidden="true">×</span>*/}
+                                                    {/*                    </button>*/}
+                                                    {/*                    <h4 className="modal-title">*/}
+                                                    {/*                        <span>Nhập Mật Khẩu Xác Nhận </span>*/}
+                                                    {/*                    </h4>*/}
+                                                    {/*                </div>*/}
+                                                    {/*                <div className="modal-body">*/}
+                                                    {/*                    <table>*/}
+                                                    {/*                        <tbody>*/}
+                                                    {/*                        <tr>*/}
+                                                    {/*                            <td>*/}
+                                                    {/*                                Mật Khẩu:*/}
+                                                    {/*                            </td>*/}
+                                                    {/*                            <td>*/}
+                                                    {/*                                <input id="nickNameInput" style={{*/}
+                                                    {/*                                    width: "300px",*/}
+                                                    {/*                                    height: "30px",*/}
+                                                    {/*                                    borderRadius: "5px",*/}
+                                                    {/*                                    padding: "8px"*/}
+                                                    {/*                                }} type="password" placeholder="Vui lòng nhập mật khẩu"/>*/}
+                                                    {/*                            </td>*/}
+                                                    {/*                        </tr>*/}
+                                                    {/*                        </tbody>*/}
+                                                    {/*                    </table>*/}
+                                                    {/*                </div>*/}
+                                                    {/*                <div className="modal-footer">*/}
+                                                    {/*                    <button type="button" className="btn btn-default" onClick={handleConfirmClick}>*/}
+                                                    {/*                        <span>Xác Nhận </span>*/}
+                                                    {/*                    </button>*/}
+                                                    {/*                </div>*/}
+                                                    {/*            </div>*/}
+                                                    {/*        </div>*/}
+                                                    {/*    </div>*/}
+                                                    {/*    </>*/}
+                                                    {/*)}*/}
                                                     {/*kết thúc modal*/}
                                                     <Link to={"/information/topup"}>
                                                         <div className="menu__setting--sub panel panel-default">

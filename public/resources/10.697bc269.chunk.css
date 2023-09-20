@@ -2884,9 +2884,9 @@
 .container-showImages a {
     cursor: pointer;
     position: absolute;
-    top: 40%;
-    width: auto;
-    padding: 16px;
+    top: 0%;
+    width: 100%;
+    padding: 0px;
     color: white;
     font-weight: bold;
     font-size: 20px;
@@ -2897,7 +2897,7 @@
     overflow: initial;
     margin-bottom: initial;
     margin-right: initial;
-    height: initial;
+    height: 100%;
     text-align: initial;
     border: initial;
     vertical-align: initial;
