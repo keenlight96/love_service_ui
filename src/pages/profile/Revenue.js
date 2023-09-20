@@ -29,8 +29,8 @@ function Revenue() {
                         label: "Revenue",
                         data: data.map((item) => item.revenue),
                         fill: true,
-                        borderColor: "rgb(140,3,51)",
-                        backgroundColor: "rgba(255,0,20,0.98)"
+                        borderColor: "rgb(241,86,74)",
+                        backgroundColor: "rgb(241,86,74)"
                     },
                 ],
             })
@@ -99,7 +99,7 @@ function Revenue() {
                                     height: "53px",
                                     borderRadius: "5px",
                                     width: "100px",
-                                    backgroundColor: "dodgerblue",
+                                    backgroundColor: "#f1564a",
                                     fontSize: "20px",
                                     color: "black"
                                 }}>Enter
