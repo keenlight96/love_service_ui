@@ -8,6 +8,7 @@ import {checkToken, setUser} from "../service/UserService";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {confirmReadAllNotifications, confirmReadNotification, getAllNotifications} from "../service/ChattingService";
+import {setFocusBill, setFocusBillId} from "../service/BillsService";
 
 const Header = () => {
     const [isClicked, setIsClicked] = useState(false);
@@ -45,8 +46,10 @@ const Header = () => {
         setIsClicked2(!isClicked2);
     };
 
-    const handleReadInformation = (value) => {
+    const handleReadInformation = (value, value2) => {
         dispatch(confirmReadNotification(value));
+        const billId = value2.substring(value2.indexOf("[") + 1, value2.indexOf("]"));
+        dispatch(setFocusBillId(billId));
     }
 
     const swapStatusCCDV = () => {
@@ -225,7 +228,7 @@ const Header = () => {
                                                                                 </ul>
                                                                             </div>
                                                                             <Link to={"/information/bills"}>
-                                                                                <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id)}}>
+                                                                                <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id, item.message)}}>
                                                                                     <strong style={{margin: "0px", color: item.isRead == false ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)"}}>
                                                                                         {
                                                                                             item.subtype == "wait" ?
@@ -250,6 +253,7 @@ const Header = () => {
                                                                                             item.isRead == false ?
                                                                                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                                                                                                     {/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
+                                                                                                    <style dangerouslySetInnerHTML={{ __html: "svg{fill:#2250a0}" }} />
                                                                                                     <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
                                                                                                 </svg>
                                                                                                 :

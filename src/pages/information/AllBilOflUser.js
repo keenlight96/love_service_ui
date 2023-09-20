@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import {cancelBill, completes, getAllBillByIdUser} from "../../service/BillsService";
+import {cancelBill, completes, getAllBillByIdUser, setFocusBill, setFocusBillId} from "../../service/BillsService";
 import {checkToken} from "../../service/UserService";
 
 const AllBillOfUser = () => {
@@ -22,9 +22,13 @@ const AllBillOfUser = () => {
     });
 
     const stringCancelBill = useSelector((state) => {
-        console.log(state)
         return state.BillByAccount.BillByAccount.cancelBill;
     });
+
+    const focusBillId = useSelector(state => {
+        return state.BillByAccount.BillByAccount.focusBillId;
+    });
+
     const [billDetail, setBillDetail] = useState(false);
 
     const [message, setMessage] = useState('')
@@ -47,6 +51,15 @@ const AllBillOfUser = () => {
     const [modal, setModal] = useState(false);
 
     const [objects, setObjects] = useState(null);
+
+    const dateStringOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false, // Use 24-hour format
+    };
 
     const openBillDetail = (object) => {
         setObjects(object);
@@ -87,6 +100,20 @@ const AllBillOfUser = () => {
         });
     },[idBill,idAccount,message]);
 
+    useEffect(() => {
+        const handleUrlChange = () => {
+            dispatch(setFocusBillId(0));
+        };
+
+        // Add the event listener to listen for URL changes
+        window.addEventListener("popstate", handleUrlChange);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("popstate", handleUrlChange);
+        };
+    }, [])
+
     const sendNotification = (billId) => {
         try {
             if (stompClient != null) {
@@ -104,6 +131,12 @@ const AllBillOfUser = () => {
 
     return (
         <>
+            <style
+                dangerouslySetInnerHTML={{
+                    __html:
+                        "\n.flicker-border {\n  border: 2px solid transparent; /* Start with a transparent border */\n  animation: flicker 2s infinite alternate; /* Apply the flicker animation */\n}\n\n@keyframes flicker {\n  0% {\n    border-color: red; /* Start with a red border */\n  }\n  50% {\n    border-color: transparent; /* Flicker to a transparent border halfway through the animation */\n  }\n  100% {\n    border-color: red; /* End with a red border again */\n  }\n}\n    "
+                }}
+            />
 
                         <h3>Lịch sử đơn thuê</h3>
                         <div className="transaction-table">
@@ -111,11 +144,10 @@ const AllBillOfUser = () => {
                                 <table className="table table-striped table-bordered table-condensed table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Nick name người CCDV</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số giờ thuê</th>
-                                        <th>Ngày bắt đầu</th>
+                                        <th>Nickname người CCDV</th>
                                         <th>Ngày tạo đơn</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Số giờ thuê</th>
                                         <th>Tổng tiền</th>
                                         <th>Tình trạng</th>
                                         <th>Xem chi tiết</th>
@@ -124,12 +156,11 @@ const AllBillOfUser = () => {
                                     </thead>
                                     <tbody>
                                     {currentBills.length > 0 && currentBills.map((item) => (
-                                            <tr key={item.id}>
+                                            <tr key={item.id} className={focusBillId && focusBillId == item.id ? "flicker-border" : ""}>
                                                 <td>{item.accountCCDV.nickname}</td>
-                                                <td>{item.address}</td>
+                                                <td>{new Date(item.dateCreate).toLocaleString("en-GB", dateStringOptions)}</td>
+                                                <td>{new Date(item.dateStart).toLocaleString("en-GB", dateStringOptions)} - {new Date(item.dateEnd).toLocaleString("en-GB", dateStringOptions)}</td>
                                                 <td>{item.hour}</td>
-                                                <td>{item.dateStart} - {item.dateEnd}</td>
-                                                <td>{item.dateCreate}</td>
                                                 <td>{item.total}</td>
                                                 <td>
                                                     {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}

@@ -5,7 +5,7 @@ import {
     getAllBillByIdCCDV,
     getAllBillByIdUser, getAllBillIn7DayByCCDV,
     receivedBill,
-    setCancelBill
+    setCancelBill, setFocusBill, setFocusBillId
 } from "../service/BillsService";
 
 const initialState = {
@@ -15,7 +15,8 @@ const initialState = {
         completeString: '',
         receivedBill: '',
         cancelBill: '',
-        bill7DayByCCDV:[]
+        bill7DayByCCDV:[],
+        focusBillId: 0,
     }
 }
 const AllBillByAccount = createSlice({
@@ -42,7 +43,10 @@ const AllBillByAccount = createSlice({
             state.BillByAccount.receivedBill = action.payload;
         })
         builder.addCase(getAllBillIn7DayByCCDV.fulfilled,(state, action)=>{
-            state.BillByAccount.bill7DayByCCDV=action.payload;
+            state.BillByAccount.bill7DayByCCDV = action.payload;
+        })
+        builder.addCase(setFocusBillId.fulfilled, (state, action) => {
+            state.BillByAccount.focusBillId = action.payload;
         })
     }
 })

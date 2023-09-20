@@ -33,10 +33,10 @@ const ChattingSlice = createSlice({
         builder.addCase(getAllChatReceivers.fulfilled, (state, action) => {
             let count = 0;
             state.chatting.receivers = action.payload.map(item => {
-                if (state.chatting.activeReceiver && item.lastMessage && state.chatting.activeReceiver.id == item.id) {
-                        let newLastMessage = {...item.lastMessage, isRead: true};
-                        customAxios.post("message/setReadMessage/" + item.lastMessage.id, "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(r => {});
-                        return {...item, lastMessage: newLastMessage};
+                if (state.chatting.activeReceiver && item.lastMessage && state.chatting.activeReceiver.id == item.id && (item.lastMessage.sender.id == item.id)) {
+                    let newLastMessage = {...item.lastMessage, isRead: true};
+                    customAxios.post("message/setReadMessage/" + item.lastMessage.id, "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(r => {});
+                    return {...item, lastMessage: newLastMessage};
                     }
                 if (item.lastMessage && !item.lastMessage.isRead && (item.lastMessage.sender.id == item.id)) {
                     count++;

@@ -57,3 +57,10 @@ export const getAllBillIn7DayByCCDV = createAsyncThunk(
     }
 )
 
+export const setFocusBillId = createAsyncThunk(
+    "setFocusBillId",
+    async (billId) => {
+        return billId;
+    }
+)
+
