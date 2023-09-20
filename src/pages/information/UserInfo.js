@@ -1,12 +1,27 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Field, Form, Formik, useFormikContext} from "formik";
+import {ErrorMessage, Field, Form, Formik, useFormikContext} from "formik";
 import {DatePicker, Modal} from "antd";
 import RegisterSupply from "../../components/common/RegisterSupply";
 import {useSelector} from "react-redux";
+import * as Yup from "yup";
 
 const UserInfo = () => {
-
+    const validationSchema = Yup.object().shape({
+        lastName: Yup.string().required('Họ là bắt buộc'),
+        firstName: Yup.string().required('Tên là bắt buộc'),
+        country: Yup.string().required('Quốc tịch là bắt buộc'),
+        address: Yup.string().required('Địa chỉ là bắt buộc'),
+        phoneNumber: Yup.string()
+            .required('Số điện thoại là bắt buộc')
+            .matches(/^[0-9]{10}$/, 'Số điện thoại phải là số và có đúng 10 chữ số'),
+        nickname: Yup.string().required('Tên người dùng là bắt buộc'),
+        height: Yup.string().required('Chiều cao là bắt buộc'),
+        weight: Yup.string().required('Cân nặng là bắt buộc'),
+        birthday: Yup.date()
+            .required('Sinh nhật là bắt buộc')
+            .max(new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000), 'Phải đủ 18 tuổi trở lên'),
+    });
     const [accounts, setAccounts] = useState('');
     const [zone,setzone]= useState('');
     const accountId = JSON.parse(localStorage.getItem("account") || "{}").id;
@@ -114,6 +129,7 @@ const UserInfo = () => {
                     </div>
                     <Formik initialValues= {accounts }
                             enableReinitialize={true}
+                            validationSchema={validationSchema}
                             onSubmit={(values) => {
                                 // values.birthday = selectedDate
                                 // values.supplies = userSupply;
@@ -136,6 +152,8 @@ const UserInfo = () => {
                                                                                                    autoComplete="false"
                                                                                                    readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
                             />
+                                <ErrorMessage name="firstName" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Tên</p><Field type="text"
                                                                                                     name="lastName"
@@ -147,12 +165,16 @@ const UserInfo = () => {
 
 
                             />
+                                <ErrorMessage name="lastName" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Nick Name</p><Field type="text"
                                                                                                           name="nickname"
                                                                                                           maxLength={5000}
                                                                                                           autoComplete="false"
                             />
+                                <ErrorMessage name="nickname" component="div"
+                                              className="error"/>
                             </div>
                                 <div className="fieldGroup "><p className="control-label">Số điện thoại</p><Field type="text"
                                                                                                               name="phoneNumber"
@@ -161,6 +183,8 @@ const UserInfo = () => {
                                                                                                                   readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
                                 />
+                                    <ErrorMessage name="phoneNumber" component="div"
+                                                  className="error"/>
                                 </div>
 
                                 <div className="fieldGroup">
@@ -172,6 +196,8 @@ const UserInfo = () => {
                                         autoComplete="false"
                                         readOnly={accounts.isGoogle}
                                     />
+                                    <ErrorMessage name="email" component="div"
+                                                  className="error"/>
                                     {message && !accounts.isGoogle && (
                                         <div className="error">{message}</div>
                                     )}
@@ -205,6 +231,8 @@ const UserInfo = () => {
                                         readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
                                     />
+                                    <ErrorMessage name="birthday" component="div"
+                                                  className="error"/>
                                 </div>
 
 
@@ -217,6 +245,8 @@ const UserInfo = () => {
 
                                                                                                         // enableReInitial = "true"
                             />
+                                <ErrorMessage name="address" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup ">
                             <p className="control-label">Giới tính</p>
@@ -302,6 +332,8 @@ const UserInfo = () => {
                                                                                                                readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
                             />
+                                <ErrorMessage name="height" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Cân nặng (kg)</p><Field type="text"
                                                                                                           name="weight"
@@ -311,6 +343,8 @@ const UserInfo = () => {
                                                                                                               readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
                             />
+                                <ErrorMessage name="weight" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Giới thiệu</p><Field type="text"
                                                                                                               name="describes"
@@ -320,6 +354,7 @@ const UserInfo = () => {
                                                                                                            readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
                             />
+
                             </div>
                             <div className="fieldGroup "><p className="control-label">Yêu cầu</p><Field type="text"
                                                                                                            name="basicRequest"

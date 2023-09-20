@@ -2,9 +2,11 @@ import RegisterSupply from "../../components/common/RegisterSupply";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
 
 
 const SupplyInfo = () => {
+
 
     const [accounts, setAccounts] = useState('');
     const accountId = JSON.parse(localStorage.getItem("account") || "{}").id;
@@ -29,6 +31,7 @@ const SupplyInfo = () => {
         <>
             <Formik initialValues={accounts}
                     enableReinitialize={true}
+
                     onSubmit={values => {
                         console.log("mau gui di", values)
 
