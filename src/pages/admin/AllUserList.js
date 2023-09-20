@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {activeAccount, blockAccount, getAccountUserFilter} from "../../service/AdminService";
+import Swal from "sweetalert2";
 
 const AllUserList =() =>{
     const dispatch = useDispatch();
@@ -33,6 +34,13 @@ const AllUserList =() =>{
     useEffect(() =>{
         dispatch(blockAccount(account)).then(() =>{
             dispatch(getAccountUserFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Khóa thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         });
     },[account]);
 
@@ -43,6 +51,13 @@ const AllUserList =() =>{
     useEffect(() =>{
         dispatch(activeAccount(user)).then(() =>{
             dispatch(getAccountUserFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Mở tài khoản thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         })
     },[user])
     const [currentPage, setCurrentPage] = useState(1);

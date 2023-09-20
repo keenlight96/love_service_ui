@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {activeAccount, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
 import DetailCCDV from "./DetailCCDV";
+import Swal from "sweetalert2";
 
 const AllCCDVList = () => {
     const dispatch = useDispatch();
@@ -31,6 +32,13 @@ const AllCCDVList = () => {
     useEffect(() => {
         dispatch(blockAccount(account)).then(() => {
             dispatch(getAccountCCDVFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Khóa tài khoản thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         })
     }, [account]);
 
@@ -40,7 +48,14 @@ const AllCCDVList = () => {
 
     useEffect(() => {
         dispatch(activeAccount(username)).then(() => {
-            dispatch(getAccountCCDVFilter(filter))
+            dispatch(getAccountCCDVFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Mở tài khoản thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         })
     }, [username])
     const [currentPage, setCurrentPage] = useState(1);

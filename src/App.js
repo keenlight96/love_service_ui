@@ -29,6 +29,7 @@ import Album from "./pages/home/Album";
 import Revenue from "./pages/profile/Revenue";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
+import SupplyInfo from "./pages/information/SupplyInfo";
 
 function App() {
     return (
@@ -56,6 +57,8 @@ function App() {
                         <Route path={"bills"} element={<Bills/>}></Route>
                         <Route path={"topup"} element={<UserInfo/>}></Route>
                         <Route path={"summary"} element={<UserInfo/>}></Route>
+                        <Route path={"supplies"} element={<SupplyInfo/>}></Route>
+                        <Route path={"album"} element={<UserInfo/>}></Route>
                         <Route path={"supplies"} element={<UserInfo/>}></Route>
                         <Route path={"album"} element={<Album/>}></Route>
                         <Route path={"revenue"} element={<Revenue/>}></Route>

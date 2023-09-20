@@ -1,12 +1,28 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Field, Form, Formik, useFormikContext} from "formik";
+import {ErrorMessage, Field, Form, Formik, useFormikContext} from "formik";
 import {DatePicker, Modal} from "antd";
 import RegisterSupply from "../../components/common/RegisterSupply";
 import {useSelector} from "react-redux";
+import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const UserInfo = () => {
-
+    const validationSchema = Yup.object().shape({
+        lastName: Yup.string().required('Họ là bắt buộc'),
+        firstName: Yup.string().required('Tên là bắt buộc'),
+        country: Yup.string().required('Quốc tịch là bắt buộc'),
+        address: Yup.string().required('Địa chỉ là bắt buộc'),
+        phoneNumber: Yup.string()
+            .required('Số điện thoại là bắt buộc')
+            .matches(/^[0-9]{10}$/, 'Số điện thoại phải là số và có đúng 10 chữ số'),
+        nickname: Yup.string().required('Tên người dùng là bắt buộc'),
+        height: Yup.string().required('Chiều cao là bắt buộc'),
+        weight: Yup.string().required('Cân nặng là bắt buộc'),
+        birthday: Yup.date()
+            .required('Sinh nhật là bắt buộc')
+            .max(new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000), 'Phải đủ 18 tuổi trở lên'),
+    });
     const [accounts, setAccounts] = useState('');
     const [zone,setzone]= useState('');
     const accountId = JSON.parse(localStorage.getItem("account") || "{}").id;
@@ -114,6 +130,7 @@ const UserInfo = () => {
                     </div>
                     <Formik initialValues= {accounts }
                             enableReinitialize={true}
+                            validationSchema={validationSchema}
                             onSubmit={(values) => {
                                 // values.birthday = selectedDate
                                 // values.supplies = userSupply;
@@ -124,7 +141,13 @@ const UserInfo = () => {
                                 //     return
                                 // }
                                     axios.post(`http://localhost:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
-                                        alert("thanh cong")
+                                        Swal.fire({
+                                            position: 'center',
+                                            icon: 'success',
+                                            title: 'Cập nhật dữ liệu thành công.',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
                                         console.log("ketqua",res.data)
                                     })
                                 }
@@ -134,7 +157,10 @@ const UserInfo = () => {
                                                                                                    name="firstName"
                                                                                                    maxLength={5000}
                                                                                                    autoComplete="false"
+                                                                                                   readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
                             />
+                                <ErrorMessage name="firstName" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Tên</p><Field type="text"
                                                                                                     name="lastName"
@@ -142,44 +168,48 @@ const UserInfo = () => {
                                                                                                     // defaultValue ={accounts.lastName || 'Nhập tên của bạn'}
                                                                                                     maxLength={5000}
                                                                                                     autoComplete="false"
+                                                                                                    readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
 
                             />
+                                <ErrorMessage name="lastName" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Nick Name</p><Field type="text"
                                                                                                           name="nickname"
                                                                                                           maxLength={5000}
                                                                                                           autoComplete="false"
                             />
+                                <ErrorMessage name="nickname" component="div"
+                                              className="error"/>
                             </div>
                                 <div className="fieldGroup "><p className="control-label">Số điện thoại</p><Field type="text"
                                                                                                               name="phoneNumber"
                                                                                                               maxLength={5000}
                                                                                                               autoComplete="false"
+                                                                                                                  readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                                 />
+                                    <ErrorMessage name="phoneNumber" component="div"
+                                                  className="error"/>
                                 </div>
 
-                                <div className="fieldGroup ">
+                                <div className="fieldGroup">
                                     <p className="control-label">Email</p>
-                                    {accounts.isGoogle ? (
-                                        <Field
-                                            type="text"
-                                            name="email"
-                                            maxLength={5000}
-                                            autoComplete="false"
-                                            readOnly={true}
-                                        />
-                                    ) : (
-                                        <>
-                                            <Field
-                                                type="text"
-                                                name="email"
-                                                maxLength={5000}
-                                                autoComplete="false"
-                                            />
-                                            {message && (<div className="error">{message}</div>)}
-                                        </>
+                                    <Field
+                                        type="text"
+                                        name="email"
+                                        maxLength={5000}
+                                        autoComplete="false"
+                                        readOnly={accounts.isGoogle}
+                                    />
+                                    <ErrorMessage name="email" component="div"
+                                                  className="error"/>
+                                    {message && !accounts.isGoogle && (
+                                        <div className="error">{message}</div>
                                     )}
                                 </div>
+
 
                                 <p className="control-label">Ngày sinh</p>
                                 <div>
@@ -205,7 +235,11 @@ const UserInfo = () => {
                                             width: '100%', // Chiếm 10% chiều rộng
                                             verticalAlign: 'top', // Để thẻ input nằm trên thẻ div
                                         }}
+                                        readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                                     />
+                                    <ErrorMessage name="birthday" component="div"
+                                                  className="error"/>
                                 </div>
 
 
@@ -214,77 +248,12 @@ const UserInfo = () => {
                                                                                                         // placeholder={accounts.address || 'Nhập địa chỉ của bạn'}
                                                                                                         maxLength={5000}
                                                                                                         autoComplete="false"
+                                                                                                        readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                                                                                                         // enableReInitial = "true"
                             />
-                            </div>
-                            <div>
-                                {/*<p className="control-label">Thành phố</p><select name="city">*/}
-                                {/*<option value="5b99f9e35180d13ea22a97fc" selected="selected">An Giang</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a97fd"> Bà Rịa Vũng Tàu</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a97fe"> Bình Dương</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a97ff"> Bình Phước</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9800"> Bình Thuận</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9801"> Bình Định</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9802"> Bạc Liêu</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9803"> Bắc Cạn</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9804"> Bắc Giang</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9805"> Bắc Ninh</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9806"> Bến Tre</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9807"> Cao Bằng</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9808"> Cà Mau</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9809"> Cần Thơ</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a980a"> Đà Nẵng</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a980b"> Đăk Lăk</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a980c"> Điện Biên</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a980d"> Đồng Nai</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a980e"> Đồng Tháp</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a980f"> Gia Lai</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9810"> Hà Giang</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9811"> Hà Nam</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9812"> Hà Nội</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9813"> Hà Tây</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9814"> Hà Tĩnh</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9815"> Hà Đông</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9816"> Hòa Bình</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9817"> Hưng Yên</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9818"> Hạ Long</option>*/}
-                                {/*<option value="5b99f9e35180d13ea22a9819"> Hải Dương</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a981a"> Hải Phòng</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a981b"> Hồ Chí Minh</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a981c"> Khánh Hòa</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a981d"> Kiên Giang</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a981e"> KonTum</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a981f"> Lai Châu</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9820"> Long An</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9821"> Lào Cai</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9822"> Lâm Đồng</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9823"> Lạng Sơn</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9824"> Nam Định</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9825"> Nghệ An</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9826"> Ninh Bình</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9827"> Ninh Thuận</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9828"> Phú Thọ</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9829"> Phú Yên</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a982a"> Quảng Bình</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a982b"> Quảng Nam</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a982c"> Quảng Ngãi</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a982d"> Quảng Ninh</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a982e"> Quảng Trị</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a982f"> Sóc Trăng</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9830"> Sơn La</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9831"> Thanh Hóa</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9832"> Thái Bình</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9833"> Thái Nguyên</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9834"> Thừa Thiên Huế</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9835"> Tiền Giang</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9836"> Trà Vinh</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9837"> Tuyên Quang</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9838"> Tây Ninh</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a9839"> Vĩnh Long</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a983a"> Vĩnh Phúc</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a983b"> Yên Bái</option>*/}
-                                {/*    <option value="5b99f9e35180d13ea22a983c">Khác</option>*/}
-                                {/*</select>*/}
+                                <ErrorMessage name="address" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup ">
                             <p className="control-label">Giới tính</p>
@@ -316,6 +285,8 @@ const UserInfo = () => {
                                                 width: '100%',
                                                 border: '1px solid #777',
                                             }}
+                                            disabled={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                                             // onChange={handleGenderChange}
                                         >
                                             <option value="">{initialGender}</option>
@@ -347,6 +318,8 @@ const UserInfo = () => {
                                             width: '100%',
                                             border: '1px solid #777',
                                         }}
+                                        disabled={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                                     >
                                         <option value="">{zone}</option>
                                         <option value="1">Miền Bắc</option>
@@ -363,31 +336,40 @@ const UserInfo = () => {
                                                                                                         // placeholder={accounts.height || 'Nhập chiều cao của bạn'}
                                                                                                         maxLength={5000}
                                                                                                         autoComplete="false"
-                                                                                                               // enableReInitial = "true"
+                                                                                                               readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                             />
+                                <ErrorMessage name="height" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Cân nặng (kg)</p><Field type="text"
                                                                                                           name="weight"
                                                                                                           // placeholder={accounts.weight || 'Nhập cân nặng của bạn'}
                                                                                                           maxLength={5000}
                                                                                                           autoComplete="false"
-                                                                                                              // enableReInitial = "true"
+                                                                                                              readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                             />
+                                <ErrorMessage name="weight" component="div"
+                                              className="error"/>
                             </div>
                             <div className="fieldGroup "><p className="control-label">Giới thiệu</p><Field type="text"
                                                                                                               name="describes"
                                                                                                               // placeholder={accounts.describes || 'Nhập giới thiệu của bạn'}
                                                                                                               maxLength={5000}
                                                                                                               autoComplete="false"
-                                                                                                           // enableReInitial = "true"
+                                                                                                           readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                             />
+
                             </div>
                             <div className="fieldGroup "><p className="control-label">Yêu cầu</p><Field type="text"
                                                                                                            name="basicRequest"
                                                                                                            // placeholder={accounts.basicRequest || 'Nhập yêu cầu của bạn'}
                                                                                                            maxLength={5000}
                                                                                                            autoComplete="false"
-                                                                                                        // enableReInitial = "true"
+                                                                                                        readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                             />
                             </div>
                             <div className="fieldGroup "><p className="control-label">Trang cá nhân</p><Field type="text"
@@ -395,7 +377,8 @@ const UserInfo = () => {
                                                                                                         // placeholder={accounts.facebookLink || 'Nhập địa chỉ trang cá nhân của bạn'}
                                                                                                         maxLength={5000}
                                                                                                         autoComplete="false"
-                                                                                                              // enableReInitial = "true"
+                                                                                                              readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
+
                             />
                             </div>
                             {/*<div  className={"col-md-18"} style={{textAlign: "center"}}>*/}
