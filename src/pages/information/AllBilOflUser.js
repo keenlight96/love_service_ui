@@ -9,6 +9,10 @@ const AllBillOfUser = () => {
 
     const dispatch = useDispatch();
 
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
+
     const allBillOfUser = useSelector((state) => {
         return state.BillByAccount.BillByAccount.allBillByUser;
     });
@@ -18,6 +22,7 @@ const AllBillOfUser = () => {
     });
 
     const stringCancelBill = useSelector((state) => {
+        console.log(state)
         return state.BillByAccount.BillByAccount.cancelBill;
     });
     const [billDetail, setBillDetail] = useState(false);
@@ -65,7 +70,7 @@ const AllBillOfUser = () => {
         dispatch(completes(idBillComplete)).then(() =>{
             dispatch(checkToken());
             dispatch(getAllBillByIdUser(idAccount))
-
+            sendNotification(idBillComplete);
         })
     },[idBillComplete])
 
@@ -78,9 +83,24 @@ const AllBillOfUser = () => {
         dispatch(cancelBill({ idBill, idAccount, message })).then(() =>{
             dispatch(checkToken());
             dispatch(getAllBillByIdUser(idAccount));
-
+            sendNotification(idBill);
         });
     },[idBill,idAccount,message]);
+
+    const sendNotification = (billId) => {
+        try {
+            if (stompClient != null) {
+                let message = {
+                    "type": "notification",
+                    "subtype": billId
+                }
+                stompClient.send("/gkz/hello", {}, JSON.stringify(message));
+            }
+        } catch (e) {
+            console.log("Send notification error:");
+            console.log(e);
+        }
+    }
 
     return (
         <>
@@ -103,8 +123,7 @@ const AllBillOfUser = () => {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {currentBills.length > 0 &&
-                                        currentBills.map((item) => (
+                                    {currentBills.length > 0 && currentBills.map((item) => (
                                             <tr key={item.id}>
                                                 <td>{item.accountCCDV.nickname}</td>
                                                 <td>{item.address}</td>

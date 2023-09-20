@@ -4,31 +4,24 @@ import SignupCCDV from "../../service/custom/SignupCCDV";
 import * as Yup from "yup";
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
-import {useLocation, useNavigate} from "react-router";
+import {useLocation, useNavigate, useParams} from "react-router";
 import Swal from "sweetalert2";
 import RegisterSupply from "../../components/common/RegisterSupply";
 import {useSelector} from "react-redux"; // Import CSS cho DatePicker
 
 const validationSchema = Yup.object().shape({
-    lastName: Yup.string().required('Họ là bắt buộc'),
-    firstName: Yup.string().required('Tên là bắt buộc'),
     country: Yup.string().required('Quốc tịch là bắt buộc'),
     address: Yup.string().required('Địa chỉ là bắt buộc'),
     phoneNumber: Yup.string().required('Số điện thoại là bắt buộc'),
     idCard: Yup.string().required('CCCD là bắt buộc'),
     price: Yup.string().required('Không được để trống'),
-    // nickName: Yup.string().required('Tên người dùng là bắt buộc'),
     height: Yup.string().required('Chiều cao là bắt buộc'),
     weight: Yup.string().required('Cân nặng là bắt buộc')
 });
-const RegisterProfile =()=> {
+const RegisterProfileGoogle =()=> {
     const [selectedIds, setSelectedIds] = useState([]);
     const [supply, setSupply] = useState([]);
     const location = useLocation();
-
-    // Truy cập dữ liệu được truyền đi kèm từ trang trước
-    const receivedData = location.state?.data;
-
 
     const userSupply = useSelector(state => {
         try {
@@ -47,13 +40,13 @@ const RegisterProfile =()=> {
                 console.error('Lỗi khi lấy dữ liệu:', error);
             });
     }, []);
-    const handleCheckboxChange = (event, id) => {
-        if (event.target.checked) {
-            setSelectedIds([...selectedIds, id]);
-        } else {
-            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-        }
-    };
+    // const handleCheckboxChange = (event, id) => {
+    //     if (event.target.checked) {
+    //         setSelectedIds([...selectedIds, id]);
+    //     } else {
+    //         setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    //     }
+    // };
     // const [type, setType] = useState('date');
     // const {Option} = Select;
     // const PickerWithType = ({type, onChange}) => {
@@ -68,11 +61,7 @@ const RegisterProfile =()=> {
     //     var selectedId = selectedOption.value;
     //     console.log("Selected ID: " + selectedId);
     // }
-    // Khai báo state để lưu trữ giá trị được chọn
-    // const [selectedId, setSelectedId] = useState(['']);
     const navigate = useNavigate();
-    // const {id: urlId} = useParams(); // Lấy ID từ URL (nếu có)
-    // const account = JSON.parse(localStorage.getItem("account"));
     return (
         <>
             <div className={'wrapper'}>
@@ -82,8 +71,8 @@ const RegisterProfile =()=> {
                             <div>
                                 <Formik
                                     initialValues={{
-                                        lastName: '',
-                                        firstName: '',
+                                        lastName: JSON.parse(localStorage.getItem("googleAccount")) ? JSON.parse(localStorage.getItem("googleAccount")).family_name : "",
+                                        firstName: JSON.parse(localStorage.getItem("googleAccount")) ? JSON.parse(localStorage.getItem("googleAccount")).given_name : "",
                                         country: '',
                                         address: '',
                                         height: '',
@@ -124,46 +113,93 @@ const RegisterProfile =()=> {
                                             console.log("id trong local", accountData)
                                             console.log("id",accountData.id)
                                             idAccount = accountData.id;
-                                        } else if (receivedData) {
-                                            // Nếu không có ID trong localStorage, kiểm tra xem có ID trong URL không
-                                            idAccount = receivedData.toString();
-                                            console.log("id trong url", receivedData)
-                                        }
-                                        console.log(1)
-                                        SignupCCDV.signupUserDetailProfile(idAccount, values)
-                                            .then(async (response) => {
-                                                console.log(2)
-                                                console.log(response.data)
-                                                if(receivedData){
-                                                    await Swal.fire({
-                                                        position: 'center',
-                                                        icon: 'success',
-                                                        title: 'Đăng kí thành công, kiểm tra email để xác minh tài khoản.',
-                                                        showConfirmButton: false,
-                                                        timer: 1500
-                                                    })
-                                                    navigate("/login")
-                                                }else if(localStorageData){
+
+                                            SignupCCDV.signupUserDetailProfile(idAccount, values)
+                                                .then(async (response) => {
+                                                    console.log(2)
+                                                    console.log(response.data)
                                                     Swal.fire({
                                                         position: 'center',
                                                         icon: 'success',
-                                                        title: 'Cập nhật thành công',
+                                                        title: 'Cập nhật thành công.',
                                                         showConfirmButton: false,
                                                         timer: 1500
                                                     })
                                                     navigate("/info")
-                                                }
-                                                else {
-                                                    Swal.fire({
-                                                    position: 'center',
-                                                    icon: 'success',
-                                                    title: 'Đăng kí thành công',
-                                                    showConfirmButton: false,
-                                                    timer: 1500
+
                                                 })
-                                                    navigate("/info")
+
+                                        } else {
+                                            try {
+                                                const accountGoogle = JSON.parse(localStorage.getItem("googleAccount"));
+                                                let account = {
+                                                    username: accountGoogle.sub,
+                                                    email: accountGoogle.email,
+                                                    nickName: accountGoogle.name,
+                                                    avatar: accountGoogle.picture,
                                                 }
-                                            })
+                                                SignupCCDV.registerUserGoogle(account)
+                                                    .then(async (response) => {
+                                                        console.log(response)
+                                                        if (response.data.validStatus === 'SUCCESSFULL') {
+                                                            idAccount = response.data.id;
+
+                                                            SignupCCDV.signupUserDetailProfile(idAccount, values)
+                                                                .then(async (response) => {
+                                                                    console.log(2)
+                                                                    console.log(response.data)
+                                                                    await Swal.fire({
+                                                                        position: 'center',
+                                                                        icon: 'success',
+                                                                        title: 'Đăng kí thành công.',
+                                                                        showConfirmButton: false,
+                                                                        timer: 1500
+                                                                    })
+                                                                    navigate("/login")
+                                                                })
+
+                                                        } else {
+                                                            await Swal.fire({
+                                                                position: 'center',
+                                                                icon: 'error',
+                                                                title: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                                                            });
+                                                            navigate("/login")
+                                                        }
+                                                    });
+                                            } catch (e) {
+                                                Swal.fire({
+                                                    position: 'center',
+                                                    icon: 'error',
+                                                    title: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                                                });
+                                                navigate("/login")
+                                            }
+                                        }
+                                        // SignupCCDV.signupUserDetailProfile(idAccount, values)
+                                        //     .then(async (response) => {
+                                        //         console.log(2)
+                                        //         console.log(response.data)
+                                        //         if(!localStorageData){
+                                        //             await Swal.fire({
+                                        //                 position: 'center',
+                                        //                 icon: 'success',
+                                        //                 title: 'Đăng kí thành công.',
+                                        //                 showConfirmButton: false,
+                                        //                 timer: 1500
+                                        //             })
+                                        //             navigate("/login")
+                                        //         }else {
+                                        //             Swal.fire({
+                                        //                 position: 'center',
+                                        //                 icon: 'success',
+                                        //                 title: 'Cập nhật thành công.',
+                                        //                 showConfirmButton: false,
+                                        //                 timer: 1500
+                                        //             })
+                                        //             navigate("/info")
+                                        //         }
+                                        //     })
                                     }}
                                 >
                                     <Form>
@@ -187,6 +223,7 @@ const RegisterProfile =()=> {
                                                                         margin: '10px',
                                                                         outline: 'none'
                                                                     }}
+                                                                    readOnly={true}
                                                                 />
                                                                 <ErrorMessage name="lastName" component="div"
                                                                               className="error"/>
@@ -207,6 +244,7 @@ const RegisterProfile =()=> {
                                                                         margin: '10px',
                                                                         outline: 'none'
                                                                     }}
+                                                                    readOnly={true}
                                                                 />
                                                                 <ErrorMessage name="firstName" component="div"
                                                                               className="error"/>
@@ -487,4 +525,4 @@ const RegisterProfile =()=> {
     </>
 )
 }
-export default RegisterProfile
+export default RegisterProfileGoogle;

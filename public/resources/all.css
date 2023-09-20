@@ -1371,8 +1371,8 @@ readers do not read off random characters that represent icons */
 .fa-check-double:before {
   content: "\f560"; }
 
-.fa-check-square:before {
-  content: "\f14a"; }
+.fa-xmark:before {
+  content: "\f00d"; }
 
 .fa-cheese:before {
   content: "\f7ef"; }
@@ -7121,6 +7121,9 @@ readers do not read off random characters that represent icons */
 
 .fa-zhihu:before {
   content: "\f63f"; }
+
+.fa-check-double:before {
+  content: "\f560"; }
 
 .sr-only {
   border: 0;

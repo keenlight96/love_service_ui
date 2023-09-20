@@ -6,18 +6,22 @@ import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
 import {getAllBillIn7DayByCCDV} from "../../../service/BillsService";
 import Swal from "sweetalert2";
+import {checkToken} from "../../../service/UserService";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
-    const user=useSelector(state => (state.user.user.current));
+    const user = useSelector(state => (state.user.user.current));
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
 
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const currentTime = new Date();
-    const [hourRent, setHourRent] = useState([]);
-    const [test, setTest] = useState(new Array(168).fill(0));
+    const [hourInDay, setHourInDay] = useState([]);
+    const [timeBillIn7Day, setTimeBillIn7Day] = useState(new Array(168).fill(0));
     const [total, setTotal] = useState(userDetail.price);
-    const [day, setDay] = useState((new Date()).getDate());
-    const [hour, setHour] = useState(1);
+    const [dayRend, setDayRend] = useState((new Date()).getDate());
+    const [hourRend, setHourRend] = useState(1);
     const [bill, setBill] = useState({
         address: '',
         dateCreate: '',
@@ -32,7 +36,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         },
         accountUser: {}
     });
-    const [halo, setHalo] = useState([]);
+    const [sevenDay, setSevenDay] = useState([]);
 
     useEffect(() => {
         dispatch(getAllBillIn7DayByCCDV(userDetail.id));
@@ -44,6 +48,10 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             console.log("check api")
         })
     }, [message]);
+    const close = () => {
+        hide();
+        setMessage(message + 1);
+    }
 
     const fillDay = () => {
         const b = [];
@@ -52,37 +60,38 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             a.setDate((a.getDate() + i));
             b.push(a);
         }
-        setHalo(b)
+        setSevenDay(b)
     }
     const pricing = (valueTag) => {
         setTotal(userDetail.price * valueTag.target.value);
-        setBill({...bill, total: userDetail.price * valueTag.target.value});
-        setHour(valueTag.target.value)
+        setHourRend(valueTag.target.value)
     }
     const getData = (e) => {
         const number = e.target.value - currentTime.getDate();
         const temp = [];
         for (let i = 0; i < 24; i++) {
-            temp.push(test[(i + (number * 24))]);
+            temp.push(timeBillIn7Day[(i + (number * 24))]);
         }
-        setHourRent(temp);
-        setDay(e.target.value);
+        setHourInDay(temp);
+        setDayRend(e.target.value);
     }
     const submit = () => {
         let check = false;
-        for (let i = 0; i < hourRent.length; i++) {
-            if (hourRent[i] === 2) {
+        for (let i = 0; i < hourInDay.length; i++) {
+            if (hourInDay[i] === 2) {
                 check = true;
                 break
             }
         }
-        if (user ) {
-        } else {check = false;}
+        if (user) {
+        } else {
+            check = false;
+        }
         if (check) {
             let tempBill = {
                 ...bill,
                 total: total,
-                hour: hour,
+                hour: hourRend,
                 dateCreate: new Date(),
                 firstMessage: $("[name='MessageBills']").val(),
                 address: $("[name='address']").val(),
@@ -90,29 +99,37 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                     id: JSON.parse(localStorage.getItem("account")).id
                 }
             }
+            console.log(tempBill);
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
-                console.log(data.data)
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: data.data,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                if (data.data != null) {
+                    sendNotification(data.data.bill.id);
+                    dispatch(checkToken());
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: data.data.message
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: data.data.message
+                    });
+                }
             }).catch(
                 (e) => {
                     console.log(e);
                 }
             ).finally(() => {
-                setMessage(message+1)
+                setMessage(message + 1);
             })
         }
     }
 
-
+// nạp data khi mount componet lần đầu
     const fillData = (data) => {
-        const tempTest = [...test];
+        const tempTest = [...timeBillIn7Day];
         for (const item of data) {
             const number = (new Date(item.dateStart)).getHours() + ((new Date(item.dateStart)).getDate() - currentTime.getDate()) * 24;
             for (let i = number; i < number + item.hour; i++) {
@@ -124,54 +141,69 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 tempTest[i] = 1;
             }
         }
-        setTest(tempTest);
+        setTimeBillIn7Day(tempTest);
         const temp = [];
         for (let i = 0; i < 24; i++) {
             temp.push(tempTest[i]);
         }
         $("[name='MessageBills']").text("");
         $("[name='address']").text("");
-        setHourRent(temp);
-        setHour(1)
+        setHourInDay(temp);
+        setHourRend(1)
     }
+    // chọn ngày và render ui
     const handClick = (index) => {
         let check = true;
-        const temp = [...test];
-        const number = index + ((day - currentTime.getDate()) * 24);
+        const temp = new Array(168).fill(0);
+        const number = index + ((dayRend - currentTime.getDate()) * 24);
         for (let i = 0; i < temp.length; i++) {
             if (temp[i] === 2) {
                 temp[i] = 0;
             }
         }
-        for (let i = number; i < (parseInt(number) + parseInt(hour)); i++) {
+        for (let i = number; i < (parseInt(number) + parseInt(hourRend)); i++) {
             if (temp[i] === 1) {
                 check = false;
             }
         }
         if (check) {
-            for (let i = number; i < (parseInt(number) + parseInt(hour)); i++) {
+            for (let i = number; i < (parseInt(number) + parseInt(hourRend)); i++) {
                 if (temp[i] === 0) {
                     temp[i] = 2;
                 }
             }
-            setTest(temp);
+            setTimeBillIn7Day(temp);
         }
-        const number1 = day - currentTime.getDate();
+        const number1 = dayRend - currentTime.getDate();
         const temp1 = [];
         for (let i = 0; i < 24; i++) {
             temp1.push(temp[(i + (number1 * 24))]);
         }
-        setHourRent(temp1);
+        setHourInDay(temp1);
         const a = new Date();
-        a.setDate(day);
+        a.setDate(dayRend);
         a.setHours(index);
         a.setMinutes(0);
         a.setSeconds(0, 0);
         const b = new Date(a.getTime());
-        b.setHours((b.getHours() + parseInt(hour)));
+        b.setHours((b.getHours() + parseInt(hourRend)));
         setBill({...bill, dateStart: a, dateEnd: b});
     }
 
+    const sendNotification = (billId) => {
+        try {
+            if (stompClient != null) {
+                let message = {
+                    "type": "notification",
+                    "subtype": billId,
+                }
+                stompClient.send("/gkz/hello", {}, JSON.stringify(message));
+            }
+        } catch (e) {
+            console.log("Send notification error:");
+            console.log(e);
+        }
+    }
 
     return isShowing ? ReactDOM.createPortal(
         <div role="dialog">
@@ -181,7 +213,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 <div className="modal-dialog">
                     <div className="modal-content" role="document">
                         <div className="modal-header">
-                            <button type="button" className="close" onClick={hide}><span
+                            <button type="button" className="close" onClick={close}><span
                                 aria-hidden="true">×</span><span
                                 className="sr-only">Close</span></button>
                             <h4 className="modal-title"><span>Thuê người yêu </span></h4></div>
@@ -253,29 +285,29 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 <tr>
                                     <td>Chọn Ngày :</td>
                                     <td><select name="dateCreate" className="form-control" onChange={getData}>
-                                        <option id="day0" value={halo[0].getDate()}>
-                                            Ngày :&nbsp;{halo[0].getDate()}-{halo[2].getMonth()+1}-{halo[2].getFullYear()}
+                                        <option id="day0" value={sevenDay[0].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
                                         </option>
-                                        <option id="day1" value={halo[1].getDate()}>
-                                            Ngày :&nbsp;{halo[1].getDate()}-{halo[2].getMonth()+1}-{halo[2].getFullYear()}
+                                        <option id="day1" value={sevenDay[1].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
                                         </option>
-                                        <option id="day2" value={halo[2].getDate()}>
-                                            Ngày :&nbsp;{halo[2].getDate()}-{halo[2].getMonth()+1}-{halo[2].getFullYear()}
+                                        <option id="day2" value={sevenDay[2].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
                                         </option>
-                                        <option id="day3" value={halo[3].getDate()}>
-                                            Ngày :&nbsp;{halo[3].getDate()}-{halo[3].getMonth()+1}-{halo[3].getFullYear()}
-                                        </option>
-
-                                        <option id="day4" value={halo[4].getDate()}>
-                                            Ngày :&nbsp;{halo[4].getDate()}-{halo[4].getMonth()+1}-{halo[4].getFullYear()}
+                                        <option id="day3" value={sevenDay[3].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth()+1}-{sevenDay[3].getFullYear()}
                                         </option>
 
-                                        <option id="day5" value={halo[5].getDate()}>
-                                            Ngày :&nbsp;{halo[5].getDate()}-{halo[5].getMonth()+1}-{halo[5].getFullYear()}
+                                        <option id="day4" value={sevenDay[4].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth()+1}-{sevenDay[4].getFullYear()}
                                         </option>
 
-                                        <option id="day6" value={halo[6].getDate()}>
-                                            Ngày :&nbsp;{halo[6].getDate()}-{halo[6].getMonth()+1}-{halo[6].getFullYear()}
+                                        <option id="day5" value={sevenDay[5].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth()+1}-{sevenDay[5].getFullYear()}
+                                        </option>
+
+                                        <option id="day6" value={sevenDay[6].getDate()}>
+                                            Ngày :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth()+1}-{sevenDay[6].getFullYear()}
                                         </option>
 
                                     </select></td>
@@ -283,17 +315,17 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 <tr>
                                     <td colSpan={2}>
                                         <div className="table-boxTime">
-                                            {hourRent.length > 0 && hourRent.map((value, index) => (
+                                            {hourInDay.length > 0 && hourInDay.map((value, index) => (
                                                 value === 0 ?
                                                     <div className="item-box" onClick={() => handClick(index)}
                                                          key={index}>&nbsp;{index}h00</div> :
                                                     value === 1 ?
                                                         <div className="item-box-unavailable"
-                                                             key={index}>&nbsp;{index}h00:&nbsp;Thuê </div> :
+                                                             key={index}>&nbsp;{index}h00&nbsp; </div> :
                                                         value === 2 ?
                                                             <div className="item-box-pick"
                                                                  onClick={() => handClick(index)}
-                                                                 key={index}>&nbsp;{index}h00:&nbsp;Chọn </div> : <></>
+                                                                 key={index}>&nbsp;{index}h00&nbsp; </div> : <></>
                                             ))}
                                         </div>
                                     </td>
@@ -304,7 +336,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                         <div className="modal-footer">
                             <button type="button" className="btn-fill btn btn-danger" onClick={submit}><span>Thuê</span>
                             </button>
-                            <button type="button" className="btn btn-default" onClick={hide}><span>Đóng</span></button>
+                            <button type="button" className="btn btn-default" onClick={close}><span>Đóng</span></button>
                         </div>
                     </div>
                 </div>

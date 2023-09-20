@@ -14,7 +14,6 @@ export const getAllBillByIdUser = createAsyncThunk(
     "getAllBillByIDCCDV",
     async (idUser) => {
         const res = await customAxios.get("bills/getAllBilByIdUser/" + idUser, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
-        console.log(res)
         return res.data;
     }
 )

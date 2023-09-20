@@ -18,6 +18,10 @@ const AllBillByOfCCDV = () => {
 
     const dispatch = useDispatch();
 
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
+
     const allBillOfCCDV = useSelector((state) => {
         console.log(state.BillByAccount.BillByAccount.allBillByCCDV);
         return state.BillByAccount.BillByAccount.allBillByCCDV;
@@ -76,7 +80,7 @@ const AllBillByOfCCDV = () => {
         dispatch(receivedBill(idBillRecevied)).then(() =>{
             dispatch(checkToken());
             dispatch(getAllBillByIdCCDV(idAccount));
-
+            sendNotification(idBillRecevied);
         })
     }, [idBillRecevied]);
 
@@ -89,8 +93,24 @@ const AllBillByOfCCDV = () => {
         dispatch(cancelBill({idBill, idAccount, message})).then(() => {
             dispatch(checkToken());
             dispatch(getAllBillByIdCCDV(idAccount));
+            sendNotification(idBill);
         });
     }, [idBill, idAccount, message]);
+
+    const sendNotification = (billId) => {
+        try {
+            if (stompClient != null) {
+                let message = {
+                    "type": "notification",
+                    "subtype": billId
+                }
+                stompClient.send("/gkz/hello", {}, JSON.stringify(message));
+            }
+        } catch (e) {
+            console.log("Send notification error:");
+            console.log(e);
+        }
+    }
 
     return (
         <>

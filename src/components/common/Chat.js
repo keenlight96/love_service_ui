@@ -2,15 +2,18 @@ import React, {useEffect, useState} from 'react';
 import {Stomp, Client} from "@stomp/stompjs";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    addChatWithReceiver,
+    addChatWithReceiver, addNotification,
     getAllChatReceivers,
     getChatWithReceiver,
     setActiveReceiver,
     setChatWithReceiver,
-    setMsgBoxToggle
+    setMsgBoxToggle, setStompClient, updateChatReceivers
 } from "../../service/ChattingService";
 
 const Chat = () => {
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    })
     const msgBoxToggle = useSelector(state => {
         return state.chatting.chatting.msgBoxToggle;
     })
@@ -38,7 +41,9 @@ const Chat = () => {
         dispatch(setMsgBoxToggle());
     }
 
-    const [stompClient, setStompClient] = useState(null);
+    const stompClient = useSelector(state => {
+        return state.chatting.stompClient;
+    })
 
     function connect() {
         if (stompClient !== null) {
@@ -47,22 +52,21 @@ const Chat = () => {
 
         let socket = new WebSocket('ws://localhost:8080/gkz-stomp-endpoint/websocket');
         let stompClient2 = Stomp.over(socket);
-        setStompClient(stompClient2);
+        dispatch(setStompClient(stompClient2));
 
         try {
             let userId = JSON.parse(localStorage.getItem("account")).id;
-            let room;
-            if (userId < activeReceiver.id) {
-                room = userId + "_" + activeReceiver.id;
-            } else {
-                room = activeReceiver.id + "_" + userId;
-            }
 
             stompClient2.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompClient2.subscribe("/topic/" + room, function (message) {
-                    console.log("test subscribe")
-                    showMessage(JSON.parse(message.body).greeting);
+                stompClient2.subscribe("/topic/" + userId, function (message) {
+                    let converter = JSON.parse(message.body)
+                    if (converter.type == "private") {
+                        showMessage(converter);
+                        updateReceivers(converter);
+                    } else if (converter.type == "notification") {
+                        dispatch(addNotification(converter));
+                    }
                 });
             });
         } catch (e) {
@@ -94,10 +98,12 @@ const Chat = () => {
                     "receiver": {
                         id: activeReceiver.id
                     },
+                    "type": "private",
                     'message': document.querySelector("#textMessage").value
                 }
                 stompClient.send("/gkz/hello", {}, JSON.stringify(message));
             }
+            document.querySelector("#textMessage").value = "";
         } catch (e) {
             console.log("Chat send message error:");
             console.log(e);
@@ -105,15 +111,25 @@ const Chat = () => {
     }
 
     const showMessage = (message) => {
-        dispatch(addChatWithReceiver(message));
-        try {
-            if (activeReceiver.id != allReceivers[0]) {
-                dispatch(getAllChatReceivers());
+        if (message.sender.id == storeUser.account.id) {
+            dispatch(addChatWithReceiver(message));
+            try {
+                if (activeReceiver.id != allReceivers[0].id) {
+                    dispatch(getAllChatReceivers());
+                }
+            } catch (e) {
             }
-        } catch (e) {
+            scrollToBottom();
+        } if (message.receiver.id == storeUser.account.id) {
+            if (message.sender.id == activeReceiver.id) {
+                dispatch(addChatWithReceiver(message));
+                scrollToBottom();
+            }
         }
-        document.querySelector("#textMessage").value = "";
-        scrollToBottom();
+    }
+
+    const updateReceivers = (message) => {
+        dispatch(getAllChatReceivers());
     }
 
     function scrollToBottom() {
@@ -126,7 +142,12 @@ const Chat = () => {
     }, [])
 
     const activateCurrentReceiver = (e, item) => {
-        dispatch(setActiveReceiver(item));
+        if (item && activeReceiver && item.id != activeReceiver.id) {
+            if (document.querySelector("#textMessage")) {
+                document.querySelector("#textMessage").value = "";
+            }
+            dispatch(setActiveReceiver(item));
+        }
         dispatch(getChatWithReceiver(item.id));
     }
 
@@ -209,13 +230,13 @@ const Chat = () => {
                                                 {/*<div className={item.id == activeReceiver.id ? "active media" : "media"} key={key}*/}
                                                 {/*     onClick={(e)  => {activateCurrentReceiver(e, item)}}>*/}
                                                     <div className="media-left">
-                                                        <div className="avt avt-sm"><img src={item.avatar} className="avt-img" alt="PD"/>
+                                                        <div className="avt avt-sm"><img src={item.avatar} className="avt-img" alt="PD" style={{width: "40px", height: "40px", objectFit: "cover"}}/>
                                                             {/*<div className="stt stt-ready"/>*/}
                                                         </div>
                                                     </div>
                                                     <div className="media-body">
                                                         <p className="name-player-review">{item.username}</p>
-                                                        {/*<p>ok?</p>*/}
+                                                        <p style={item.lastMessage && !item.lastMessage.isRead ? {fontWeight: "bold"} : {}}>{item.lastMessage && item.lastMessage.message}</p>
                                                         <span></span>
                                                     </div>
                                                 </div>
@@ -232,7 +253,7 @@ const Chat = () => {
                                                         {
                                                             activeReceiver.id ?
                                                                 <>
-                                                                    <img src={activeReceiver.avatar} className="avt-img" alt=""/>
+                                                                    <img src={activeReceiver.avatar} className="avt-img" alt="" style={{width: "35px", height: "35px", objectFit: "cover"}}/>
                                                                     {/*<div className="stt stt-ready"/>*/}
                                                                 </>
                                                                 :
@@ -243,7 +264,7 @@ const Chat = () => {
                                                 <div className="media-body media-middle">
                                                     {
                                                         activeReceiver.id ?
-                                                        <a target="_blank" className="name-player-review" href="/page64fa190cc27ea26bdf1997d3">{activeReceiver.nickname}</a>
+                                                        <a target="_blank" className="name-player-review" href={`/profile/${activeReceiver.username}`}>{activeReceiver.nickname}</a>
                                                         :
                                                         <div></div>
                                                     }
@@ -254,8 +275,8 @@ const Chat = () => {
                                 </div>
                                 <div className="box__right--message chat-main-wrap">
                                     <div>
-                                        <div className="main-header"><p className="name"><span>babyroshan</span><span> - <span
-                                            className="nick-name">babyroshan</span></span></p></div>
+                                        <div className="main-header"><p className="name"><span></span><span> - <span
+                                            className="nick-name"></span></span></p></div>
                                         <div className="main-body">
                                             <div className="mess-detail-room"><i style={{flexGrow: 1}}/>
                                                 <div id={"chat-content"}>

@@ -122,11 +122,7 @@ const AllUserList =() =>{
                                                         <td>{item.account.nickname}</td>
                                                         <td>{item.account.username}</td>
                                                         <td>
-                                                            <a
-                                                                href="https://demo.dashboardpack.com/cdn-cgi/l/email-protection"
-                                                                className="__cf_email__"
-                                                                data-cfemail="65120a170e51555c250208040c094b060a08"
-                                                            >
+                                                            <a className="__cf_email__">
                                                                 {item.account.email}
                                                             </a>
                                                         </td>

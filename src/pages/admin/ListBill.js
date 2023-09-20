@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {getAllBill} from "../../service/AdminService";
 
 const ListBill =() =>{
     const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const ListBill =() =>{
     // kết thúc phân trang
     const [billDetail, setBillDetail] = useState(false);
     const [modal, setModal] = useState(false);
+    const [idStatus, setIdStatus] = useState("null");
     const openBillDetail = (object) => {
         setObjects(object);
         setBillDetail(true);
@@ -39,15 +41,21 @@ const ListBill =() =>{
     const closeModal = () => {
         setModal(false);
     };
+    const [filterBill, setFilterBill] = useState('null');
+
+    useEffect(() =>{
+        dispatch(getAllBill(filterBill));
+    },[filterBill])
     return(
         <>
             <div className="white_box_tittle list_header" >
             <h3>Tất cả đơn thuê</h3>
-            <select className="form-control gender " style={{width: 'auto'}} className="form-control gender">
-                <option>Trạng thái</option>
-                <option>Đã hoàn thành</option>
-                <option>Chờ xác nhận</option>
-                <option>Đã hủy</option>
+            <select className="form-control gender " style={{width: 'auto'}} className="form-control gender" onChange={(e) => setFilterBill( e.target.value )}>
+                <option value="null">Trạng thái</option>
+                <option value="6">Đã hoàn thành</option>
+                <option value="4">Chờ xác nhận</option>
+                <option value="5">Đã nhận</option>
+                <option value="7">Đã hủy</option>
             </select>
             </div>
             <div className="transaction-table">
@@ -57,7 +65,7 @@ const ListBill =() =>{
                         <thead>
                         <tr>
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản người thuê</th>
-                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản người thuê</th>
+                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản người CCDV</th>
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Địa chỉ</th>
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Số giờ thuê</th>
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Ngày bắt đầu</th>

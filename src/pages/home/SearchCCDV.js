@@ -1,11 +1,10 @@
 import { useSelector} from "react-redux";
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
 
 const SearchCCDV = () =>{
-
     const searchCCDv = useSelector(state => {
         return state.CCDVs.CCDVs.search;
-        console.log(searchCCDv);
     })
      return(
         <>

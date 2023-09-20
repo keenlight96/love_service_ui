@@ -16,12 +16,14 @@ import ModalCreateBill from "./CreateBill/ModalCreateBill";
 // import
 import {useMemo} from "react";
 import Pagination from "../../components/common/Pagination";
+import {checkToken} from "../../service/UserService";
 
 // Số phần tử 1 trang
 let PageSize = 5;
+
 // End Pagination
 
-function Detail(){
+function Detail() {
     const [userDetail, setUserDetail] = useState(null);
     const [image, setImage] = useState([]);
     const [interest, setInterest] = useState([])
@@ -92,7 +94,7 @@ function Detail(){
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/userDetail/` + username,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.get(`http://localhost:8080/userDetail/` + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(response => {
                 // console.log(response.data.userProfile);
                 // let {birthday} = response.data.userProfile;
@@ -106,10 +108,18 @@ function Detail(){
                 setBill(response.data.bills);
 
                 dispatch(getAllReviewsByProviderUsername(response.data.userProfile.account.username));
+
             })
             .catch(error => {
                 console.log(error);
             });
+        axios.get("http://localhost:8080/userDetail/increaseView?username=" + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+            .then(res => {
+                console.log(res.data)
+            }).catch(error => {
+            console.log(error);
+        });
+        dispatch(checkToken());
     }, []);
 
     useEffect(() => {
@@ -139,36 +149,38 @@ function Detail(){
     }, [reviews])
 
     const addNewChat = () => {
-        let newReceiver = {
-            id: userDetail.account.id,
-            username: userDetail.account.username,
-            nickname: userDetail.account.nickname,
-            avatar: userDetail.account.avatar,
-            role: {
-                id: userDetail.account.role.id,
-                nameRole: userDetail.account.role.nameRole,
-            },
-            status: {
-                id: userDetail.account.status.id,
-                nameStatus: userDetail.account.status.nameStatus,
-            },
-            isActive: userDetail.account.isActive
-        }
-        dispatch(addChatReceivers(newReceiver));
-        dispatch(setActiveReceiver(newReceiver));
+        if (userDetail.account.id != storeUser.account.id) {
+            let newReceiver = {
+                id: userDetail.account.id,
+                username: userDetail.account.username,
+                nickname: userDetail.account.nickname,
+                avatar: userDetail.account.avatar,
+                role: {
+                    id: userDetail.account.role.id,
+                    nameRole: userDetail.account.role.nameRole,
+                },
+                status: {
+                    id: userDetail.account.status.id,
+                    nameStatus: userDetail.account.status.nameStatus,
+                },
+                isActive: userDetail.account.isActive
+            }
+            dispatch(addChatReceivers(newReceiver));
+            dispatch(setActiveReceiver(newReceiver));
 
-        if (!msgBoxToggle) {
-            dispatch(setMsgBoxToggle());
+            if (!msgBoxToggle) {
+                dispatch(setMsgBoxToggle());
+            }
         }
     }
     const user = useSelector(state => (state.user.user.current));
     //Js function
 
-    return(
+    return (
         <>
             {userDetail && userDetail.id && < ModalCreateBill isShowing={isShowing}
-                                                hide={toggle}
-                                                userDetail={userDetail}
+                                                              hide={toggle}
+                                                              userDetail={userDetail}
             />}
         <title>User Profile</title>
         <link rel="apple-touch-icon" sizes="57x57" href="https://playerduo.net/favicons/apple-icon-57x57.png" />
@@ -223,7 +235,7 @@ function Detail(){
                                             <div className="avt avt-lg">
                                                 {
                                                     userDetail.account && <img src={userDetail.account.avatar} alt="Avatar"
-                                                                               style={{width: "100%", height: "100%"}}/>
+                                                                               style={{objectFit: "cover", height: "100%"}}/>
                                                 }
                                             </div>
                                         </div>
@@ -247,14 +259,14 @@ function Detail(){
                                 <div className="player-profile-right-wrap col-md-3 col-md-push-6">
                                     <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
                                         <div className="rateting-style">
-                                            {avgStar}
+                                            {avgStar.toFixed(1).replace(".", ",")}
                                             &nbsp;
                                             <i className="fas fa-star"></i>
                                             &nbsp;
                                             <span>{reviews ? reviews.length : <></>} <span>Đánh giá</span></span>
                                         </div>
                                         <div className="text-center">
-                                            {user?                                    <button className="btn-my-style red"onClick={toggle}>Thuê</button>
+                                            {user?                                    <button className="btn-my-style red" onClick={toggle}>Thuê</button>
                                                 :<></>}                                            {/*<button className="btn-my-style white">Donate</button>*/}
                                             <button className="btn-my-style white" onClick={() => {addNewChat()}}>
                                                 <i className="fas fa-comment-alt"></i>Chat
@@ -360,7 +372,8 @@ function Detail(){
                                                         <tr>
                                                             <td>Facebook</td>
                                                             <td><a href={userDetail.facebookLink} target="_blank"
-                                                                   rel="noopener noreferrer">{userDetail.facebookLink}</a></td>
+                                                                   rel="noopener noreferrer">{userDetail.facebookLink}</a>
+                                                            </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -525,4 +538,5 @@ function Detail(){
         </>
     )
 }
+
 export default Detail

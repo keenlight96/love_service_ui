@@ -1,9 +1,8 @@
 import * as Yup from "yup";
-import formik, {ErrorMessage, Field, Formik} from "formik";
+import {ErrorMessage, Field, Formik} from "formik";
 import SignupCCDV from "../../service/custom/SignupCCDV";
 import React, {useEffect, useState} from "react";
 import "../../custom-css/cssRegister.css"
-import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
 import {useLocation, useNavigate} from "react-router";
 
@@ -200,11 +199,11 @@ const RegisterCCDV =() =>{
                                             <span>Đăng nhập</span>
                                         </p>
                                     </a>
-                                    <a className="create-new">
-                                        <p>
-                                            <span>Quên mật khẩu?</span>
-                                        </p>
-                                    </a>
+                                    {/*<a className="create-new">*/}
+                                    {/*    <p>*/}
+                                    {/*        <span>Quên mật khẩu?</span>*/}
+                                    {/*    </p>*/}
+                                    {/*</a>*/}
                                 </div>
                             </div>
                         </div>
