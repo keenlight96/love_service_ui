@@ -9,8 +9,8 @@ import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggl
 import ShowImages from "./ShowImages";
 import {convertToFormattedDate} from "../../service/custom/general.function";
 import {getAllReviewsByProviderUsername, isAbleToReview, sendReview} from "../../service/ReviewService";
-import useModal from "./CreateBill/UseModal";
-import ModalCreateBill from "./CreateBill/ModalCreateBill";
+import useModal from "./UseModal";
+import ModalCreateBill from "./ModalCreateBill";
 
 // Start Pagination
 // import

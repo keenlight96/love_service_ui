@@ -11,6 +11,9 @@ import {
 import {Link} from "react-router-dom";
 import Bills from "./Bills";
 import {checkToken} from "../../service/UserService";
+import $ from "jquery";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const AllBillByOfCCDV = () => {
 
@@ -62,6 +65,7 @@ const AllBillByOfCCDV = () => {
     };
 
     const closeBillDetail = () => {
+        setHover(false);
         setBillDetail(false);
     };
 
@@ -90,7 +94,7 @@ const AllBillByOfCCDV = () => {
         setBillRecevied(idBill1)
     }
     useEffect(() => {
-        dispatch(receivedBill(idBillRecevied)).then(() =>{
+        dispatch(receivedBill(idBillRecevied)).then(() => {
             dispatch(checkToken());
             dispatch(getAllBillByIdCCDV(idAccount));
             sendNotification(idBillRecevied);
@@ -138,7 +142,35 @@ const AllBillByOfCCDV = () => {
             console.log(e);
         }
     }
-
+    const sendReport = () => {
+        const report = {
+            date: new Date(),
+            send: {
+                id: objects.accountUser.id
+            },
+            receiver: {
+                id: objects.accountCCDV.id
+            },
+            content: $("[name='contentReport']").val(),
+            bill: {
+                id: objects.id
+            }
+        }
+        axios.post("http://localhost:8080/reports/sendReport", report, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+            .then(data => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'info',
+                    title: data.data
+                })
+            }).catch(e => {
+            console.log(e)
+        })
+    }
+    const [hover, setHover] = useState(false);
+    const clickReport = () => {
+        setHover(!hover)
+    }
     return (
         <>
             <style
@@ -426,10 +458,31 @@ const AllBillByOfCCDV = () => {
                                                     <span className="price">{objects.adminMessage}</span>
                                                 </td>
                                             </tr>
+                                            {hover ?
+                                                <>
+                                                    <tr>
+                                                        <td><span>Nội dung báo cáo </span>:</td>
+                                                        <td></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td colSpan={2}>
+                                                    <textarea required="không được để trống"
+                                                              placeholder=" Bạn muốn báo cáo về người CCDV điều gì "
+                                                              name="contentReport"
+                                                              maxLength={255} type="text" className="form-control"
+                                                    />
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                                : <></>}
                                             </tbody>
                                         </table>
                                     </div>
                                     <div className="modal-footer">
+                                        {hover?<> <button className="btn btn-success" onClick={sendReport}><span>Gửi Báo Cáo</span>
+                                        </button></>: <button className="btn btn-danger" onClick={clickReport}><span>Báo Cáo</span>
+                                        </button>}
                                         <button type="button" className="btn btn-default" onClick={closeBillDetail}>
                                             <span>Đóng</span>
                                         </button>

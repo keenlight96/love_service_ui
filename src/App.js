@@ -29,6 +29,9 @@ import Album from "./pages/home/Album";
 import Revenue from "./pages/profile/Revenue";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
+import EditSuppleAndPrice from "./pages/information/EditSuppleAndPrice";
+import RegisterSupply from "./components/common/RegisterSupply";
+import SupplyInfo from "./pages/information/SupplyInfo";
 import {useSelector} from "react-redux";
 
 function App() {
@@ -65,26 +68,9 @@ function App() {
                                 <Route path={"album"} element={storeUser && (storeUser.account.role.id == 3) ? <Album/> : <Test/>}></Route>
                                 <Route path={"revenue"} element={storeUser && (storeUser.account.role.id == 3) ? <Revenue/> : <Test/>}></Route>
 
-                                {/*<Route path={"summary"} element={<UserInfo/>}></Route>*/}
-                                {/*<Route path={"supplies"} element={<UserInfo/>}></Route>*/}
-                                {/*<Route path={"album"} element={<Album/>}></Route>*/}
-                                {/*<Route path={"revenue"} element={<Revenue/>}></Route>*/}
-                                {/*<Route path={"bills"} element={<Bills/>}></Route>*/}
-                                {/*<Route path={"topup"} element={<UserInfo/>}></Route>*/}
-                            </Route>
-                    {/*{*/}
-                    {/*    storeUser && storeUser.account.role.id == 3 ?*/}
-                    {/*        <Route path={"information"} element={<Information/>}>*/}
-                    {/*            <Route path={"info"} element={<UserInfo/>}></Route>*/}
-                    {/*            <Route path={"bills"} element={<Bills/>}></Route>*/}
-                    {/*            <Route path={"topup"} element={<UserInfo/>}></Route>*/}
-                    {/*            <Route path={"summary"} element={<UserInfo/>}></Route>*/}
-                    {/*            <Route path={"supplies"} element={<UserInfo/>}></Route>*/}
-                    {/*            <Route path={"album"} element={<Album/>}></Route>*/}
-                    {/*            <Route path={"revenue"} element={<Revenue/>}></Route>*/}
-                    {/*        </Route>*/}
-                    {/*        : <></>*/}
-                    {/*}*/}
+                        <Route path={"setSupply"} element={<RegisterSupply isRegister={false} />}></Route>
+                    </Route>
+
                 </Route>
                 {
                     storeUser && storeUser.account.role.id == 1 ?

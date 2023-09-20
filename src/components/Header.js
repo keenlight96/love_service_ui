@@ -21,7 +21,6 @@ const Header = () => {
     const navigate = useNavigate();
     const [isClicked, setIsClicked] = useState(false);
     const [isClicked2, setIsClicked2] = useState(false);
-    const [isClickedChangeStatus, setIsChangeStatus] = useState(true);
     const [statusCCDV, setStatusCCDV] = useState(true);
     const dispatch = useDispatch();
     const [user, setUser] = useState(() => {
@@ -94,7 +93,7 @@ const Header = () => {
                         }
                     }
                 })
-            
+
         }
 
     const swapStatusCCDV = () => {

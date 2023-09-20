@@ -11,7 +11,6 @@ const ChangePrice = () => {
                     price: ''
                 }
             }
-
                     onSubmit={(values) => {
                         const id = JSON.parse(localStorage.getItem("account")).id
                         axios.post('http://localhost:8080/userDetail/change-price/' + id, values)

@@ -9,6 +9,7 @@ import {Modal} from "react-bootstrap";
 const SidebarInformation = (current) => {
     const location = useLocation();
     const storeUser = useSelector(state => {
+        console.log(state)
         return state.user.user.current
     });
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -53,6 +54,10 @@ const SidebarInformation = (current) => {
                     break;
                 case "/information/album":
                     element = document.querySelector("#id2-3");
+                    element.classList.add("active");
+                    break;
+                case "/information/setSupply":
+                    element = document.querySelector("#id2-4");
                     element.classList.add("active");
                     break;
             }
@@ -238,6 +243,14 @@ const SidebarInformation = (current) => {
                                                     <div className="menu__setting--sub panel panel-default">
                                                         <div className="panel-heading">
                                                             <div className="  panel-title" id={"id2-3"}><i className="fas fa-book" /> Album ảnh
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                                <Link to={"/information/setSupply"}>
+                                                    <div className="menu__setting--sub panel panel-default">
+                                                        <div className="panel-heading">
+                                                            <div className="  panel-title" id={"id2-4"}><i className="fas fa-alien-monster" /> Danh sách dịch vụ
                                                             </div>
                                                         </div>
                                                     </div>
