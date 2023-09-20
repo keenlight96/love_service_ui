@@ -33,6 +33,14 @@ import axios from "axios";
              }
          });
      }
+
+     static async registerUserGoogle2(values) {
+         return await axios.post("http://localhost:8080/accounts/registerUserGoogle2", values, {
+             headers: {
+                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+             }
+         });
+     }
      static async checkProfile(id){
          return await axios.get("http://localhost:8080/accounts/checkProfileExists/"+id)
      }

@@ -34,13 +34,6 @@ const AllUserList =() =>{
     useEffect(() =>{
         dispatch(blockAccount(account)).then(() =>{
             dispatch(getAccountUserFilter(filter));
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Khóa thành công.',
-                showConfirmButton: false,
-                timer: 1500
-            });
         });
     },[account]);
 
@@ -51,13 +44,6 @@ const AllUserList =() =>{
     useEffect(() =>{
         dispatch(activeAccount(user)).then(() =>{
             dispatch(getAccountUserFilter(filter));
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Mở tài khoản thành công.',
-                showConfirmButton: false,
-                timer: 1500
-            });
         })
     },[user])
     const [currentPage, setCurrentPage] = useState(1);
@@ -148,17 +134,17 @@ const AllUserList =() =>{
                                                         </td>
                                                         <td>
                                                             {item.account.status.nameStatus === "block" &&
-                                                            <a href="#" className="status_btn" style={{backgroundColor :'red'}}>
+                                                            <a href="#" className="status_btn" style={{backgroundColor :'red',width:'127px'}}>
                                                                 Tài khoản bị khóa
                                                             </a>
                                                             }
                                                             {item.account.status.nameStatus === "active" &&
-                                                                <a href="#" className="status_btn" style={{backgroundColor :'#05d34e'}}>
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'#05d34e',width:'127px'}}>
                                                                     Đã khích hoạt
                                                                 </a>
                                                             }
                                                             {item.account.status.nameStatus === "register" &&
-                                                                <a href="#" className="status_btn" style={{backgroundColor :'orange'}}>
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'orange',width:'127px'}}>
                                                                     Chờ xác nhận
                                                                 </a>
                                                             }
