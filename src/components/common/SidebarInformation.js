@@ -46,6 +46,10 @@ const SidebarInformation = (current) => {
                     element = document.querySelector("#id2-3");
                     element.classList.add("active");
                     break;
+                case "/information/setSupply":
+                    element = document.querySelector("#id2-4");
+                    element.classList.add("active");
+                    break;
             }
         } catch (e) {}
     }, [location.pathname, storeUser])
@@ -159,6 +163,14 @@ const SidebarInformation = (current) => {
                                                     <div className="menu__setting--sub panel panel-default">
                                                         <div className="panel-heading">
                                                             <div className="  panel-title" id={"id2-3"}><i className="fas fa-book" /> Album ảnh
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                                <Link to={"/information/setSupply"}>
+                                                    <div className="menu__setting--sub panel panel-default">
+                                                        <div className="panel-heading">
+                                                            <div className="  panel-title" id={"id2-4"}><i className="fas fa-alien-monster" /> Danh sách dịch vụ
                                                             </div>
                                                         </div>
                                                     </div>

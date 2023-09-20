@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom';
 import React, {useEffect, useState} from "react";
-import "./modalCreateBill.css"
+import "../../custom-css/modalCreateBill.css"
 import axios from "axios";
 import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
-import {getAllBillIn7DayByCCDV} from "../../../service/BillsService";
+import {getAllBillIn7DayByCCDV} from "../../service/BillsService";
 import Swal from "sweetalert2";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
@@ -98,20 +98,21 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                     id: JSON.parse(localStorage.getItem("account")).id
                 }
             }
-            axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
+            axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+                .then(data => {
                 hide();
                 if (data.data != null) {
                     sendNotification(data.data.bill.id);
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
-                        title: data.data.message
+                        title: data.data
                     });
                 } else {
                     Swal.fire({
                         position: 'center',
                         icon: 'error',
-                        title: data.data.message
+                        title: data.data
                     });
                 }
             }).catch(
@@ -153,6 +154,11 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         let check = true;
         const temp = new Array(168).fill(0);
         const number = index + ((dayRend - currentTime.getDate()) * 24);
+        for(let i = 0; i < 24; i++){
+            if (currentTime.getHours() >= i) {
+                temp[i]=1;
+            }
+        }
         for (let i = 0; i < temp.length; i++) {
             if (temp[i] === 2) {
                 temp[i] = 0;

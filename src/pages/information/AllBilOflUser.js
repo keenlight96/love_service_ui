@@ -1,7 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect, useState } from "react";
+import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
 import {cancelBill, completes, getAllBillByIdUser} from "../../service/BillsService";
 import {checkToken} from "../../service/UserService";
+import axios from "axios";
+import Swal from "sweetalert2";
+import $ from "jquery";
 
 const AllBillOfUser = () => {
 
@@ -53,6 +56,7 @@ const AllBillOfUser = () => {
     };
 
     const closeBillDetail = () => {
+        setHover(false);
         setBillDetail(false);
     };
     const openModal = (object) => {
@@ -63,16 +67,16 @@ const AllBillOfUser = () => {
         setMessage("")
         setModal(false);
     };
-    const  complete = (idBill) =>{
+    const complete = (idBill) => {
         setBillComplete(idBill)
     }
-    useEffect(() =>{
-        dispatch(completes(idBillComplete)).then(() =>{
+    useEffect(() => {
+        dispatch(completes(idBillComplete)).then(() => {
             dispatch(checkToken());
             dispatch(getAllBillByIdUser(idAccount))
             sendNotification(idBillComplete);
         })
-    },[idBillComplete])
+    }, [idBillComplete])
 
     const confirmCancelBill = (idBill) => {
         setIdBill(idBill);
@@ -80,12 +84,12 @@ const AllBillOfUser = () => {
     };
 
     useEffect(() => {
-        dispatch(cancelBill({ idBill, idAccount, message })).then(() =>{
+        dispatch(cancelBill({idBill, idAccount, message})).then(() => {
             dispatch(checkToken());
             dispatch(getAllBillByIdUser(idAccount));
             sendNotification(idBill);
         });
-    },[idBill,idAccount,message]);
+    }, [idBill, idAccount, message]);
 
     const sendNotification = (billId) => {
         try {
@@ -102,108 +106,140 @@ const AllBillOfUser = () => {
         }
     }
 
+    const sendReport = () => {
+        const report = {
+            date: new Date(),
+            send: {
+                id: objects.accountUser.id
+            },
+            receiver: {
+                id: objects.accountCCDV.id
+            },
+            content: $("[name='contentReport']").val(),
+            bill: {
+                id: objects.id
+            }
+        }
+        axios.post("http://localhost:8080/reports/sendReport", report, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+            .then(data => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'info',
+                    title: data.data
+                })
+            }).catch(e => {
+            console.log(e)
+        })
+    }
+    const [hover, setHover] = useState(false);
+    const clickReport = () => {
+        setHover(!hover)
+    }
     return (
         <>
+            <h3>Lịch sử đơn thuê</h3>
+            <div className="transaction-table">
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Nick name người CCDV</th>
+                            <th>Địa chỉ</th>
+                            <th>Số giờ thuê</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày tạo đơn</th>
+                            <th>Tổng tiền</th>
+                            <th>Tình trạng</th>
+                            <th>Xem chi tiết</th>
+                            <th>Hoạt động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {currentBills.length > 0 &&
+                            currentBills.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.accountCCDV.nickname}</td>
+                                    <td>{item.address}</td>
+                                    <td>{item.hour}</td>
+                                    <td>{item.dateStart} - {item.dateEnd}</td>
+                                    <td>{item.dateCreate}</td>
+                                    <td>{item.total}</td>
+                                    <td>
+                                        {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
+                                    </td>
+                                    <td style={{width: '150px'}}>
+                                        <button className="action-button detail-button"
+                                                style={{width: 'auto'}} onClick={() => openBillDetail(item)}>
+                                            xem chi tiết
+                                        </button>
+                                    </td>
+                                    <td className="actions" style={{width: '200px'}}>
+                                        {item.status.nameStatus === "wait" && (
+                                            <>
+                                                <button className="action-button cancel-button"
+                                                        onClick={() => openModal(item)}>
+                                                    Hủy đơn
+                                                </button>
+                                            </>
+                                        )}
+                                        {item.status.nameStatus === "recevied" && (
+                                            <>
+                                                <button className="action-button cancel-button"
+                                                        onClick={() => openModal(item)}>
+                                                    Hủy đơn
+                                                </button>
+                                                <button className="action-button confirm-button"
+                                                        onClick={() => complete(item.id)}>
+                                                    Xác nhận
+                                                </button>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                        <h3>Lịch sử đơn thuê</h3>
-                        <div className="transaction-table">
-                            <div className="table-responsive">
-                                <table className="table table-striped table-bordered table-condensed table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Nick name người CCDV</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số giờ thuê</th>
-                                        <th>Ngày bắt đầu</th>
-                                        <th>Ngày tạo đơn</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Tình trạng</th>
-                                        <th>Xem chi tiết</th>
-                                        <th>Hoạt động</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {currentBills.length > 0 &&
-                                        currentBills.map((item) => (
-                                            <tr key={item.id}>
-                                                <td>{item.accountCCDV.nickname}</td>
-                                                <td>{item.address}</td>
-                                                <td>{item.hour}</td>
-                                                <td>{item.dateStart} - {item.dateEnd}</td>
-                                                <td>{item.dateCreate}</td>
-                                                <td>{item.total}</td>
-                                                <td>
-                                                    {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
-                                                </td>
-                                                <td style={{width: '150px'}}>
-                                                    <button className="action-button detail-button"
-                                                            style={{width: 'auto'}} onClick={() => openBillDetail(item)}>
-                                                        xem chi tiết
-                                                    </button>
-                                                </td>
-                                                <td className="actions" style={{width: '200px'}}>
-                                                    {item.status.nameStatus === "wait" && (
-                                                        <>
-                                                            <button className="action-button cancel-button" onClick={() => openModal(item)}>
-                                                                Hủy đơn
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                    {item.status.nameStatus === "recevied" && (
-                                                        <>
-                                                            <button className="action-button cancel-button" onClick={() => openModal(item)}>
-                                                                Hủy đơn
-                                                            </button>
-                                                            <button className="action-button confirm-button" onClick={() =>complete(item.id)}>
-                                                                Xác nhận
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        {/* Hiển thị các nút phân trang */}
-                        <div className="pagination-container">
-                            <ul className="pagination">
-                                {currentPage === 1 ? (
-                                    <li className="disabled">
-                                        <button>&lt; Trang trước</button>
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <button onClick={() => paginate(currentPage - 1)}>&lt; Trang trước</button>
-                                    </li>
-                                )}
-                                {currentPage < Math.ceil(allBillOfUser.length / billsPerPage) ? (
-                                    <li>
-                                        <button onClick={() => paginate(currentPage + 1)}>Trang tiếp theo &gt;</button>
-                                    </li>
-                                ) : (
-                                    <li className="disabled">
-                                        <button>Trang tiếp theo &gt;</button>
-                                    </li>
-                                )}
-                            </ul>
-                        </div>
-
-
-                        {allBillOfUser.length === 0 && (
-                            <div className="text-center mt-20 col-md-12"><span>Không có dữ liệu</span></div>
-                        )}
+            {/* Hiển thị các nút phân trang */}
+            <div className="pagination-container">
+                <ul className="pagination">
+                    {currentPage === 1 ? (
+                        <li className="disabled">
+                            <button>&lt; Trang trước</button>
+                        </li>
+                    ) : (
+                        <li>
+                            <button onClick={() => paginate(currentPage - 1)}>&lt; Trang trước</button>
+                        </li>
+                    )}
+                    {currentPage < Math.ceil(allBillOfUser.length / billsPerPage) ? (
+                        <li>
+                            <button onClick={() => paginate(currentPage + 1)}>Trang tiếp theo &gt;</button>
+                        </li>
+                    ) : (
+                        <li className="disabled">
+                            <button>Trang tiếp theo &gt;</button>
+                        </li>
+                    )}
+                </ul>
+            </div>
 
 
-            {objects && modal &&  (
+            {allBillOfUser.length === 0 && (
+                <div className="text-center mt-20 col-md-12"><span>Không có dữ liệu</span></div>
+            )}
+
+
+            {objects && modal && (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
                     <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
                     <div role="dialog">
                         <div className="fade modal-backdrop in"/>
-                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal" style={{display: "block"}}>
+                        <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"
+                             style={{display: "block"}}>
                             <div className="modal-dialog">
                                 <div className="modal-content" role="document">
                                     <div className="modal-header">
@@ -233,7 +269,8 @@ const AllBillOfUser = () => {
                                                     <span>Ngày tạo đơn </span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
+                                                    <span
+                                                        className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -246,8 +283,10 @@ const AllBillOfUser = () => {
                                             </tr>
                                             <tr>
                                                 <td colSpan={2}>
-                                                    <textarea required="không được để trống" placeholder="Lý do hủy" name="message"
-                                                              maxLength={255} type="text" className="form-control" defaultValue={""}  value={message}
+                                                    <textarea required="không được để trống" placeholder="Lý do hủy"
+                                                              name="message"
+                                                              maxLength={255} type="text" className="form-control"
+                                                              defaultValue={""} value={message}
                                                               onChange={(e) => setMessage(e.target.value)}/>
                                                 </td>
                                             </tr>
@@ -255,7 +294,8 @@ const AllBillOfUser = () => {
                                         </table>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="button" className="btn-fill btn btn-danger" onClick={() => confirmCancelBill(objects.id)}>
+                                        <button type="button" className="btn-fill btn btn-danger"
+                                                onClick={() => confirmCancelBill(objects.id)}>
                                             <span>Xác nhận</span>
                                         </button>
                                         <button type="button" className="btn btn-default" onClick={closeModal}>
@@ -376,19 +416,31 @@ const AllBillOfUser = () => {
                                                     <span className="price">{objects.adminMessage}</span>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <span> helo </span>:
-                                                </td>
-                                                <td>
-                                                    <span> helo2 </span>
-                                                </td>
-                                            </tr>
+                                            {hover ?
+                                                <>
+                                                    <tr>
+                                                        <td><span>Nội dung báo cáo </span>:</td>
+                                                        <td></td>
+                                                    </tr>
 
+                                                    <tr>
+                                                        <td colSpan={2}>
+                                                    <textarea required="không được để trống"
+                                                              placeholder=" Bạn muốn báo cáo về người CCDV điều gì "
+                                                              name="contentReport"
+                                                              maxLength={255} type="text" className="form-control"
+                                                    />
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                                : <></>}
                                             </tbody>
                                         </table>
                                     </div>
                                     <div className="modal-footer">
+                                        {hover? <button className="btn btn-success" onClick={sendReport}><span>Gửi Báo Cáo</span>
+                                        </button>: <button className="btn btn-danger" onClick={clickReport}><span>Báo Cáo</span>
+                                        </button>}
                                         <button type="button" className="btn btn-default" onClick={closeBillDetail}>
                                             <span>Đóng</span>
                                         </button>

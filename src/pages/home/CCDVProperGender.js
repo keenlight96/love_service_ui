@@ -14,7 +14,7 @@ const CCDVProperGender = () => {
             </header>
             <div className="card-player row">
                 {properCCDV && properCCDV.map((item, key) => (
-                    <Link to={"/userDetail/" + item.userProfile.id}>
+                    <Link to={"/profile/" + item.userProfile.account.username}>
                         <div className="col-md-3" key={key}>
                             <div className="player-information-card-wrap">
                                 <div className="player-avatar">

@@ -50,5 +50,13 @@ import axios from "axios";
      static async getListSupply(){
          return await axios.get("http://localhost:8080/supplies/getSupplyList")
      }
+     // edit supply bi id user profile
+     static async setNewListSupply(id,list){
+         return await  axios.post("http://localhost:8080/supplies/setSupply?id="+id,list)
+     }
+     static async setNewPrice(name,price){
+         return await  axios.get("http://localhost:8080/userDetail/setPrice?username="+name+"&price="+price)
+     }
+
 }
 export default SignupCCDV;
