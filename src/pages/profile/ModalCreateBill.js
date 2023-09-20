@@ -125,8 +125,9 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                     console.log(e);
                 }
             )
+            hide()
+            setMessage(message + 1);
         }
-        setMessage(message + 1);
     }
 
     const fillData = (data) => {
