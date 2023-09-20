@@ -1,9 +1,8 @@
-import SidebarSupplies from "../home/SidebarSupplies";
-import React, {useEffect} from "react";
-import RegisterSupply from "../../components/common/RegisterSupply";
-import SidebarInformation from "../../components/common/SidebarInformation";
+import React, {useEffect, useState} from "react";
+import UploadAvatar from "../profile/UploadAvatar";
 
 const UserInfo = () => {
+
     return (
         <>
             <div className="row flowaccount">
@@ -18,26 +17,34 @@ const UserInfo = () => {
                 </div>
             </div>
             <div className="row">
-                <div className="col-md-6 col-sm-12 col-xs-12 personalinfo"><h3>Thông tin cá nhân</h3>
-                    <div className="d-flex img-avatar"><img src="../resources/raw/avatar6.png" className alt="avatar" sizes="sm" />
-                        <div className="cropimg-avatar">
-                            <button type="button"><span> Thay Đổi<p>JPG, GIF or PNG, &lt;5 MB. </p></span>
-                            </button>
-                        </div>
-                    </div>
+                <div className="col-md-6 col-sm-12 col-xs-12 personalinfo">
+                    <h3>Thông tin cá nhân</h3>
+                    <UploadAvatar/>
+
                     <form className="from-userinfo">
-                        <div className="fieldGroup "><p className="control-label">Họ và tên</p><input type="text" name="name" placeholder maxLength={5000} autoComplete="false" defaultValue="keenlight" />
+                        <div className="fieldGroup ">
+                            <p className="control-label">Họ và tên</p>
+                            <input type="text" name="name"
+                                   placeholder
+                                   maxLength={5000}
+                                   autoComplete="false"
+                                   defaultValue="keenlight"/>
                         </div>
-                        <div className="fieldGroup "><p className="control-label">Biệt danh</p><input type="text" name="nickName" placeholder maxLength={5000} autoComplete="false" defaultValue="keenlight" />
+                        <div className="fieldGroup "><p className="control-label">Biệt danh</p><input type="text"
+                                                                                                      name="nickName"
+                                                                                                      placeholder
+                                                                                                      maxLength={5000}
+                                                                                                      autoComplete="false"
+                                                                                                      defaultValue="keenlight"/>
                         </div>
                         <p className="control-label">Ngày sinh</p>
                         <div className="datefield">
                             <div className="react-datepicker-wrapper">
                                 <div className="react-datepicker__input-container">
-                                    <button className="example-custom-input" type="button" />
+                                    <button className="example-custom-input" type="button"/>
                                 </div>
                             </div>
-                            <div />
+                            <div/>
                         </div>
                         <p className="control-label">Ngôn ngữ</p><select name="language">
                         <option disabled>--- Chọn ngôn ngữ ---</option>
@@ -350,8 +357,12 @@ const UserInfo = () => {
                         <option value="5b99f9e35180d13ea22a983c">Khác</option>
                     </select>
                         <p className="control-label">Giới tính</p>
-                        <div className="d-flex"><label className="gender--radio"><input name="gender" type="radio" defaultValue="male" defaultChecked="checked" />Nam<span /></label><label className="gender--radio"><input name="gender" type="radio" defaultValue="female" />Nữ<span /></label></div>
-                        <hr />
+                        <div className="d-flex"><label className="gender--radio"><input name="gender" type="radio"
+                                                                                        defaultValue="male"
+                                                                                        defaultChecked="checked"/>Nam<span/></label><label
+                            className="gender--radio"><input name="gender" type="radio" defaultValue="female"/>Nữ<span/></label>
+                        </div>
+                        <hr/>
                         <button type="submit" className="btn-update">Cập nhật</button>
                     </form>
                 </div>

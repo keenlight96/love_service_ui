@@ -77,7 +77,8 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                                 imageAlbum && imageAlbum.map((item, key) => {
                                     if (key < 13) {
                                         return (
-                                            <div className="col-md-3" style={{padding:"0px 5px"}}>
+                                            <div className="col-md-3" style={{padding:"0px 5px", position: "relative",
+                                                overflow: 'hidden'}}>
                                                 <a style={{display: 'block'}} key={key} onClick={() => toggleModal()}>
                                                     <img style={{
                                                         width: "100%",
@@ -86,6 +87,7 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                                                         borderRadius: "10px"
                                                     }}
                                                          src={item.img} className alt=""/>
+                                                    <span onClick={() => toggleModal()}></span>
                                                 </a>
                                             </div>
                                         )
@@ -93,15 +95,33 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                                     if (key == 13) {
                                         return (
                                             <>
-                                                <div className="col-md-3" style={{padding:"0px 5px"}}>
+                                                <div className="col-md-3" style={{padding: "0px 5px"}}>
                                                     <a onClick={() => toggleModal()}>
 
-                                                            <div className="fadeDiv" style={{fontFamily: "Arial"}}>
-                                                                <img style={{width: "100%", height: "250px", marginTop: "10px", borderRadius: "10px", zIndex: '-1', position: "relative"}} src={item.img} className alt=""/>
-                                                                <div style={{width: "100%", height: "250px", marginTop: "-250px", padding:'50% 40%', borderRadius: "10px", position: "relative", background:'rgba(0,0,0,0.6)', zIndex:'1', color:'white', fontSize:'30px'}}>
-                                                                    +{imageAlbum.length - 13}
-                                                                </div>
+                                                        <div className="fadeDiv" style={{fontFamily: "Arial"}}>
+                                                            <img style={{
+                                                                width: "100%",
+                                                                height: "250px",
+                                                                marginTop: "10px",
+                                                                borderRadius: "10px",
+                                                                zIndex: '-1',
+                                                                position: "relative"
+                                                            }} src={item.img} className alt=""/>
+                                                            <div style={{
+                                                                width: "100%",
+                                                                height: "250px",
+                                                                marginTop: "-250px",
+                                                                padding: '50% 40%',
+                                                                borderRadius: "10px",
+                                                                position: "relative",
+                                                                background: 'rgba(0,0,0,0.6)',
+                                                                zIndex: '1',
+                                                                color: 'white',
+                                                                fontSize: '30px'
+                                                            }}>
+                                                                +{imageAlbum.length - 13}
                                                             </div>
+                                                        </div>
 
                                                     </a>
                                                     <div className="clearfix"/>
@@ -122,19 +142,6 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                              }}>
                             <div className="modal-dialog">
                                 <div className="modal-content">
-                                    {/*/!* Modal Header *!/*/}
-                                    {/*<div className="modal-header">*/}
-                                    {/*    <h4 className="modal-title">Modal Heading</h4>*/}
-                                    {/*    <button type="button" className="close" onClick={() => {toggleModal()}}>×</button>*/}
-                                    {/*</div>*/}
-                                    {/*/!* Modal body *!/*/}
-                                    {/*<div className="modal-body">*/}
-                                    {/*    Modal body..*/}
-                                    {/*</div>*/}
-                                    {/*/!* Modal footer *!/*/}
-                                    {/*<div className="modal-footer">*/}
-                                    {/*    <button type="button" className="btn btn-danger">Close</button>*/}
-                                    {/*</div>*/}
                                     <>
                                         <meta name="viewport" content="width=device-width, initial-scale=1"/>
                                         <style
@@ -147,55 +154,18 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                                                          alignItems: "center",
                                                          justifyContent: "center",
                                                          margin: "auto",
-                                                         height: '500px'
+                                                         height: '100%'
                                                      }} key={key}>
                                                     <img src={item.img}
-                                                         style={{height: '500px', width: '360px'}}/>
+                                                         style={{height: '100%', width: '360px'}}/>
                                                 </div>
                                             ))}
-                                            {/*<div className="mySlides-showImages"*/}
-                                            {/*     style={{display: "flex", alignItems: "center", justifyContent: "center", margin: "auto", height: '600px'}}>*/}
-                                            {/*    <img src="https://www.ldg.com.vn/media/uploads/uploads/22013357-hinh-anh-gai-xinh-7-edited.jpg"*/}
-                                            {/*         style={{height: '600px', width: 'initial'}}/>*/}
-                                            {/*</div>*/}
                                             <a className="prev" onClick={() => {
                                                 plusSlides(-1)
                                             }}>❮</a>
                                             <a className="next" onClick={() => {
                                                 plusSlides(1)
                                             }}>❯</a>
-                                            {/*<div className="row-showImages">*/}
-                                            {/*    <div className="column-showImages">*/}
-                                            {/*        <img className="demo-showImages cursor-showImages"*/}
-                                            {/*             src="https://www.ldg.com.vn/media/uploads/uploads/22013357-hinh-anh-gai-xinh-7-edited.jpg"*/}
-                                            {/*             style={{width: '100%'}} onClick={() => {*/}
-                                            {/*            currentSlide(1)*/}
-                                            {/*        }} alt="The Woods"/>*/}
-                                            {/*    </div>*/}
-                                            {/*    <div className="column-showImages">*/}
-                                            {/*        <img className="demo-showImages cursor-showImages"*/}
-                                            {/*             src="https://gaixinhbikini.com/wp-content/uploads/2023/02/hinh-co-gai-xinh-dep-005.jpg"*/}
-                                            {/*             style={{width: '100%'}} onClick={() => {*/}
-                                            {/*            currentSlide(2)*/}
-                                            {/*        }} alt="Cinque Terre"/>*/}
-                                            {/*    </div>*/}
-                                            {/*    <div className="column-showImages">*/}
-                                            {/*        <img className="demo-showImages cursor-showImages"*/}
-                                            {/*             src="https://boxgaixinh.net/wp-content/uploads/2022/10/1-40.jpg" style={{width: '100%'}}*/}
-                                            {/*             onClick={() => {*/}
-                                            {/*                 currentSlide(3)*/}
-                                            {/*             }}*/}
-                                            {/*             alt="Mountains and fjords"/>*/}
-                                            {/*    </div>*/}
-                                            {/*    <div className="column-showImages">*/}
-                                            {/*        <img className="demo-showImages cursor-showImages"*/}
-                                            {/*             src="https://gaixinhbikini.com/wp-content/uploads/2023/03/gai-mac-vay-sexy-24.jpg"*/}
-                                            {/*             style={{width: '100%'}} onClick={() => {*/}
-                                            {/*            currentSlide(4)*/}
-                                            {/*        }}*/}
-                                            {/*             alt="Northern Lights"/>*/}
-                                            {/*    </div>*/}
-                                            {/*</div>*/}
                                         </div>
                                     </>
                                 </div>
