@@ -247,7 +247,7 @@ const Chat = () => {
                                                         </div>
                                                     </div>
                                                     <div className="media-body" style={{maxWidth: "180px"}}>
-                                                        <p className="name-player-review">{item.username}</p>
+                                                        <p className="name-player-review">{item.nickname}</p>
                                                         <p style={item.lastMessage && storeUser && (item.lastMessage.receiver.id == storeUser.account.id) && (item.lastMessage.isRead == false) ?
                                                             {fontWeight: "bold"} : {fontWeight: "normal"}}>{item.lastMessage && item.lastMessage.message}</p>
                                                         <span></span>
@@ -290,7 +290,7 @@ const Chat = () => {
                                                 <div className="media-body media-middle">
                                                     {
                                                         activeReceiver.id ?
-                                                        <a target="_blank" className="name-player-review" href={`/profile/${activeReceiver.username}`}>{activeReceiver.nickname}</a>
+                                                        <a target="_blank" className="name-player-review" href={`/profile/${activeReceiver.username}`}>{activeReceiver.nickname} - {activeReceiver.username}</a>
                                                         :
                                                         <div></div>
                                                     }
