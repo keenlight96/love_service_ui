@@ -25,6 +25,7 @@ import AllCCDVList from "./pages/admin/AllCCDVList";
 import AccountReport from "./pages/admin/AccountReport";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
+import SupplyInfo from "./pages/information/SupplyInfo";
 
 function App() {
     return (
@@ -52,7 +53,7 @@ function App() {
                         <Route path={"bills"} element={<Bills/>}></Route>
                         <Route path={"topup"} element={<UserInfo/>}></Route>
                         <Route path={"summary"} element={<UserInfo/>}></Route>
-                        <Route path={"supplies"} element={<UserInfo/>}></Route>
+                        <Route path={"supplies"} element={<SupplyInfo/>}></Route>
                         <Route path={"album"} element={<UserInfo/>}></Route>
 
                     </Route>
