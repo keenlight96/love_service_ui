@@ -116,13 +116,13 @@ function Revenue() {
                      }}/>
             )}
 
-                {chartData && chartData.datasets && (
-                    <Line data={chartData} options={{
-                        responsive: true,
-                        plugins: {legend: {position: "top"}},
-                        title: {display: true, text: "Revenue"},
-                    }}/>
-                )}
+                {/*{chartData && chartData.datasets && (*/}
+                {/*    <Line data={chartData} options={{*/}
+                {/*        responsive: true,*/}
+                {/*        plugins: {legend: {position: "top"}},*/}
+                {/*        title: {display: true, text: "Revenue"},*/}
+                {/*    }}/>*/}
+                {/*)}*/}
 
             </div>
             {/*{modal && (*/}

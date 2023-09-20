@@ -103,7 +103,9 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}}).then(data => {
                 hide();
                 if (data.data != null) {
-                    sendNotification(data.data.bill.id);
+                    if (data.data.bill != null) {
+                        sendNotification(data.data.bill.id);
+                    }
                     dispatch(checkToken());
                     Swal.fire({
                         position: 'center',

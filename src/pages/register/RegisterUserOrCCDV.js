@@ -81,7 +81,7 @@ function RegisterUserOrCCDV() {
                                     <div id={"signInDiv"}></div>
 
                                     <div className={"row"}>
-                                        <div className={"col-md-6"} onClick={() => {registerUser()}}>
+                                        <div className={"col-md-6"} onClick={() => {registerUser().then(r => {})}}>
                                             <button className="create-new" onClick={() =>{navigate("/registerUser")}} style={{marginTop:'25px', background:'rgb(240, 86, 74)',borderRadius:'10px',color:'rgb(255, 255, 255)',width:'100%',border:'none',height:'40px', fontSize:'15px',fontWeight:'50%'}}>
                                                 <span>Đăng ký người dùng</span>
                                             </button>

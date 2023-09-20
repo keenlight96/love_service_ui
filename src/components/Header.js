@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Outlet} from "react-router";
+import {Outlet, useNavigate} from "react-router";
 import $ from "jquery";
 import {Link} from "react-router-dom";
 import LoginService from "../service/custom/login";
@@ -18,6 +18,7 @@ import {setFocusBill, setFocusBillId} from "../service/BillsService";
 import customAxios from "../service/api";
 
 const Header = () => {
+    const navigate = useNavigate();
     const [isClicked, setIsClicked] = useState(false);
     const [isClicked2, setIsClicked2] = useState(false);
     const [isClickedChangeStatus, setIsChangeStatus] = useState(true);
@@ -115,6 +116,7 @@ const Header = () => {
 
     const logout = () => {
         LoginService.logout().then(r => {
+            navigate("/login");
         });
         try {
             setUser(JSON.parse(localStorage.getItem("account")));

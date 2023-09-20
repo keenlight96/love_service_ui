@@ -29,8 +29,13 @@ import Album from "./pages/home/Album";
 import Revenue from "./pages/profile/Revenue";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
+import {useSelector} from "react-redux";
 
 function App() {
+    const storeUser = useSelector(state => {
+        console.log(state.user.user.current)
+        return state.user.user.current;
+    })
     return (
         <>
             <Routes>
@@ -51,28 +56,50 @@ function App() {
                     <Route path={"profile/:username"} element={<Detail/>}></Route>
 
                     {/*Page Information*/}
-                    <Route path={"information"} element={<Information/>}>
-                        <Route path={"info"} element={<UserInfo/>}></Route>
-                        <Route path={"bills"} element={<Bills/>}></Route>
-                        <Route path={"topup"} element={<UserInfo/>}></Route>
-                        <Route path={"summary"} element={<UserInfo/>}></Route>
-                        <Route path={"supplies"} element={<UserInfo/>}></Route>
-                        <Route path={"album"} element={<Album/>}></Route>
-                        <Route path={"revenue"} element={<Revenue/>}></Route>
+                            <Route path={"information"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <Information/> : <Test/> }>
+                                <Route path={"info"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
+                                <Route path={"bills"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <Bills/> : <Test/>}></Route>
+                                <Route path={"topup"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
+                                <Route path={"summary"} element={storeUser && (storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
+                                <Route path={"supplies"} element={storeUser && (storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
+                                <Route path={"album"} element={storeUser && (storeUser.account.role.id == 3) ? <Album/> : <Test/>}></Route>
+                                <Route path={"revenue"} element={storeUser && (storeUser.account.role.id == 3) ? <Revenue/> : <Test/>}></Route>
 
-                    </Route>
-
+                                {/*<Route path={"summary"} element={<UserInfo/>}></Route>*/}
+                                {/*<Route path={"supplies"} element={<UserInfo/>}></Route>*/}
+                                {/*<Route path={"album"} element={<Album/>}></Route>*/}
+                                {/*<Route path={"revenue"} element={<Revenue/>}></Route>*/}
+                                {/*<Route path={"bills"} element={<Bills/>}></Route>*/}
+                                {/*<Route path={"topup"} element={<UserInfo/>}></Route>*/}
+                            </Route>
+                    {/*{*/}
+                    {/*    storeUser && storeUser.account.role.id == 3 ?*/}
+                    {/*        <Route path={"information"} element={<Information/>}>*/}
+                    {/*            <Route path={"info"} element={<UserInfo/>}></Route>*/}
+                    {/*            <Route path={"bills"} element={<Bills/>}></Route>*/}
+                    {/*            <Route path={"topup"} element={<UserInfo/>}></Route>*/}
+                    {/*            <Route path={"summary"} element={<UserInfo/>}></Route>*/}
+                    {/*            <Route path={"supplies"} element={<UserInfo/>}></Route>*/}
+                    {/*            <Route path={"album"} element={<Album/>}></Route>*/}
+                    {/*            <Route path={"revenue"} element={<Revenue/>}></Route>*/}
+                    {/*        </Route>*/}
+                    {/*        : <></>*/}
+                    {/*}*/}
                 </Route>
-                <Route path="/" element={<LayoutAdmin/>}>
-                    <Route path="/homeAdmin"  element={<HomeAdmin />}>
-                        <Route path={"allBills"} element={<ListBill/>}></Route>
-                        <Route path={"NewUser"} element={<NewUserList/>}></Route>
-                        <Route path={"allUser"} element={<AllUserList/>}></Route>
-                        <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
-                        <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>
-                        <Route path={"allListReport"} element={<AccountReport/>}></Route>
-                    </Route>
-                </Route>
+                {
+                    storeUser && storeUser.account.role.id == 1 ?
+                        <Route path="/" element={<LayoutAdmin/>}>
+                            <Route path="/homeAdmin"  element={<HomeAdmin />}>
+                                <Route path={"allBills"} element={<ListBill/>}></Route>
+                                <Route path={"NewUser"} element={<NewUserList/>}></Route>
+                                <Route path={"allUser"} element={<AllUserList/>}></Route>
+                                <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
+                                <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>
+                                <Route path={"allListReport"} element={<AccountReport/>}></Route>
+                            </Route>
+                        </Route>
+                        : <></>
+                }
             </Routes>
         </>
     );
