@@ -203,12 +203,6 @@ const SignupForm = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div>
-                                                <div className="fieldGroup"  style={{ fontSize: '14px', color:'red',height:'70px'}}>
-                                                    <Field type="text" name="nickName" placeholder="Tên người dùng" maxLength="5000" autoComplete="false" style={{textAlign: 'center', borderRadius: '7px', padding: '7px', margin: '10px', outline: 'none'}}/>
-                                                    <ErrorMessage name="nickName" component="div" className="error"/>
-                                                </div>
-                                            </div>
                                             <div className="recaptcha">
                                                 {/* Đoạn mã reCAPTCHA */}
                                             </div>
@@ -220,11 +214,9 @@ const SignupForm = () => {
                                     )}
                                 </Formik>
                                 <div className="change-link" style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <a className="create-new">
+                                    <a className="create-new" href={"/login"}>
                                         <p>
-                                            <Link to={login}>
                                             <span>Đăng nhập</span>
-                                            </Link>
                                         </p>
                                     </a>
                                     {/*<a className="create-new">*/}

@@ -138,7 +138,7 @@ const RegisterProfileGoogle =()=> {
                                                     nickName: accountGoogle.name,
                                                     avatar: accountGoogle.picture,
                                                 }
-                                                SignupCCDV.registerUserGoogle(account)
+                                                SignupCCDV.registerUserGoogle2(account)
                                                     .then(async (response) => {
                                                         console.log(response)
                                                         if (response.data.validStatus === 'SUCCESSFULL') {
