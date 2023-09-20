@@ -32,13 +32,6 @@ const AllCCDVList = () => {
     useEffect(() => {
         dispatch(blockAccount(account)).then(() => {
             dispatch(getAccountCCDVFilter(filter));
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Khóa tài khoản thành công.',
-                showConfirmButton: false,
-                timer: 1500
-            });
         })
     }, [account]);
 
@@ -49,13 +42,6 @@ const AllCCDVList = () => {
     useEffect(() => {
         dispatch(activeAccount(username)).then(() => {
             dispatch(getAccountCCDVFilter(filter));
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Mở tài khoản thành công.',
-                showConfirmButton: false,
-                timer: 1500
-            });
         })
     }, [username])
     const [currentPage, setCurrentPage] = useState(1);
