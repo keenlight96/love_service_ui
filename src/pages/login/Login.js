@@ -28,20 +28,20 @@ function Login() {
     const [message, setMessage] = useState("")
     const signUpSchema = yup.object().shape({
         username: yup.string()
-            .min(4, "tài khoản phải lớn 4 ký tự!")
+            .min(4, "Tài khoản phải lớn 4 ký tự!")
             .max(50, "Too Long!")
-            .required("tài khoản không được để trống")
+            .required("Tài khoản không được để trống")
             .matches(
                 /^[a-z0-9]*$/,
-                "tài khoản không được chứa ký tự đặc biệt, và được viết hoa"
+                "Tài khoản không được chứa ký tự đặc biệt và chữ hoa"
             ),
         password: yup.string()
-            .min(4, "mật khẩu dài ít nhất 5 ký tự trở lên")
+            .min(4, "Mật khẩu dài ít nhất 5 ký tự trở lên")
             .max(50, "Too Long!")
             .required("mật khẩu không được để trống")
             .matches(
                 /^[a-zA-Z0-9]*$/,
-                "mật khẩu không được chứa ký tự đặc biệt"
+                "Mật khẩu không được chứa ký tự đặc biệt"
             ),
     })
     const handleLogin = async (values) => {
@@ -49,9 +49,9 @@ function Login() {
             const response = await LoginService.login(values);
             const data = response.data;
             console.log(data.isActive);
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("account", JSON.stringify(data));
-            if ((data.status.nameStatus === "active"||data.status.nameStatus === "inActive")&& data.isActive) {
+            if (data.status.nameStatus === "active" && data.isActive) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("account", JSON.stringify(data));
                 dispatch(checkToken());
                 dispatch(getAllNotifications(data.id));
                 if (data.role.nameRole ==="ROLE_ADMIN") {
@@ -172,36 +172,13 @@ function Login() {
                 <div className="main-singin-box">
                     <div className="wrapper">
                         <div className="container">
-
-                            <div className="leftside">
-                                <div className="air-balloon one">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon two">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon three">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon foure">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                            </div>
-
                             <div className="row login-page">
                                 <div className="col-md-7 hidden-sm hidden-xs image-login">
                                     <img style={{height: '100%', borderRadius: '8px', boxShadow: '5px 5px 7px 0'}}
                                          src="/resources/img/imgbackground.jpg" className=""
                                          alt="PD"/>
                                 </div>
-                                <div className="content-main" style={{
-                                    width: '450px',
-                                    border: '1px',
-                                    borderRadius: '8px',
-                                    backgroundColor: '#fff',
-                                    padding: '20px',
-                                    boxShadow: '5px 5px 7px 0'
-                                }}>
+                                <div className="content-main" style={{width: '450px', border: '1px', borderRadius: '8px', backgroundColor: '#fff', padding: '20px', boxShadow: '5px 5px 7px 0'}}>
                                     <h3 style={{color: '#f0564a'}}>Nơi kết nối yêu thương</h3>
                                     <Formik
                                         initialValues={{
@@ -212,32 +189,30 @@ function Login() {
                                         validationSchema={signUpSchema}
                                     >
                                         <Form>
-                                            <div className="fieldGroup">
-                                                <Field type="text" name="username"
-                                                       placeholder="Tên đăng nhập hoặc email"
-                                                       maxLength={18} autoComplete="false"/>
-                                                <ErrorMessage name={'username'}/>
-                                                {
-                                                    message && <p style={{textAlign: 'center'}}>{message}</p>
-                                                }
+                                            <div className="fieldGroup" style={{ height: '80px', fontSize: '14px', color: 'red' }}>
+                                                <label htmlFor="username" style={{color:'black'}}>Tên đăng nhập: </label>
+                                                <Field type="text" id="username" name="username" maxLength={18} autoComplete="false" />
+                                                <ErrorMessage name="username" />
+                                                {message && <p style={{ textAlign: 'center' }}>{message}</p>}
                                             </div>
-                                            <div className="fieldGroup">
-                                                <Field type="password" name="password" placeholder="Mật khẩu"
-                                                       maxLength={50} autoComplete="false"/>
-                                                <ErrorMessage name={'password'}/>
+                                            <div className="fieldGroup" style={{ height: '80px', fontSize: '14px', color: 'red' }}>
+                                                <label htmlFor="password" style={{color:'black'}}>Mật khẩu:</label>
+                                                <Field type="password" id="password" name="password" maxLength={50} autoComplete="false" />
+                                                <ErrorMessage name="password" />
                                             </div>
-                                            <p className="forgot-password">
-                                                <a href="src/pages/login/Login#"><span>Quên mật khẩu?</span></a>
-                                            </p>
+                                            {/*<p className="forgot-password">*/}
+                                            {/*    <a href="src/pages/login/Login#"><span>Quên mật khẩu?</span></a>*/}
+                                            {/*</p>*/}
                                             <button type="submit"><span>Đăng nhập</span></button>
                                         </Form>
+
                                     </Formik>
                                     {/*<button className="btn btn-default">*/}
                                     {/*    <i className="fab fa-facebook"></i>*/}
                                     {/*    <span>Đăng nhập bằng Facebook</span>*/}
                                     {/*</button>*/}
 
-                                    <div id={"signInDiv"}></div>
+                                    <div style={{marginTop: '2px', borderRadius:'10px'}} id={"signInDiv"}></div>
 
                                     <div className={"row"}>
                                         <div className={"col-md-6"}>
@@ -252,21 +227,7 @@ function Login() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="rightside">
-                                <div className="air-balloon one">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon two">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon three">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon foure">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
                             </div>
                         </div>
                     </div>

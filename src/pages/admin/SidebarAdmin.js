@@ -131,12 +131,12 @@ const SidebarAdmin  = () => {
                                     <img src="/template_adminimg/menu-icon/11.svg" alt=""/>
                                 </div>
                                 <div className="nav_title">
-                                    <span>Quyền</span>
+                                    <span>Vai trò</span>
                                 </div>
                             </a>
                             <ul className="mm-collapse">
                                 <li>
-                                    <a href="" id={"id1-8"}>Cài đặt quyền</a>
+                                    <a href="" id={"id1-8"}>Cài đặt vai trò</a>
                                 </li>
                             </ul>
                         </li>

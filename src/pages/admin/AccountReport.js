@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import DetailCCDV from "./DetailCCDV";
 import {useDispatch, useSelector} from "react-redux";
-import {getListReport} from "../../service/AdminService";
+import {activeAccount, blockAccount, getListReport} from "../../service/AdminService";
 
 const AccountReport =() =>{
     const dispatch = useDispatch();
@@ -31,6 +31,26 @@ const AccountReport =() =>{
 
     const currenAllListReport = reportList.slice(indexOfFirstAlLCCDV, indexOfLastAllCCDV);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const [idAccount, setIdAccount] = useState({});
+    const [username, setUsername] = useState('');
+    const activeAc = (str) => {
+        setUsername(str);
+    };
+    const blockAc = (object) => {
+        setIdAccount(object);
+        console.log(idAccount)
+    };
+    useEffect(() =>{
+        dispatch(blockAccount(idAccount)).then(() =>{
+            dispatch(getListReport(userParam));
+        })
+    },[idAccount])
+    useEffect(() =>{
+        dispatch(activeAccount(username)).then(() =>{
+            dispatch(getListReport(userParam));
+        })
+    },[username]);
     return(
         <>
             <link rel="stylesheet" href="/template_admin/css/css_sidebar.css"/>
@@ -72,13 +92,13 @@ const AccountReport =() =>{
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Tài khoản người tố cáo</th>
-                                                    <th scope="col">Tài khoản người bị tố cáo</th>
-                                                    <th scope="col">Quyền người bị tố cáo</th>
-                                                    <th scope="col">Nội dung tố cáo</th>
-                                                    <th scope="col">Trạng thái tài khoản người bị tố cáo</th>
-                                                    <th scope="col">Hoạt động</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản người tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản người bị tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Quyền người bị tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Nội dung tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái tài khoản người bị tố cáo</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -105,7 +125,12 @@ const AccountReport =() =>{
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="#">{item.receiver.role.nameRole}</a>
+                                                            {item.receiver.role.nameRole === "ROLE_CCDV" &&
+                                                            <a href="#">Người CCDV</a>
+                                                            }
+                                                            {item.receiver.role.nameRole === "ROLE_USER" &&
+                                                                <a href="#">Người dùng</a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             <div >
@@ -113,49 +138,45 @@ const AccountReport =() =>{
                                                             </div>
                                                         </td>
                                                         <td>
+                                                            {item.receiver.status.nameStatus === "active" &&
                                                             <a href="#" className="status_btn">
-                                                                {item.receiver.status.nameStatus}
+                                                                đã kích hoạt
                                                             </a>
+                                                            }
+                                                            {item.receiver.status.nameStatus === "block" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor : 'red'}}>
+                                                                    đã bị khóa
+                                                                </a>
+                                                            }
+                                                            {item.receiver.status.nameStatus === "register" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor : 'orange'}}>
+                                                                    chờ xác nhận
+                                                                </a>
+                                                            }
                                                         </td>
-                                                        {/*<td>*/}
-                                                        {/*    {(item.account.status.nameStatus === "active" || item.account.status.nameStatus === "emailverify") && (*/}
-                                                        {/*        <>*/}
-                                                        {/*            <div className="action_btns d-flex"*/}
-                                                        {/*                 >*/}
-                                                        {/*                <a href="#" className="action_btn">*/}
-                                                        {/*                    {" "}*/}
-                                                        {/*                    <i className="ti-unlock"/>*/}
-                                                        {/*                </a>*/}
-                                                        {/*            </div>*/}
-                                                        {/*        </>*/}
-                                                        {/*    )}*/}
-                                                        {/*    {item.account.status.nameStatus === "register" && (*/}
-                                                        {/*        <>*/}
-                                                        {/*            <div className="action_btns d-flex">*/}
-                                                        {/*                <a href="#" className="action_btn">*/}
-                                                        {/*                    {" "}*/}
-                                                        {/*                    <i className="ti-unlock"/>*/}
-                                                        {/*                </a>*/}
-                                                        {/*                <button href="#" className="status_btn"*/}
-                                                        {/*                        style={{marginLeft: '10px'}}>*/}
-                                                        {/*                    Active*/}
-                                                        {/*                </button>*/}
+                                                        <td>
+                                                            {item.receiver.status.nameStatus === "active"   &&(
+                                                                <>
+                                                                    <div className="action_btns d-flex">
+                                                                        <a href="#" className="action_btn" onClick={() => blockAc(item.receiver.id)}>
+                                                                            {" "}
+                                                                            <i className="ti-unlock" />
+                                                                        </a>
+                                                                    </div>
+                                                                </>
+                                                            )}
 
-                                                        {/*            </div>*/}
-                                                        {/*        </>*/}
-                                                        {/*    )}*/}
-
-                                                        {/*    {item.account.status.nameStatus === "block" && (*/}
-                                                        {/*        <>*/}
-                                                        {/*            <div className="action_btns d-flex">*/}
-                                                        {/*                <a href="#" className="action_btn">*/}
-                                                        {/*                    {" "}*/}
-                                                        {/*                    <i className="ti-lock"/>*/}
-                                                        {/*                </a>*/}
-                                                        {/*            </div>*/}
-                                                        {/*        </>*/}
-                                                        {/*    )}*/}
-                                                        {/*</td>*/}
+                                                            { item.receiver.status.nameStatus === "block" &&(
+                                                                <>
+                                                                    <div className="action_btns d-flex" >
+                                                                        <a href="#" className="action_btn" onClick={() => activeAc(item.receiver.username)}>
+                                                                            {" "}
+                                                                            <i className="ti-lock" />
+                                                                        </a>
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                        </td>
                                                     </tr>
                                                 ))}
                                                 </tbody>
