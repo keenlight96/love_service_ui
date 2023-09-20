@@ -74,7 +74,7 @@ const ListBill =() =>{
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tổng tiền</th>
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Tình trạng</th>
                             <th style={{fontSize :'14px', fontWeight: 'bold'}}>Xem chi tiết</th>
-                            <th style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
+                            {/*<th style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>*/}
                         </tr>
                         </thead>
                         <tbody>
@@ -103,12 +103,12 @@ const ListBill =() =>{
                                             xem chi tiết
                                         </button>
                                     </td>
-                                    <td>
-                                        <button className="action-button detail-button"
-                                                style={{width: "auto", backgroundColor: "red"}}>
-                                            Nhận xét đơn
-                                        </button>
-                                    </td>
+                                    {/*<td>*/}
+                                    {/*    <button className="action-button detail-button"*/}
+                                    {/*            style={{width: "auto", backgroundColor: "red"}}>*/}
+                                    {/*        Nhận xét đơn*/}
+                                    {/*    </button>*/}
+                                    {/*</td>*/}
                                 </tr>
                             ))}
                         </tbody>

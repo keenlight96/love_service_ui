@@ -7,7 +7,7 @@ import {
     getChatWithReceiver,
     setActiveReceiver,
     setChatWithReceiver,
-    setMsgBoxToggle, setStompClient, updateChatReceivers
+    setMsgBoxToggle, setReadMessageReceiver, setStompClient
 } from "../../service/ChattingService";
 
 const Chat = () => {
@@ -23,6 +23,9 @@ const Chat = () => {
     const dispatch = useDispatch();
     const allReceivers = useSelector((state) => {
         return state.chatting.chatting.receivers;
+    })
+    const countUnreadReceivers = useSelector(state => {
+        return state.chatting.chatting.countUnreadReceivers;
     })
     const chatContent = useSelector(state => {
         return state.chatting.chatting.chatContent;
@@ -137,15 +140,24 @@ const Chat = () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+
+            sendMessage();
+        }
+    };
+
     useEffect(() => {
         dispatch(getAllChatReceivers());
     }, [])
 
-    const activateCurrentReceiver = (e, item) => {
+    const activateCurrentReceiver = async (e, item) => {
         if (item && activeReceiver && item.id != activeReceiver.id) {
             if (document.querySelector("#textMessage")) {
                 document.querySelector("#textMessage").value = "";
             }
+            await dispatch(getAllChatReceivers());
             dispatch(setActiveReceiver(item));
         }
         dispatch(getChatWithReceiver(item.id));
@@ -217,16 +229,16 @@ const Chat = () => {
                         </div>
                         <div className="message__popup--box-content">
                             <div className="box__left display">
-                                <div className="box__left--message"><span className="search room-search input-group"><input placeholder="Search ..."
-                                                                                                                            name="text" type="text"
-                                                                                                                            className="form-control"
-                                                                                                                            defaultValue/><span
-                                    className="input-group-addon"><i className="fa fa-search" aria-hidden="true"/></span></span>
+                                <div className="box__left--message">
+                                    <span className="search room-search input-group">
+                                        <div placeholder="Search ..." className="form-control" style={{border: "0px", padding: "0px 5px 0px 10px", height: "48px"}}/>
+                                        <span className="input-group-addon"></span>
+                                    </span>
                                     <div className="list-message-content">
                                         {
                                             allReceivers && allReceivers.map((item, key) => (
                                                 <div className={activeReceiver.id == item.id ? "active media" : "media"} key={key}
-                                                     onClick={(e)  => {activateCurrentReceiver(e, item)}}>
+                                                     onClick={(e)  => {activateCurrentReceiver(e, item).then(r => {})}}>
                                                 {/*<div className={item.id == activeReceiver.id ? "active media" : "media"} key={key}*/}
                                                 {/*     onClick={(e)  => {activateCurrentReceiver(e, item)}}>*/}
                                                     <div className="media-left">
@@ -234,11 +246,25 @@ const Chat = () => {
                                                             {/*<div className="stt stt-ready"/>*/}
                                                         </div>
                                                     </div>
-                                                    <div className="media-body">
-                                                        <p className="name-player-review">{item.username}</p>
-                                                        <p style={item.lastMessage && !item.lastMessage.isRead ? {fontWeight: "bold"} : {}}>{item.lastMessage && item.lastMessage.message}</p>
+                                                    <div className="media-body" style={{maxWidth: "180px"}}>
+                                                        <p className="name-player-review">{item.nickname}</p>
+                                                        <p style={item.lastMessage && storeUser && (item.lastMessage.receiver.id == storeUser.account.id) && (item.lastMessage.isRead == false) ?
+                                                            {fontWeight: "bold"} : {fontWeight: "normal"}}>{item.lastMessage && item.lastMessage.message}</p>
                                                         <span></span>
                                                     </div>
+                                                    {
+                                                        item.lastMessage && item.lastMessage.receiver.id == storeUser.account.id && !item.lastMessage.isRead ?
+                                                            <div className="media-right" style={{position: "relative", paddingRight: "30px"}}>
+                                                                <div style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                                                        {/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
+                                                                        <style dangerouslySetInnerHTML={{ __html: "svg{fill:#2250a0}" }} />
+                                                                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            : <></>
+                                                    }
                                                 </div>
                                             ))
                                         }
@@ -264,7 +290,7 @@ const Chat = () => {
                                                 <div className="media-body media-middle">
                                                     {
                                                         activeReceiver.id ?
-                                                        <a target="_blank" className="name-player-review" href={`/profile/${activeReceiver.username}`}>{activeReceiver.nickname}</a>
+                                                        <a target="_blank" className="name-player-review" href={`/profile/${activeReceiver.username}`}>{activeReceiver.nickname} - {activeReceiver.username}</a>
                                                         :
                                                         <div></div>
                                                     }
@@ -324,7 +350,7 @@ const Chat = () => {
                                                         </div>
                                                         <span className="send-message input-group">
                                                             <textarea className="form-control" id={"textMessage"} placeholder="Type a message ..." type="text"
-                                                                      name="message" maxLength={255} defaultValue={""}/>
+                                                                      name="message" maxLength={255} defaultValue={""} onKeyDown={handleKeyDown}/>
                                                                         {/*<span className="input-group-addon"><i className="far fa-grin"/></span>*/}
                                                                         {/*<span className="input-group-addon">*/}
                                                                         {/*    <input className="hidden" type="file" multiple accept="image/png, image/jpeg, image/jpg"/>*/}
@@ -348,9 +374,21 @@ const Chat = () => {
                     </div>
                 </div>
                 :
-                <div className="message__popup  false" onClick={(e) => messageBoxOpen(e)}>
-                    <div className="message__popup--icon"><img src="../resources/raw/popup-chat.png" className alt="PD"/></div>
-                </div>
+                <>
+                    <div className="message__popup  false" onClick={(e) => messageBoxOpen(e)}>
+                        <div className="message__popup--icon"><img src="../resources/raw/popup-chat.png" className alt="PD"/></div>
+                    </div>
+                    {
+                        countUnreadReceivers && countUnreadReceivers > 0 ?
+                            <div style={{position: "fixed", marginLeft: "50%", marginTop: "10%"}}>
+                                <a href="/information/bills" className={"group-user"} style={{position: "fixed", bottom: "50px", right: "-4px", transform: "translate(-50%, -50%)", border: "black 2px solid", borderRadius: "50%", marginLeft: "0px", padding: "0px 0px", background: "#F0564A", width: "24px", height: "24px", textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', display: 'flex', justifyContent: "center", alignItems: "center", float: 'left'}}>
+                                    <p style={{paddingTop: "10px", color: "white", fontSize: "12px"}}>{countUnreadReceivers}</p></a>
+                            </div>
+                            :
+                            <></>
+                    }
+                </>
+
             }
 
         </>

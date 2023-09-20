@@ -66,6 +66,13 @@ export const setActiveReceiver = createAsyncThunk(
     }
 )
 
+export const setReadMessageReceiver = createAsyncThunk(
+    "setReadMessageReceiver",
+    async (receiverId) => {
+        return receiverId;
+    }
+)
+
 // Notification
 export const getAllNotifications = createAsyncThunk(
     "getAllNotifications",

@@ -14,12 +14,19 @@ const validationSchema = Yup.object().shape({
     firstName: Yup.string().required('Tên là bắt buộc'),
     country: Yup.string().required('Quốc tịch là bắt buộc'),
     address: Yup.string().required('Địa chỉ là bắt buộc'),
-    phoneNumber: Yup.string().required('Số điện thoại là bắt buộc'),
-    idCard: Yup.string().required('CCCD là bắt buộc'),
+    phoneNumber: Yup.string()
+        .required('Số điện thoại là bắt buộc')
+        .matches(/^[0-9]{10}$/, 'Số điện thoại phải là số và có đúng 10 chữ số'),
+    idCard: Yup.string()
+        .required('CCCD là bắt buộc')
+        .matches(/^[0-9]{12}$/, 'CCCD phải là số và có đúng 12 chữ số'),
     price: Yup.string().required('Không được để trống'),
     // nickName: Yup.string().required('Tên người dùng là bắt buộc'),
     height: Yup.string().required('Chiều cao là bắt buộc'),
-    weight: Yup.string().required('Cân nặng là bắt buộc')
+    weight: Yup.string().required('Cân nặng là bắt buộc'),
+    birthday: Yup.date()
+        .required('Sinh nhật là bắt buộc')
+        .max(new Date(Date.now() - 18 * 365 * 24 * 60 * 60 * 1000), 'Phải đủ 18 tuổi trở lên'),
 });
 const RegisterProfile =()=> {
     const [selectedIds, setSelectedIds] = useState([]);
@@ -465,6 +472,8 @@ const RegisterProfile =()=> {
                                                                     width:'190px'
                                                                 }}
                                                                 />
+                                                                <ErrorMessage name="birthday" component="div"
+                                                                              className="error"/>
                                                             </div>
                                                         </td>
                                                     </tr>

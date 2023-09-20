@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {activeAccount, blockAccount, getAccountUserFilter} from "../../service/AdminService";
+import Swal from "sweetalert2";
 
 const AllUserList =() =>{
     const dispatch = useDispatch();

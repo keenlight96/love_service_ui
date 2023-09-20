@@ -9,7 +9,7 @@ import {useLocation, useNavigate} from "react-router";
 const validationSchema = Yup.object().shape({
     username: Yup.string()
         .required('Tên đăng nhập là bắt buộc')
-        .min(8, 'Tên đăng nhập phải có ít nhất 8 ký tự'),
+        .min(6, 'Tên đăng nhập phải có ít nhất 6 ký tự'),
     password: Yup.string()
         .required('Mật khẩu là bắt buộc')
         .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
@@ -213,7 +213,7 @@ const RegisterCCDV = () => {
                                     </Formik>
                                     <div className="change-link"
                                          style={{display: 'flex', justifyContent: 'space-between'}}>
-                                        <a className="create-new">
+                                        <a className="create-new" href={"/login"}>
                                             <p>
                                                 <span>Đăng nhập</span>
                                             </p>
@@ -230,7 +230,7 @@ const RegisterCCDV = () => {
                     </div>
                 </div>
 
-            </div>
+             </div>
         </>
     )
 }

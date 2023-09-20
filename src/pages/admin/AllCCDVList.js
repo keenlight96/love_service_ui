@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {activeAccount, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
 import DetailCCDV from "./DetailCCDV";
+import Swal from "sweetalert2";
 
 const AllCCDVList = () => {
     const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const AllCCDVList = () => {
 
     useEffect(() => {
         dispatch(activeAccount(username)).then(() => {
-            dispatch(getAccountCCDVFilter(filter))
+            dispatch(getAccountCCDVFilter(filter));
         })
     }, [username])
     const [currentPage, setCurrentPage] = useState(1);

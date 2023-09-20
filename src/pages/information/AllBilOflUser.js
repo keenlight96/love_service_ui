@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import {cancelBill, completes, getAllBillByIdUser} from "../../service/BillsService";
+import {cancelBill, completes, getAllBillByIdUser, setFocusBill, setFocusBillId} from "../../service/BillsService";
 import {checkToken} from "../../service/UserService";
 
 const AllBillOfUser = () => {
@@ -22,9 +22,13 @@ const AllBillOfUser = () => {
     });
 
     const stringCancelBill = useSelector((state) => {
-        console.log(state)
         return state.BillByAccount.BillByAccount.cancelBill;
     });
+
+    const focusBillId = useSelector(state => {
+        return state.BillByAccount.BillByAccount.focusBillId;
+    });
+
     const [billDetail, setBillDetail] = useState(false);
 
     const [message, setMessage] = useState('')
@@ -47,6 +51,15 @@ const AllBillOfUser = () => {
     const [modal, setModal] = useState(false);
 
     const [objects, setObjects] = useState(null);
+
+    const dateStringOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false, // Use 24-hour format
+    };
 
     const openBillDetail = (object) => {
         setObjects(object);
@@ -87,6 +100,20 @@ const AllBillOfUser = () => {
         });
     },[idBill,idAccount,message]);
 
+    useEffect(() => {
+        const handleUrlChange = () => {
+            dispatch(setFocusBillId(0));
+        };
+
+        // Add the event listener to listen for URL changes
+        window.addEventListener("popstate", handleUrlChange);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("popstate", handleUrlChange);
+        };
+    }, [])
+
     const sendNotification = (billId) => {
         try {
             if (stompClient != null) {
@@ -104,40 +131,45 @@ const AllBillOfUser = () => {
 
     return (
         <>
-
+            <style
+                dangerouslySetInnerHTML={{
+                    __html:
+                        "\n.flicker-border {\n  border: 2px solid transparent; /* Start with a transparent border */\n  animation: flicker 2s infinite alternate; /* Apply the flicker animation */\n}\n\n@keyframes flicker {\n  0% {\n    border-color: red; /* Start with a red border */\n  }\n  50% {\n    border-color: transparent; /* Flicker to a transparent border halfway through the animation */\n  }\n  100% {\n    border-color: red; /* End with a red border again */\n  }\n}\n    "
+                }}
+            />
+            <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
+            <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
                         <h3>Lịch sử đơn thuê</h3>
                         <div className="transaction-table">
                             <div className="table-responsive">
                                 <table className="table table-striped table-bordered table-condensed table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Nick name người CCDV</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số giờ thuê</th>
-                                        <th>Ngày bắt đầu</th>
-                                        <th>Ngày tạo đơn</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Tình trạng</th>
-                                        <th>Xem chi tiết</th>
-                                        <th>Hoạt động</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "80px"}}>Mã đơn</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Nickname người CCDV</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "320px"}}>Ngày bắt đầu</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "70px"}}>Số giờ thuê</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tổng tiền</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tình trạng</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Xem chi tiết</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "150px"}}>Hoạt động</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {currentBills.length > 0 && currentBills.map((item) => (
-                                            <tr key={item.id}>
+                                            <tr key={item.id} className={focusBillId && focusBillId == item.id ? "flicker-border" : ""}>
+                                                <td style={{textAlign: "center"}}>{item.id}</td>
                                                 <td>{item.accountCCDV.nickname}</td>
-                                                <td>{item.address}</td>
-                                                <td>{item.hour}</td>
-                                                <td>{item.dateStart} - {item.dateEnd}</td>
-                                                <td>{item.dateCreate}</td>
-                                                <td>{item.total}</td>
+                                                <td>{new Date(item.dateStart).toLocaleString("en-GB", dateStringOptions)} - {new Date(item.dateEnd).toLocaleString("en-GB", dateStringOptions)}</td>
+                                                <td style={{textAlign: "center"}}>{item.hour}</td>
+                                                <td style={{textAlign: "right"}}>{item.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
                                                 <td>
                                                     {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
                                                 </td>
-                                                <td style={{width: '150px'}}>
+                                                <td style={{width: '150px', textAlign: "center"}}>
                                                     <button className="action-button detail-button"
                                                             style={{width: 'auto'}} onClick={() => openBillDetail(item)}>
-                                                        xem chi tiết
+                                                        Xem chi tiết
                                                     </button>
                                                 </td>
                                                 <td className="actions" style={{width: '200px'}}>
@@ -218,7 +250,7 @@ const AllBillOfUser = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Nick name nguời cung cấp dịch vụ :</td>
+                                                <td>Nickname người cung cấp dịch vụ:</td>
                                                 <td>{objects.accountCCDV.nickname}</td>
                                             </tr>
                                             <tr>
@@ -232,7 +264,7 @@ const AllBillOfUser = () => {
                                                     <span>Ngày tạo đơn </span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
+                                                    <span className="price">{new Date(objects.dateEnd).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -240,7 +272,7 @@ const AllBillOfUser = () => {
                                                     <span>Tổng tiền</span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{objects.total}</span>
+                                                    <span className="price">{objects.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -306,7 +338,7 @@ const AllBillOfUser = () => {
                                                 </td>
                                                 <td>
                                                 <span
-                                                    className="price">{new Date(objects.dateCreate).toLocaleString()}</span>
+                                                    className="price">{new Date(objects.dateCreate).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -314,7 +346,7 @@ const AllBillOfUser = () => {
                                                     <span>Tổng tiền</span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{objects.total}</span>
+                                                    <span className="price">{objects.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -323,7 +355,7 @@ const AllBillOfUser = () => {
                                                 </td>
                                                 <td>
                                                 <span
-                                                    className="price">{new Date(objects.dateStart).toLocaleString()}</span>
+                                                    className="price">{new Date(objects.dateStart).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>

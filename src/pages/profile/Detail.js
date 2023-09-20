@@ -5,7 +5,7 @@ import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 import ShowImages from "./ShowImages";
 import {convertToFormattedDate} from "../../service/custom/general.function";
 import {getAllReviewsByProviderUsername, isAbleToReview, sendReview} from "../../service/ReviewService";
@@ -167,6 +167,10 @@ function Detail() {
             }
             dispatch(addChatReceivers(newReceiver));
             dispatch(setActiveReceiver(newReceiver));
+            try {
+                dispatch(getChatWithReceiver(newReceiver.id))
+            } catch (e) {
+            }
 
             if (!msgBoxToggle) {
                 dispatch(setMsgBoxToggle());
@@ -252,7 +256,7 @@ function Detail() {
                                     <div className="member-since">
                                         <div>Ngày tham gia:</div>
                                         <span>
-                                {new Date(userDetail.dateCreate).toLocaleDateString()}
+                                {new Date(userDetail.dateCreate).toLocaleDateString("en-GB")}
                             </span>
                                     </div>
                                 </div>
@@ -266,7 +270,7 @@ function Detail() {
                                             <span>{reviews ? reviews.length : <></>} <span>Đánh giá</span></span>
                                         </div>
                                         <div className="text-center">
-                                            {user?                                    <button className="btn-my-style red" onClick={toggle}>Thuê</button>
+                                            {storeUser && storeUser.account.role.id == 2 ? <button className="btn-my-style red" onClick={toggle}>Thuê</button>
                                                 :<></>}                                            {/*<button className="btn-my-style white">Donate</button>*/}
                                             <button className="btn-my-style white" onClick={() => {addNewChat()}}>
                                                 <i className="fas fa-comment-alt"></i>Chat

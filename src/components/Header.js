@@ -7,7 +7,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkToken, setUser} from "../service/UserService";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {confirmReadAllNotifications, confirmReadNotification, getAllNotifications} from "../service/ChattingService";
+import {
+    addChatReceivers,
+    confirmReadAllNotifications,
+    confirmReadNotification,
+    getAllNotifications, getChatWithReceiver,
+    setActiveReceiver, setMsgBoxToggle
+} from "../service/ChattingService";
+import {setFocusBill, setFocusBillId} from "../service/BillsService";
+import customAxios from "../service/api";
 
 const Header = () => {
     const [isClicked, setIsClicked] = useState(false);
@@ -31,6 +39,9 @@ const Header = () => {
     const countUnreadNotifications = useSelector(state => {
         return state.chatting.chatting.countUnreadNotifications;
     });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
 
     const handleClick = (e) => {
         if (isClicked2) {
@@ -45,9 +56,45 @@ const Header = () => {
         setIsClicked2(!isClicked2);
     };
 
-    const handleReadInformation = (value) => {
+    const handleReadInformation = (value, value2) => {
         dispatch(confirmReadNotification(value));
+        const billId = value2.substring(value2.indexOf("[") + 1, value2.indexOf("]"));
+        dispatch(setFocusBillId(billId));
     }
+
+        const addAdminChat = () => {
+            const admin = customAxios.get("userDetail/admin")
+                .then(r => {
+                    if (r.data.account.id != storeUser.account.id) {
+                        let newReceiver = {
+                            id: r.data.account.id,
+                            username: r.data.account.username,
+                            nickname: r.data.account.nickname,
+                            avatar: r.data.account.avatar,
+                            role: {
+                                id: r.data.account.role.id,
+                                nameRole: r.data.account.role.nameRole,
+                            },
+                            status: {
+                                id: r.data.account.status.id,
+                                nameStatus: r.data.account.status.nameStatus,
+                            },
+                            isActive: r.data.account.isActive
+                        }
+                        dispatch(addChatReceivers(newReceiver));
+                        dispatch(setActiveReceiver(newReceiver));
+                        try {
+                            dispatch(getChatWithReceiver(newReceiver.id))
+                        } catch (e) {
+                        }
+
+                        if (!msgBoxToggle) {
+                            dispatch(setMsgBoxToggle());
+                        }
+                    }
+                })
+            
+        }
 
     const swapStatusCCDV = () => {
         axios.get("http://localhost:8080/accounts/workOrRest?id=" + user.id).then(
@@ -134,19 +181,19 @@ const Header = () => {
                     </div>
                     <div className="navbar">
                         <ul className="nav navbar-nav navbar-left">
-                            <li className="item-search">
-                                <nav className="Navbar__Item">
-                                    <div className="Navbar__Link">
-                                        <div className="Group-search visible "><span
-                                            className="search input-group"><input placeholder="Nickname/Url ..."
-                                                                                  type="text" className="form-control"
-                                                                                  defaultValue={""}/><span
-                                            className="input-group-addon"><button type="button"
-                                                                                  className="btn btn-default"><i
-                                            className="fal fa-search" aria-hidden="true"/></button></span></span></div>
-                                    </div>
-                                </nav>
-                            </li>
+                            {/*<li className="item-search">*/}
+                            {/*    <nav className="Navbar__Item">*/}
+                            {/*        <div className="Navbar__Link">*/}
+                            {/*            <div className="Group-search visible "><span*/}
+                            {/*                className="search input-group"><input placeholder="Nickname/Url ..."*/}
+                            {/*                                                      type="text" className="form-control"*/}
+                            {/*                                                      defaultValue={""}/><span*/}
+                            {/*                className="input-group-addon"><button type="button"*/}
+                            {/*                                                      className="btn btn-default"><i*/}
+                            {/*                className="fal fa-search" aria-hidden="true"/></button></span></span></div>*/}
+                            {/*        </div>*/}
+                            {/*    </nav>*/}
+                            {/*</li>*/}
                         </ul>
                         <ul className="nav navbar-nav navbar-center">
                             <li className="item-icon">
@@ -156,10 +203,10 @@ const Header = () => {
                                     </Link>
                                 </a>
                             </li>
-                            <li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i
-                                className="fal fa-camera-movie"/></a></li>
-                            <li className="item-icon group-fb"><a className="group-user" href="/#"><i
-                                className="fal fa-trophy-alt"/></a></li>
+                            {/*<li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i*/}
+                            {/*    className="fal fa-camera-movie"/></a></li>*/}
+                            {/*<li className="item-icon group-fb"><a className="group-user" href="/#"><i*/}
+                            {/*    className="fal fa-trophy-alt"/></a></li>*/}
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             {
@@ -225,7 +272,7 @@ const Header = () => {
                                                                                 </ul>
                                                                             </div>
                                                                             <Link to={"/information/bills"}>
-                                                                                <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id)}}>
+                                                                                <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id, item.message)}}>
                                                                                     <strong style={{margin: "0px", color: item.isRead == false ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)"}}>
                                                                                         {
                                                                                             item.subtype == "wait" ?
@@ -248,7 +295,11 @@ const Header = () => {
                                                                                     <li className={"item-icon"}>
                                                                                         {
                                                                                             item.isRead == false ?
-                                                                                                <i className="fal fa-circle"></i>
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                                                                                    {/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
+                                                                                                    <style dangerouslySetInnerHTML={{ __html: "svg{fill:#2250a0}" }} />
+                                                                                                    <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+                                                                                                </svg>
                                                                                                 :
                                                                                                 <></>
                                                                                         }
@@ -343,11 +394,13 @@ const Header = () => {
                                                             className="flag flag-en" alt="PD"/>
                                                         </div>
                                                     </div>
-                                                    <div className="box-item"><a href="#"
-                                                                                 target="_blank"
-                                                                                 rel="noopener noreferrer"><span>Group</span></a><a
-                                                        href="#" target="_blank"
-                                                        rel="noopener noreferrer"><span>Fanpage</span></a>
+                                                    <div className="box-item" style={{display: "flex", justifyContent: "center"}}>
+                                                        {/*<a href="#"*/}
+                                                        {/*                         target="_blank"*/}
+                                                        {/*                         rel="noopener noreferrer"><span>Group</span></a>*/}
+                                                        <a rel="noopener noreferrer"  onClick={() => {addAdminChat()}}>
+                                                            <span>Chat Admin</span>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </ul>
