@@ -10,16 +10,33 @@ const UserInfo = () => {
     const [accounts, setAccounts] = useState('');
     const [zone,setzone]= useState('');
     const accountId = JSON.parse(localStorage.getItem("account") || "{}").id;
+    console.log('id:' , accountId)
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/accounts/account-profile/${accountId}`).then ( res  => {
-            console.log('thongtin:', res.data)
-            setAccounts(res.data);
-            setInitialGender(res.data.gender)
-            setzone(res.data.zone.zone)
-        })
-    }, [])
+        axios.get(`http://localhost:8080/accounts/account-profile/${accountId}`)
+            .then(res => {
+                if (res.data) {
+                    console.log('thongtin:', res.data);
+                    setAccounts(res.data);
+                    if (res.data.gender== null){
+                        setInitialGender("Nam/Nữ");
+                    }else{
+                        setInitialGender(res.data.gender)
+                    }
+                    if(res.data.zone==null){
+                        setzone("Bắc/Trung/Nam");
+                    }else {
+                        setzone(res.data.zone.zone)
+                    }
+                } else {
+                    console.log('Không có dữ liệu');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải dữ liệu:', error);
+            });
+    }, []);
     //supplies
     // const userSupply = useSelector(state => {
     //     try {
@@ -102,6 +119,10 @@ const UserInfo = () => {
                                 // values.supplies = userSupply;
                                 // values.birthday = birthday;
                                 console.log("mau gui di", values)
+                                // if (values.isGoogle === true){
+                                //     setMessage('Do bạn đăng kí bằng google nên không thể sửa tài khoản email.')
+                                //     return
+                                // }
                                     axios.post(`http://localhost:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
                                         alert("thanh cong")
                                         console.log("ketqua",res.data)
@@ -137,14 +158,30 @@ const UserInfo = () => {
                                 />
                                 </div>
 
-                                <div className="fieldGroup "><p className="control-label">Email</p><Field type="text"
-                                                                                                              name="email"
-                                                                                                              maxLength={5000}
-                                                                                                              autoComplete="false"
-                                />
-                                    {message&& (<div className="error">{message}</div>)}
+                                <div className="fieldGroup ">
+                                    <p className="control-label">Email</p>
+                                    {accounts.isGoogle ? (
+                                        <Field
+                                            type="text"
+                                            name="email"
+                                            maxLength={5000}
+                                            autoComplete="false"
+                                            readOnly={true}
+                                        />
+                                    ) : (
+                                        <>
+                                            <Field
+                                                type="text"
+                                                name="email"
+                                                maxLength={5000}
+                                                autoComplete="false"
+                                            />
+                                            {message && (<div className="error">{message}</div>)}
+                                        </>
+                                    )}
                                 </div>
-                            <p className="control-label">Ngày sinh</p>
+
+                                <p className="control-label">Ngày sinh</p>
                                 <div>
                                     {/*<div*/}
                                     {/*    style={{*/}
@@ -547,9 +584,9 @@ const UserInfo = () => {
                                         }}
                                     >
                                         <option value="">{zone}</option>
-                                        <option value="1">Bắc</option>
-                                        <option value="2">Trung</option>
-                                        <option value="3">Nam</option>
+                                        <option value="1">Miền Bắc</option>
+                                        <option value="2">Miền Trung</option>
+                                        <option value="3">Miền Nam</option>
                                     </Field>
 
                                 </div>
