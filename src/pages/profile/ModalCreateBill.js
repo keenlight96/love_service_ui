@@ -18,7 +18,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const currentTime = new Date();
     const [hourInDay, setHourInDay] = useState([]);
     const [timeBillIn7Day, setTimeBillIn7Day] = useState(new Array(168).fill(0));
-    const [total, setTotal] = useState(userDetail.price);
+    const [total, setTotal] = useState(0);
     const [dayRend, setDayRend] = useState((new Date()).getDate());
     const [hourRend, setHourRend] = useState(1);
     const [bill, setBill] = useState({
@@ -38,6 +38,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const [sevenDay, setSevenDay] = useState([]);
     const [billCCDV,setBillCCDV] = useState('')
     useEffect(() => {
+        setTotal(userDetail.price);
         dispatch(getAllBillIn7DayByCCDV(userDetail.id));
         fillDay();
         axios.get(`http://localhost:8080/bills/getAllBill7DayByIDCCDV?id=${userDetail.id}`).then(data => {
@@ -106,18 +107,25 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                     if (data.data != null) {
                         if (data.data.bill != null) {
                             sendNotification(data.data.bill.id);
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: data.data.message
+                            });
+                        } else {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: data.data.message
+                            });
                         }
                         dispatch(checkToken());
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: data.data.message
-                        });
+
                     } else {
                         Swal.fire({
                             position: 'center',
                             icon: 'error',
-                            title: data.data.message
+                            title: "Có lỗi xảy ra. Vui lòng thử lại."
                         });
                     }
                 }).catch(
