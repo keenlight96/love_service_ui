@@ -1,7 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {activeCCDV, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
+import {activeAccount, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
 import DetailCCDV from "./DetailCCDV";
+import Swal from "sweetalert2";
 
 const AllCCDVList = () => {
     const dispatch = useDispatch();
@@ -22,17 +23,22 @@ const AllCCDVList = () => {
         setUsername(str);
     }
     const allCCDVFilter = useSelector((state) => {
-        console.log(state.admin.admin.allCCDVFilter);
         return state.admin.admin.allCCDVFilter;
     });
     const [account, setAccount] = useState({});
     const blockAc = (object) => {
         setAccount(object);
-        console.log(account);
     };
     useEffect(() => {
         dispatch(blockAccount(account)).then(() => {
             dispatch(getAccountCCDVFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Khóa tài khoản thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         })
     }, [account]);
 
@@ -41,9 +47,15 @@ const AllCCDVList = () => {
     }, [filter])
 
     useEffect(() => {
-        console.log(username + 11111)
-        dispatch(activeCCDV(username)).then(() => {
-            dispatch(getAccountCCDVFilter(filter))
+        dispatch(activeAccount(username)).then(() => {
+            dispatch(getAccountCCDVFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Mở tài khoản thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         })
     }, [username])
     const [currentPage, setCurrentPage] = useState(1);
@@ -67,9 +79,9 @@ const AllCCDVList = () => {
     }
     const [showDetail, setShowDetail] = useState(false);
 
-    const toggleDetail = () => {
-        setShowDetail(!showDetail);
-    };
+    // const toggleDetail = () => {
+    //     setShowDetail(!showDetail);
+    // };
 
     return (
         <>
@@ -95,14 +107,6 @@ const AllCCDVList = () => {
                                     <div className="QA_section">
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách nguời CCDV </h4>
-                                            <select className="form-control gender " style={{width: 'auto'}}
-                                                    className="form-control gender" value={filter.status}
-                                                    onChange={(e) => handleInputChange(e, 'status')}>
-                                                <option value="">Trạng thái</option>
-                                                <option value="active">Active</option>
-                                                <option value="register">Register</option>
-                                                <option value="block">Block</option>
-                                            </select>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
                                                     <div className="search_inner">
@@ -116,19 +120,27 @@ const AllCCDVList = () => {
                                                         </form>
                                                     </div>
                                                 </div>
+                                                <select className="form-control gender " style={{width: 'auto'}}
+                                                        className="form-control gender" value={filter.status}
+                                                        onChange={(e) => handleInputChange(e, 'status')}>
+                                                    <option value="">Trạng thái</option>
+                                                    <option value="active">Đã kích hoạt</option>
+                                                    <option value="register">Chờ kích hoạt</option>
+                                                    <option value="block">Khóa</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Biệt danh</th>
-                                                    <th scope="col">Tên tài khoản</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Vai trò</th>
-                                                    <th scope="col">Trạng thái</th>
-                                                    <th scope="col">Hoạt động</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Biệt danh</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tên tài khoản</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Email</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Vai trò</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -147,21 +159,31 @@ const AllCCDVList = () => {
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a
-                                                                href="https://demo.dashboardpack.com/cdn-cgi/l/email-protection"
-                                                                className="__cf_email__"
-                                                                data-cfemail="65120a170e51555c250208040c094b060a08"
-                                                            >
+                                                            <a className="__cf_email__">
                                                                 {item.account.email}
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="#">{item.account.role.nameRole}</a>
+                                                            {item.account.role.nameRole === "ROLE_CCDV" &&
+                                                            <a href="#">Người CCDV</a>
+                                                            }
                                                         </td>
                                                         <td>
-                                                            <a href="#" className="status_btn">
-                                                                {item.account.status.nameStatus}
-                                                            </a>
+                                                            {item.account.status.nameStatus === "block" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'red'}}>
+                                                                    Tài khoản bị khóa
+                                                                </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "active" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'#05d34e'}}>
+                                                                    Đã khích hoạt
+                                                                </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "register" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'orange'}}>
+                                                                    Chờ xác nhận
+                                                                </a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             {(item.account.status.nameStatus === "active" || item.account.status.nameStatus === "emailverify") && (
@@ -188,13 +210,6 @@ const AllCCDVList = () => {
                                                                                 onClick={() => activeAc(item.account.username)}>
                                                                             Active
                                                                         </button>
-                                                                        {/*<label className="toggle">*/}
-                                                                        {/*    <input type="checkbox"></input>*/}
-                                                                        {/*        <span className="slider"></span>*/}
-                                                                        {/*        <span className="labels" data-on="Active"*/}
-                                                                        {/*              data-off="Register"></span>*/}
-                                                                        {/*</label>*/}
-
                                                                     </div>
                                                                 </>
                                                             )}
@@ -202,7 +217,7 @@ const AllCCDVList = () => {
                                                             {item.account.status.nameStatus === "block" && (
                                                                 <>
                                                                     <div className="action_btns d-flex">
-                                                                        <a href="#" className="action_btn">
+                                                                        <a href="#" className="action_btn" onClick={() => activeAc(item.account.username)}>
                                                                             {" "}
                                                                             <i className="ti-lock"/>
                                                                         </a>

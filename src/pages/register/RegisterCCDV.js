@@ -1,9 +1,8 @@
 import * as Yup from "yup";
-import formik, {ErrorMessage, Field, Formik} from "formik";
+import {ErrorMessage, Field, Formik} from "formik";
 import SignupCCDV from "../../service/custom/SignupCCDV";
 import React, {useEffect, useState} from "react";
 import "../../custom-css/cssRegister.css"
-import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
 import {useLocation, useNavigate} from "react-router";
 
@@ -41,7 +40,7 @@ const RegisterCCDV =() =>{
 
     return(
         <>
-            <div style={{display:'flex', backgroundColor:'lightpink',justifyContent:'center'}}>
+            {/*<div style={{display:'flex',justifyContent:'center'}}>*/}
             <div className={'wrapper-register'}>
                 <div className={'container-register'}>
                     <div className={'layoutForm'}>
@@ -143,7 +142,7 @@ const RegisterCCDV =() =>{
                                                     <Field
                                                         type="email"
                                                         name="email"
-                                                        placeholder="Xác thực Email"
+                                                        placeholder="Email"
                                                         maxLength="5000"
                                                         autoComplete="false"
                                                         onFocus = {resetMessage}
@@ -200,16 +199,16 @@ const RegisterCCDV =() =>{
                                             <span>Đăng nhập</span>
                                         </p>
                                     </a>
-                                    <a className="create-new">
-                                        <p>
-                                            <span>Quên mật khẩu?</span>
-                                        </p>
-                                    </a>
+                                    {/*<a className="create-new">*/}
+                                    {/*    <p>*/}
+                                    {/*        <span>Quên mật khẩu?</span>*/}
+                                    {/*    </p>*/}
+                                    {/*</a>*/}
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {/*</div>*/}
             </div>
 
              </div>

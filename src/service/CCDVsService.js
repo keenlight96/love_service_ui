@@ -46,3 +46,11 @@ export const getCCDVsByTopViews = createAsyncThunk(
         return rs.data;
     }
 )
+
+export const searchCCDV = createAsyncThunk(
+    "searchCCDV",
+    async (filter) => {
+        const rs = await customAxios.post("userDetail/filterByCCDv" , filter,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return rs.data;
+    }
+)

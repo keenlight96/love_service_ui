@@ -23,18 +23,21 @@ import NewCCDVList from "./pages/admin/NewCCDVList";
 import AllUserList from "./pages/admin/AllUserList";
 import AllCCDVList from "./pages/admin/AllCCDVList";
 import AccountReport from "./pages/admin/AccountReport";
+import NewUserList from "./pages/admin/NewUserList";
+import AccountSettings from "./pages/home/AccountSettings";
+import Album from "./pages/home/Album";
+import Revenue from "./pages/profile/Revenue";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
 import EditSuppleAndPrice from "./pages/information/EditSuppleAndPrice";
 import RegisterSupply from "./components/common/RegisterSupply";
+import SupplyInfo from "./pages/information/SupplyInfo";
 
 function App() {
     return (
         <>
             <Routes>
-                <Route path={"/test1"} element={<EditSuppleAndPrice/>}/>
-                <Route path={"/test"} element={<Test/>}>
-                </Route>
+                <Route path={"/test"} element={<Test/>}></Route>
                 <Route path={"/"} element={<Layout/>}>
                     {/*Page Login*/}
                     <Route path={"/login"} element={<Login/>}></Route>
@@ -56,16 +59,20 @@ function App() {
                         <Route path={"bills"} element={<Bills/>}></Route>
                         <Route path={"topup"} element={<UserInfo/>}></Route>
                         <Route path={"summary"} element={<UserInfo/>}></Route>
-                        <Route path={"supplies"} element={<UserInfo/>}></Route>
+                        <Route path={"supplies"} element={<SupplyInfo/>}></Route>
                         <Route path={"album"} element={<UserInfo/>}></Route>
+                        <Route path={"supplies"} element={<UserInfo/>}></Route>
+                        <Route path={"album"} element={<Album/>}></Route>
+                        <Route path={"revenue"} element={<Revenue/>}></Route>
+
                         <Route path={"setSupply"} element={<RegisterSupply isRegister={false} />}></Route>
                     </Route>
 
                 </Route>
-                <Route path="/" element={<LayoutAdmin />}>
+                <Route path="/" element={<LayoutAdmin/>}>
                     <Route path="/homeAdmin"  element={<HomeAdmin />}>
                         <Route path={"allBills"} element={<ListBill/>}></Route>
-                        <Route path={"NewUser"} element={<NewCCDVList/>}></Route>
+                        <Route path={"NewUser"} element={<NewUserList/>}></Route>
                         <Route path={"allUser"} element={<AllUserList/>}></Route>
                         <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
                         <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>

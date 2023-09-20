@@ -3,8 +3,8 @@ import customAxios from "./api";
 
 export const getAllBill = createAsyncThunk(
     "getAllBill",
-    async () => {
-        const res = await customAxios.get("admin/getAllBills/" , {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+    async (idStatus) => {
+        const res = await customAxios.get("admin/findBillByIdStatus?idStatus=" + idStatus , {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return res.data;
     }
 )
@@ -46,8 +46,8 @@ export const getAccountCCDVFilter = createAsyncThunk(
         return res.data;
     }
 )
-export const activeCCDV = createAsyncThunk(
-    "activeCCDV",
+export const activeAccount = createAsyncThunk(
+    "activeAccount",
     async (usernameCCDV) => {
         const res = await customAxios.post("admin/" + usernameCCDV , {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return res.data;

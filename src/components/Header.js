@@ -7,7 +7,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkToken, setUser} from "../service/UserService";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {getAllNotifications} from "../service/ChattingService";
+import {
+    addChatReceivers,
+    confirmReadAllNotifications,
+    confirmReadNotification,
+    getAllNotifications, getChatWithReceiver,
+    setActiveReceiver, setMsgBoxToggle
+} from "../service/ChattingService";
+import {setFocusBill, setFocusBillId} from "../service/BillsService";
+import customAxios from "../service/api";
 
 const Header = () => {
     const [isClicked, setIsClicked] = useState(false);
@@ -26,7 +34,13 @@ const Header = () => {
     });
     const notifications = useSelector(state => {
         return state.chatting.chatting.notifications;
-    })
+    });
+    const countUnreadNotifications = useSelector(state => {
+        return state.chatting.chatting.countUnreadNotifications;
+    });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
 
     const handleClick = (e) => {
         if (isClicked2) {
@@ -40,13 +54,53 @@ const Header = () => {
         }
         setIsClicked2(!isClicked2);
     };
+
+    const handleReadInformation = (value, value2) => {
+        dispatch(confirmReadNotification(value));
+        const billId = value2.substring(value2.indexOf("[") + 1, value2.indexOf("]"));
+        dispatch(setFocusBillId(billId));
+    }
+
+        const addAdminChat = () => {
+            const admin = customAxios.get("userDetail/admin")
+                .then(r => {
+                    if (r.data.account.id != storeUser.account.id) {
+                        let newReceiver = {
+                            id: r.data.account.id,
+                            username: r.data.account.username,
+                            nickname: r.data.account.nickname,
+                            avatar: r.data.account.avatar,
+                            role: {
+                                id: r.data.account.role.id,
+                                nameRole: r.data.account.role.nameRole,
+                            },
+                            status: {
+                                id: r.data.account.status.id,
+                                nameStatus: r.data.account.status.nameStatus,
+                            },
+                            isActive: r.data.account.isActive
+                        }
+                        dispatch(addChatReceivers(newReceiver));
+                        dispatch(setActiveReceiver(newReceiver));
+                        try {
+                            dispatch(getChatWithReceiver(newReceiver.id))
+                        } catch (e) {
+                        }
+
+                        if (!msgBoxToggle) {
+                            dispatch(setMsgBoxToggle());
+                        }
+                    }
+                })
+
+        }
+
     const swapStatusCCDV = () => {
         axios.get("http://localhost:8080/accounts/workOrRest?id=" + user.id).then(
             res => {
                 Swal.fire({
                     position: 'center',
-                    icon: 'inf' +
-                        'o',
+                    icon: 'info',
                     title: res.data,
                     showConfirmButton: false,
                     timer: 1500
@@ -57,7 +111,6 @@ const Header = () => {
         })
         setStatusCCDV(!statusCCDV);
     }
-
 
     const logout = () => {
         LoginService.logout().then(r => {
@@ -79,16 +132,14 @@ const Header = () => {
         }
     }, [])
 
-        useEffect(() => {
-            try {
-                const userTemp = JSON.parse(localStorage.getItem("account"));
-                setUser(userTemp);
-                console.log(userTemp)
-                userTemp && userTemp.role.id === 3 && user.status.id === 111 ? setStatusCCDV(false) : setStatusCCDV(true);
-            } catch (e) {
-                setUser({});
-            }
-        }, [storeUser])
+    useEffect(() => {
+        try {
+            setUser(JSON.parse(localStorage.getItem("account")));
+            storeUser && storeUser.account.role.id === 3 && storeUser.account.status.id === 111 ? setStatusCCDV(false) : setStatusCCDV(true);
+        } catch (e) {
+            setUser({});
+        }
+    }, [storeUser])
 
     return (
         <>
@@ -129,19 +180,19 @@ const Header = () => {
                     </div>
                     <div className="navbar">
                         <ul className="nav navbar-nav navbar-left">
-                            <li className="item-search">
-                                <nav className="Navbar__Item">
-                                    <div className="Navbar__Link">
-                                        <div className="Group-search visible "><span
-                                            className="search input-group"><input placeholder="Nickname/Url ..."
-                                                                                  type="text" className="form-control"
-                                                                                  defaultValue={""}/><span
-                                            className="input-group-addon"><button type="button"
-                                                                                  className="btn btn-default"><i
-                                            className="fal fa-search" aria-hidden="true"/></button></span></span></div>
-                                    </div>
-                                </nav>
-                            </li>
+                            {/*<li className="item-search">*/}
+                            {/*    <nav className="Navbar__Item">*/}
+                            {/*        <div className="Navbar__Link">*/}
+                            {/*            <div className="Group-search visible "><span*/}
+                            {/*                className="search input-group"><input placeholder="Nickname/Url ..."*/}
+                            {/*                                                      type="text" className="form-control"*/}
+                            {/*                                                      defaultValue={""}/><span*/}
+                            {/*                className="input-group-addon"><button type="button"*/}
+                            {/*                                                      className="btn btn-default"><i*/}
+                            {/*                className="fal fa-search" aria-hidden="true"/></button></span></span></div>*/}
+                            {/*        </div>*/}
+                            {/*    </nav>*/}
+                            {/*</li>*/}
                         </ul>
                         <ul className="nav navbar-nav navbar-center">
                             <li className="item-icon">
@@ -151,30 +202,46 @@ const Header = () => {
                                     </Link>
                                 </a>
                             </li>
-                            <li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i
-                                className="fal fa-camera-movie"/></a></li>
-                            <li className="item-icon group-fb"><a className="group-user" href="/#"><i
-                                className="fal fa-trophy-alt"/></a></li>
+                            {/*<li className="item-icon"><a className="group-user " href="https://playerduo.net/stories"><i*/}
+                            {/*    className="fal fa-camera-movie"/></a></li>*/}
+                            {/*<li className="item-icon group-fb"><a className="group-user" href="/#"><i*/}
+                            {/*    className="fal fa-trophy-alt"/></a></li>*/}
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             {
                                 user && user.id ?
                                     <>
                                         <li className={isClicked2 ? "item-icon notificate dropdown open" : "item-icon notificate dropdown"}
-                                            onClick={(e) => {handleClick2(e)}}>
+                                            onClick={(e) => {handleClick2(e)}} style={{display: "flex"}}>
                                             <a id="basic-nav-dropdown" role="button" className="dropdown-toggle"
                                                aria-haspopup="true" aria-expanded="false" href="#">
                                             <div className="item-title"><i className="fal fa-bell"/></div>
                                         </a>
+                                            {
+                                                countUnreadNotifications && countUnreadNotifications > 0 ?
+                                                    <div style={{position: "absolute", marginLeft: "70%", marginTop: "60%"}}>
+                                                        <a href="/information/bills" className={"group-user"} style={{marginLeft: "0px", padding: "0px 0px", background: "#F0564A", width: "24px", height: "24px", textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
+                                                            <p style={{padding: "0px", color: "white", fontSize: "12px"}}>{countUnreadNotifications}</p></a>
+                                                    </div>
+                                                    :
+                                                    <></>
+                                            }
                                             <ul role="menu" className="dropdown-menu"
                                                 aria-labelledby="basic-nav-dropdown">
                                                 <div className="content">
-                                                    <div className="tab-notif-common"><h5><span>Thông báo</span></h5>
-                                                        <div className="tab-action"><p className="active">
-                                                            <span>Chính</span></p>
-                                                            <p className><span>Khác</span></p>
-                                                            <p className><span>Theo dõi</span></p>
-                                                            <p className><span>Tương tác</span></p></div>
+                                                    <div className="tab-notif-common">
+                                                        <h5 style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                                                            <span style={{flex: 1, textAlign: "center"}}>Thông báo</span>
+                                                            <span style={{fontSize: "13px"}}><a href="#" onClick={(e) => {
+                                                                dispatch(confirmReadAllNotifications(storeUser.account.id));
+                                                                e.stopPropagation();
+                                                            }}>Đã đọc</a></span>
+                                                        </h5>
+                                                        {/*<div className="tab-action"><p className="active">*/}
+                                                        {/*    <span>Chính</span></p>*/}
+                                                        {/*    <p className><span>Khác</span></p>*/}
+                                                        {/*    <p className><span>Theo dõi</span></p>*/}
+                                                        {/*    <p className><span>Tương tác</span></p></div>*/}
                                                     </div>
                                                     <div>
                                                         <div className="infinite-scroll-component"
@@ -182,19 +249,30 @@ const Header = () => {
                                                             <div className={"container"} style={{width: "410px", margin: "10px", padding: "5px"}}>
                                                                 {
                                                                     notifications && notifications.map((item, key) => (
-                                                                        <div className={"row notif-content"} key={key}>
+                                                                        <div className={"row notif-content"} key={key} style={{paddingBottom: "10px"}}>
                                                                             <div className={"col-md-2 col-centered"}>
                                                                                 <ul style={{float: "left", paddingLeft: "0px"}}>
                                                                                     <li className={"item-icon"}>
-                                                                                        <a href="#" className={"group-user"} style={{textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
-                                                                                            <i className="fal fa-camera-movie"></i>
+                                                                                        <a href="/information/bills" className={"group-user"} style={{padding: "12px 0px", textSizeAdjust: '100%', WebkitTapHighlightColor: 'transparent', mainColor: '#f0564a', lineHeight: '1.42857', color: 'rgb(51, 51, 51)', WebkitFontSmoothing: 'antialiased', fontWeight: 400, fontSize: 16, boxSizing: 'border-box', listStyle: 'none', position: 'relative', display: 'block', float: 'left'}}>
+                                                                                            {
+                                                                                                item.subtype == "wait" ?
+                                                                                                    <i className="fal fa-plus"></i>
+                                                                                                    :
+                                                                                                    item.subtype == "recevied" ?
+                                                                                                        <i className="fal fa-check-double"></i>
+                                                                                                        :
+                                                                                                        item.subtype == "complete" ?
+                                                                                                            <i className="fal fa-check-double"></i>
+                                                                                                            :
+                                                                                                            <i className="fal fa-xmark"></i>
+                                                                                            }
                                                                                         </a>
                                                                                     </li>
                                                                                 </ul>
                                                                             </div>
                                                                             <Link to={"/information/bills"}>
-                                                                                <div className={"col-md-9 col-centered"}>
-                                                                                    <strong style={{margin: "0px"}}>
+                                                                                <div className={"col-md-9 col-centered"} onClick={() => {handleReadInformation(item.id, item.message)}}>
+                                                                                    <strong style={{margin: "0px", color: item.isRead == false ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)"}}>
                                                                                         {
                                                                                             item.subtype == "wait" ?
                                                                                                 "Đơn thuê mới"
@@ -208,9 +286,25 @@ const Header = () => {
                                                                                                         "Đơn thuê bị hủy"
                                                                                         }
                                                                                     </strong>
-                                                                                    <p style={{paddingLeft: "10px"}}><b>{item.sender.nickname}</b> {item.message}</p>
+                                                                                    <p style={{paddingLeft: "10px", fontSize: "13px", color: item.isRead == false ? "rgba(0,0,0,1)" : "rgba(0,0,0,0.5)"}}><b>{item.sender.nickname}</b> {item.message}</p>
                                                                                 </div>
                                                                             </Link>
+                                                                            <div className={"col-md-1 col-centered"}>
+                                                                                <ul style={{float: "left", paddingLeft: "0px"}}>
+                                                                                    <li className={"item-icon"}>
+                                                                                        {
+                                                                                            item.isRead == false ?
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                                                                                    {/*! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. */}
+                                                                                                    <style dangerouslySetInnerHTML={{ __html: "svg{fill:#2250a0}" }} />
+                                                                                                    <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />
+                                                                                                </svg>
+                                                                                                :
+                                                                                                <></>
+                                                                                        }
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
                                                                         </div>
                                                                     ))
                                                                 }
@@ -236,8 +330,10 @@ const Header = () => {
                                                 </div>
                                             </ul>
                                         </li>
-                                        <li className="item-icon balance"><a className="money-user"><i
-                                            className="far fa-plus"/> {user && user.balance} đ</a>
+                                        <li className="item-icon balance" style={{marginLeft: "5px", marginRight: "5px"}}>
+                                            <a className="money-user">
+                                                {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
+                                            </a>
                                         </li>
                                         <li className={isClicked ? "item-icon item-avatar dropdown open" : "item-icon item-avatar dropdown "}
                                             onClick={(e) => {
@@ -248,26 +344,26 @@ const Header = () => {
                                                aria-haspopup="true" aria-expanded="false"
                                                href="#"><img
                                                 src={user.avatar} className="avt-img" alt=""
-                                                style={{width: "45px", height: "45px", maxWidth: "45px"}}/></a>
+                                                style={{width: "45px", height: "45px", objectFit: "cover"}}/></a>
                                             <ul role="menu" className="dropdown-menu"
                                                 aria-labelledby="header-nav-dropdown">
-                                                <li role="presentation" className="page-user"><a role="menuitem"
-                                                                                                 tabIndex={-1}
-                                                                                                 href="#"><img
-                                                    src={user.avatar} className="avt-img" alt=""
-                                                    style={{maxWidth: "55px"}}/>
-                                                    <div className="text-logo"><h5>{user.nickName}</h5>
-                                                        <p>Username : <span>{user.username}</span></p>
-                                                        {/*<p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>*/}
-                                                    </div>
-                                                </a></li>
+                                                <li role="presentation" className="page-user">
+                                                    <a role="menuitem" tabIndex={-1} href={user.role.id == 3 ? `/profile/${user.username}` : `#`}><img
+                                                            src={user.avatar} className="avt-img" alt=""
+                                                            style={{width: "55px", height: "55px", objectFit: "cover"}}/>
+                                                        <div className="text-logo"><h5>{user.nickName}</h5>
+                                                            <p>Username : <span>{user.username}</span></p>
+                                                            {/*<p className="label-user-page"><span>Xem trang cá nhân của bạn</span></p>*/}
+                                                        </div>
+                                                    </a>
+                                                </li>
                                                 <li role="presentation" className="menu-item hidden-lg hidden-md"><a
                                                     role="menuitem"
                                                     tabIndex={-1}
                                                     href="#"><i
                                                     className="fas fa-plus"/> <span>Số dư</span> : <span
                                                     className="money">
-                                                    {user && user.balance} đ
+                                                    {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                                                 </span></a></li>
                                                 <li role="presentation" className="menu-item"><a role="menuitem"
                                                                                                  tabIndex={-1}
@@ -297,11 +393,13 @@ const Header = () => {
                                                             className="flag flag-en" alt="PD"/>
                                                         </div>
                                                     </div>
-                                                    <div className="box-item"><a href="#"
-                                                                                 target="_blank"
-                                                                                 rel="noopener noreferrer"><span>Group</span></a><a
-                                                        href="#" target="_blank"
-                                                        rel="noopener noreferrer"><span>Fanpage</span></a>
+                                                    <div className="box-item" style={{display: "flex", justifyContent: "center"}}>
+                                                        {/*<a href="#"*/}
+                                                        {/*                         target="_blank"*/}
+                                                        {/*                         rel="noopener noreferrer"><span>Group</span></a>*/}
+                                                        <a rel="noopener noreferrer"  onClick={() => {addAdminChat()}}>
+                                                            <span>Chat Admin</span>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </ul>
@@ -368,7 +466,7 @@ const Header = () => {
                                                                                                          href="#"><i
                                         className="fas fa-plus"/> <span>Số dư</span> : <span
                                         className="money">
-                                        {user && user.balance} đ
+                                        {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                                     </span></a></li>
                                     <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                      href="/information/topup"><i

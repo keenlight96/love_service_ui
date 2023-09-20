@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {blockAccount, getAccountUserFilter} from "../../service/AdminService";
+import {activeAccount, blockAccount, getAccountUserFilter} from "../../service/AdminService";
+import Swal from "sweetalert2";
 
 const AllUserList =() =>{
     const dispatch = useDispatch();
@@ -17,9 +18,14 @@ const AllUserList =() =>{
         });
     };
     const allUserFilter = useSelector((state) => {
-        console.log(state.admin.admin.allUserFilter);
         return state.admin.admin.allUserFilter;
     });
+
+    const [user, setUsername] = useState('')
+    const activeAc = (str) => {
+        setUsername(str);
+    }
+
     const [account, setAccount] =useState({});
     const blockAc = (object) => {
         setAccount(object);
@@ -28,11 +34,32 @@ const AllUserList =() =>{
     useEffect(() =>{
         dispatch(blockAccount(account)).then(() =>{
             dispatch(getAccountUserFilter(filter));
-        })
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Khóa thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        });
     },[account]);
+
     useEffect(() =>{
         dispatch(getAccountUserFilter(filter));
-    },[filter])
+    },[filter]);
+
+    useEffect(() =>{
+        dispatch(activeAccount(user)).then(() =>{
+            dispatch(getAccountUserFilter(filter));
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Mở tài khoản thành công.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        })
+    },[user])
     const [currentPage, setCurrentPage] = useState(1);
 
     const allAccountUser = 5;
@@ -67,12 +94,6 @@ const AllUserList =() =>{
                                     <div className="QA_section">
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách người dùng </h4>
-                                                <select className="form-control gender " style={{width: 'auto'}} className="form-control gender" value={filter.status} onChange={(e) => handleInputChange(e, 'status')}>
-                                                    <option value="">Trạng thái</option>
-                                                    <option value="active">Active</option>
-                                                    <option value="register">Register</option>
-                                                    <option value="block">Block</option>
-                                                </select>
                                             <div className="box_right d-flex lms_block">
                                                 <div className="serach_field_2">
                                                     <div className="search_inner">
@@ -84,19 +105,25 @@ const AllUserList =() =>{
                                                         </form>
                                                     </div>
                                                 </div>
+                                                <select className="form-control gender " style={{width: 'auto'}} className="form-control gender" value={filter.status} onChange={(e) => handleInputChange(e, 'status')}>
+                                                    <option value="">Trạng thái</option>
+                                                    <option value="active">Đã kích hoạt</option>
+                                                    <option value="register">Chờ kích họat</option>
+                                                    <option value="block">Khóa</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Nickname</th>
-                                                    <th scope="col">Username</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Role</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Action</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Biệt danh</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Email</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Vai trò</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -110,21 +137,31 @@ const AllUserList =() =>{
                                                         <td>{item.account.nickname}</td>
                                                         <td>{item.account.username}</td>
                                                         <td>
-                                                            <a
-                                                                href="https://demo.dashboardpack.com/cdn-cgi/l/email-protection"
-                                                                className="__cf_email__"
-                                                                data-cfemail="65120a170e51555c250208040c094b060a08"
-                                                            >
+                                                            <a className="__cf_email__">
                                                                 {item.account.email}
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="#">{item.account.role.nameRole}</a>
+                                                            {item.account.role.nameRole === "ROLE_USER" &&
+                                                            <a href="#">Người dùng</a>
+                                                            }
                                                         </td>
                                                         <td>
-                                                            <a href="#" className="status_btn">
-                                                                {item.account.status.nameStatus}
+                                                            {item.account.status.nameStatus === "block" &&
+                                                            <a href="#" className="status_btn" style={{backgroundColor :'red'}}>
+                                                                Tài khoản bị khóa
                                                             </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "active" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'#05d34e'}}>
+                                                                    Đã khích hoạt
+                                                                </a>
+                                                            }
+                                                            {item.account.status.nameStatus === "register" &&
+                                                                <a href="#" className="status_btn" style={{backgroundColor :'orange'}}>
+                                                                    Chờ xác nhận
+                                                                </a>
+                                                            }
                                                         </td>
                                                         <td>
                                                             {( item.account.status.nameStatus === "active" || item.account.status.nameStatus === "register" || item.account.status.nameStatus === "emailverify")   &&(
@@ -140,8 +177,8 @@ const AllUserList =() =>{
 
                                                             { item.account.status.nameStatus === "block" &&(
                                                                 <>
-                                                                <div className="action_btns d-flex"  >
-                                                                    <a href="#" className="action_btn">
+                                                                <div className="action_btns d-flex" >
+                                                                    <a href="#" className="action_btn" onClick={() => activeAc(item.account.username)}>
                                                                         {" "}
                                                                         <i className="ti-lock" />
                                                                     </a>

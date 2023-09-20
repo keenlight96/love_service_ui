@@ -14,7 +14,6 @@ export const getAllBillByIdUser = createAsyncThunk(
     "getAllBillByIDCCDV",
     async (idUser) => {
         const res = await customAxios.get("bills/getAllBilByIdUser/" + idUser, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
-        console.log(res)
         return res.data;
     }
 )
@@ -55,6 +54,13 @@ export const getAllBillIn7DayByCCDV = createAsyncThunk(
     async (idCCDV) => {
         const res = await customAxios.get("/bills/getAllBill7DayByIDCCDV?id=" + idCCDV, {Authorization: "Bearer " + localStorage.getItem("token")});
         return res.data
+    }
+)
+
+export const setFocusBillId = createAsyncThunk(
+    "setFocusBillId",
+    async (billId) => {
+        return billId;
     }
 )
 

@@ -6,13 +6,13 @@ import $ from 'jquery'
 import {useDispatch, useSelector} from "react-redux";
 import {getAllBillIn7DayByCCDV} from "../../service/BillsService";
 import Swal from "sweetalert2";
+import {checkToken} from "../../service/UserService";
 
 const ModalCreateBill = ({isShowing, hide, userDetail}) => {
     const user = useSelector(state => (state.user.user.current));
     const stompClient = useSelector(state => {
         return state.chatting.stompClient;
     })
-
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const currentTime = new Date();
@@ -36,16 +36,18 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         accountUser: {}
     });
     const [sevenDay, setSevenDay] = useState([]);
-
+    const [billCCDV,setBillCCDV] = useState('')
     useEffect(() => {
         dispatch(getAllBillIn7DayByCCDV(userDetail.id));
         fillDay();
         axios.get(`http://localhost:8080/bills/getAllBill7DayByIDCCDV?id=${userDetail.id}`).then(data => {
             fillData(data.data);
-            console.log("nạp");
+            setBillCCDV(data.data);
+            console.log(data.data)
         }).catch(() => {
             console.log("check api")
         })
+
     }, [message]);
     const close = () => {
         hide();
@@ -100,34 +102,35 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
             }
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
                 .then(data => {
-                hide();
-                if (data.data != null) {
-                    sendNotification(data.data.bill.id);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: data.data
-                    });
-                } else {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: data.data
-                    });
-                }
-            }).catch(
+                    hide();
+                    if (data.data != null) {
+                        if (data.data.bill != null) {
+                            sendNotification(data.data.bill.id);
+                        }
+                        dispatch(checkToken());
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: data.data.message
+                        });
+                    } else {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: data.data.message
+                        });
+                    }
+                }).catch(
                 (e) => {
                     console.log(e);
                 }
-            ).finally(() => {
-                setMessage(message + 1);
-            })
+            )
         }
+        setMessage(message + 1);
     }
 
-// nạp data khi mount componet lần đầu
     const fillData = (data) => {
-        const tempTest = [...timeBillIn7Day];
+        const tempTest = new Array(168).fill(0);
         for (const item of data) {
             const number = (new Date(item.dateStart)).getHours() + ((new Date(item.dateStart)).getDate() - currentTime.getDate()) * 24;
             for (let i = number; i < number + item.hour; i++) {
@@ -149,26 +152,36 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setHourInDay(temp);
         setHourRend(1)
     }
-    // chọn ngày và render ui
     const handClick = (index) => {
         let check = true;
         const temp = new Array(168).fill(0);
         const number = index + ((dayRend - currentTime.getDate()) * 24);
-        for(let i = 0; i < 24; i++){
+        for (const item of billCCDV) {
+            const number = (new Date(item.dateStart)).getHours() + ((new Date(item.dateStart)).getDate() - currentTime.getDate()) * 24;
+            for (let i = number; i < number + item.hour; i++) {
+                temp[i] = 1;
+            }
+        }
+        for (let i = 0; i < 24; i++) {
             if (currentTime.getHours() >= i) {
-                temp[i]=1;
+                temp[i] = 1;
             }
         }
         for (let i = 0; i < temp.length; i++) {
             if (temp[i] === 2) {
                 temp[i] = 0;
             }
-        }
-        for (let i = number; i < (parseInt(number) + parseInt(hourRend)); i++) {
-            if (temp[i] === 1) {
-                check = false;
+            if (i >= number && i < (parseInt(number) + parseInt(hourRend))) {
+                if (temp[i] === 1) {
+                    check = false;
+                }
             }
         }
+        // for (let i = number; i < (parseInt(number) + parseInt(hourRend)); i++) {
+        //     if (temp[i] === 1) {
+        //         check = false;
+        //     }
+        // }
         if (check) {
             for (let i = number; i < (parseInt(number) + parseInt(hourRend)); i++) {
                 if (temp[i] === 0) {
@@ -181,6 +194,8 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         const temp1 = [];
         for (let i = 0; i < 24; i++) {
             temp1.push(temp[(i + (number1 * 24))]);
+            if (temp[(i + (number1 * 24))] === 2) {
+            }
         }
         setHourInDay(temp1);
         const a = new Date();
@@ -264,7 +279,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                 </tr>
                                 <tr>
                                     <td><span>Số dư hiện tại</span>:</td>
-                                    {user  ? <td>
+                                    {user ? <td>
                                         <span className="total-amount">{user.balance}đ</span><span
                                         className="load-more-credit">+</span></td> : <td>
                                         <span className="total-amount">0đ</span><span
@@ -289,28 +304,35 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                                     <td>Chọn Ngày :</td>
                                     <td><select name="dateCreate" className="form-control" onChange={getData}>
                                         <option id="day0" value={sevenDay[0].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
                                         </option>
                                         <option id="day1" value={sevenDay[1].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
                                         </option>
                                         <option id="day2" value={sevenDay[2].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth()+1}-{sevenDay[2].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
                                         </option>
                                         <option id="day3" value={sevenDay[3].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth()+1}-{sevenDay[3].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth() + 1}-{sevenDay[3].getFullYear()}
                                         </option>
 
                                         <option id="day4" value={sevenDay[4].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth()+1}-{sevenDay[4].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth() + 1}-{sevenDay[4].getFullYear()}
                                         </option>
 
                                         <option id="day5" value={sevenDay[5].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth()+1}-{sevenDay[5].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth() + 1}-{sevenDay[5].getFullYear()}
                                         </option>
 
                                         <option id="day6" value={sevenDay[6].getDate()}>
-                                            Ngày :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth()+1}-{sevenDay[6].getFullYear()}
+                                            Ngày
+                                            :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth() + 1}-{sevenDay[6].getFullYear()}
                                         </option>
 
                                     </select></td>

@@ -6,7 +6,7 @@ import {
     getAllBillByIdCCDV,
     getAllBillByIdUser,
     receivedBill,
-    setCancelBill
+    setCancelBill, setFocusBillId
 } from "../../service/BillsService";
 import {Link} from "react-router-dom";
 import Bills from "./Bills";
@@ -38,6 +38,10 @@ const AllBillByOfCCDV = () => {
         return state.BillByAccount.BillByAccount.cancelBill;
     });
 
+    const focusBillId = useSelector(state => {
+        return state.BillByAccount.BillByAccount.focusBillId;
+    });
+
     const [idBillRecevied, setBillRecevied] = useState(undefined);
 
     const [idBill, setIdBill] = useState(undefined);
@@ -63,6 +67,15 @@ const AllBillByOfCCDV = () => {
     const closeBillDetail = () => {
         setHover(false);
         setBillDetail(false);
+    };
+
+    const dateStringOptions = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false, // Use 24-hour format
     };
 
     const [objects, setObjects] = useState(null);
@@ -100,6 +113,20 @@ const AllBillByOfCCDV = () => {
             sendNotification(idBill);
         });
     }, [idBill, idAccount, message]);
+
+    useEffect(() => {
+        const handleUrlChange = () => {
+            dispatch(setFocusBillId(0));
+        };
+
+        // Add the event listener to listen for URL changes
+        window.addEventListener("popstate", handleUrlChange);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("popstate", handleUrlChange);
+        };
+    }, [])
 
     const sendNotification = (billId) => {
         try {
@@ -146,108 +173,106 @@ const AllBillByOfCCDV = () => {
     }
     return (
         <>
-
+            <style
+                dangerouslySetInnerHTML={{
+                    __html:
+                        "\n.flicker-border {\n  border: 2px solid transparent; /* Start with a transparent border */\n  animation: flicker 2s infinite alternate; /* Apply the flicker animation */\n}\n\n@keyframes flicker {\n  0% {\n    border-color: red; /* Start with a red border */\n  }\n  50% {\n    border-color: transparent; /* Flicker to a transparent border halfway through the animation */\n  }\n  100% {\n    border-color: red; /* End with a red border again */\n  }\n}\n    "
+                }}
+            />
+            <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
+            <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet"/>
             <h3>Lịch sử đơn thuê</h3>
             <div className="transaction-table">
                 <div className="table-responsive">
-                    {/* {allBillOfCCDV && SON.parse(localStorage.getItem("account")).role.nameRole === "ROLE_CCDV" && */}
                     <table className="table table-striped table-bordered table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th>Tên người thuê</th>
-                            <th>Địa chỉ</th>
-                            <th>Số giờ thuê</th>
-                            <th>Ngày bắt đầu</th>
-                            <th>Ngày kết thúc</th>
-                            <th>Ngày tạo đơn</th>
-                            <th>Tổng tiền</th>
-                            <th>Tình trạng</th>
-                            <th>Xem chi tiết</th>
-                            <th>Hoạt động</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "80px"}}>Mã đơn</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Nickname người CCDV</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "320px"}}>Ngày bắt đầu</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "70px"}}>Số giờ thuê</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tổng tiền</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tình trạng</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Xem chi tiết</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "150px"}}>Hoạt động</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {currentBills.length > 0 &&
-                            currentBills.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.accountUser.nickname}</td>
-                                    <td>{item.address}</td>
-                                    <td>{item.hour}</td>
-                                    <td>
-                                        {new Date(item.dateStart).toLocaleString()}
-                                    </td>
-                                    <td>
-                                        {new Date(item.dateEnd).toLocaleString()}
-                                    </td>
-                                    <td>{new Date(item.dateCreate).toLocaleString()}</td>
-                                    <td>{item.total}</td>
-                                    <td>
-                                        {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
-                                    </td>
-                                    <td style={{width: "150px"}}>
-                                        <button className="action-button detail-button"
-                                                style={{width: "auto"}}
-                                                onClick={() => openBillDetail(item)}>
-                                            xem chi tiết
-                                        </button>
-                                    </td>
-                                    <td className="actions" style={{width: "200px"}}>
-                                        {item.status.nameStatus === "wait" && (
-                                            <>
-                                                <button type="button"
-                                                        className="action-button cancel-button"
-                                                        onClick={() => openModal(item)}>
-                                                    Hủy đơn
-                                                </button>
-                                                <button className="action-button confirm-button"
-                                                        onClick={() => receivedBills(item.id)}>
-                                                    Xác nhận
-                                                </button>
-                                            </>
-                                        )}
-                                        {item.status.nameStatus === "recevied" && (
-                                            <>
-                                                <button className="action-button cancel-button"
-                                                        onClick={() => openModal(item)}>
-                                                    Hủy đơn
-                                                </button>
-                                            </>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div className="pagination-container">
-                <ul className="pagination">
-                    {currentPage === 1 ? (
-                        <li className="disabled">
-                            <button>&lt; Trang trước</button>
-                        </li>
-                    ) : (
-                        <li>
-                            <button onClick={() => paginate(currentPage - 1)}>&lt; Trang trước</button>
-                        </li>
-                    )}
-                    {currentPage < Math.ceil(allBillOfCCDV.length / billsPerPage) ? (
-                        <li>
-                            <button onClick={() => paginate(currentPage + 1)}>Trang tiếp theo &gt;</button>
-                        </li>
-                    ) : (
-                        <li className="disabled">
-                            <button>Trang tiếp theo &gt;</button>
-                        </li>
-                    )}
-                </ul>
-            </div>
+                                    {currentBills.length > 0 &&
+                                        currentBills.map((item) => (
+                                            <tr key={item.id} className={focusBillId && focusBillId == item.id ? "flicker-border" : ""}>
+                                                <td style={{textAlign: "center"}}>{item.id}</td>
+                                                <td>{item.accountCCDV.nickname}</td>
+                                                <td>{new Date(item.dateStart).toLocaleString("en-GB", dateStringOptions)} - {new Date(item.dateEnd).toLocaleString("en-GB", dateStringOptions)}</td>
+                                                <td style={{textAlign: "center"}}>{item.hour}</td>
+                                                <td style={{textAlign: "right"}}>{item.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
+                                                <td>
+                                                    {item.status.nameStatus === "wait" ? "Chờ xác nhận" : item.status.nameStatus === "recevied" ? "Đã nhận" : item.status.nameStatus === "complete" ? "Hoàn thành" : "Đã hủy"}
+                                                </td>
+                                                <td style={{width: "150px"}}>
+                                                    <button className="action-button detail-button"
+                                                            style={{width: "auto"}}
+                                                            onClick={() => openBillDetail(item)}>
+                                                        Xem chi tiết
+                                                    </button>
+                                                </td>
+                                                <td className="actions" style={{width: "200px"}}>
+                                                    {item.status.nameStatus === "wait" && (
+                                                        <>
+                                                            <button type="button"
+                                                                    className="action-button cancel-button"
+                                                                    onClick={() => openModal(item)}>
+                                                                Hủy đơn
+                                                            </button>
+                                                            <button className="action-button confirm-button"
+                                                                    onClick={() => receivedBills(item.id)}>
+                                                                Xác nhận
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                    {item.status.nameStatus === "recevied" && (
+                                                        <>
+                                                            <button className="action-button cancel-button"
+                                                                    onClick={() => openModal(item)}>
+                                                                Hủy đơn
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="pagination-container">
+                            <ul className="pagination">
+                                {currentPage === 1 ? (
+                                    <li className="disabled">
+                                        <button>&lt; Trang trước</button>
+                                    </li>
+                                ) : (
+                                    <li>
+                                        <button onClick={() => paginate(currentPage - 1)}>&lt; Trang trước</button>
+                                    </li>
+                                )}
+                                {currentPage < Math.ceil(allBillOfCCDV.length / billsPerPage) ? (
+                                    <li>
+                                        <button onClick={() => paginate(currentPage + 1)}>Trang tiếp theo &gt;</button>
+                                    </li>
+                                ) : (
+                                    <li className="disabled">
+                                        <button>Trang tiếp theo &gt;</button>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
 
-            {allBillOfCCDV.length == 0 && (
-                <div className="text-center mt-20 col-md-12">
-                    <span>Không có dữ liệu</span>
-                </div>
-            )}
+                        {allBillOfCCDV.length == 0 && (
+                            <div className="text-center mt-20 col-md-12">
+                                <span>Không có dữ liệu</span>
+                            </div>
+                        )}
             {objects && modal && (
                 <>
                     <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet"/>
@@ -271,7 +296,7 @@ const AllBillByOfCCDV = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Nick name ngừoi thuê:</td>
+                                                <td>Nickname người thuê:</td>
                                                 <td>{objects.accountUser.nickname}</td>
                                             </tr>
                                             <tr>
@@ -286,7 +311,7 @@ const AllBillByOfCCDV = () => {
                                                 </td>
                                                 <td>
                                                     <span
-                                                        className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
+                                                        className="price">{new Date(objects.dateEnd).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -294,7 +319,7 @@ const AllBillByOfCCDV = () => {
                                                     <span>Tổng tiền</span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{objects.total}</span>
+                                                    <span className="price">{objects.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -364,7 +389,7 @@ const AllBillByOfCCDV = () => {
                                                 </td>
                                                 <td>
                                                 <span
-                                                    className="price">{new Date(objects.dateCreate).toLocaleString()}</span>
+                                                    className="price">{new Date(objects.dateCreate).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -372,7 +397,7 @@ const AllBillByOfCCDV = () => {
                                                     <span>Tổng tiền</span>:
                                                 </td>
                                                 <td>
-                                                    <span className="price">{objects.total}</span>
+                                                    <span className="price">{objects.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -381,7 +406,7 @@ const AllBillByOfCCDV = () => {
                                                 </td>
                                                 <td>
                                                 <span
-                                                    className="price">{new Date(objects.dateStart).toLocaleString()}</span>
+                                                    className="price">{new Date(objects.dateStart).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -390,7 +415,7 @@ const AllBillByOfCCDV = () => {
                                                 </td>
                                                 <td>
                                                 <span
-                                                    className="price">{new Date(objects.dateEnd).toLocaleString()}</span>
+                                                    className="price">{new Date(objects.dateEnd).toLocaleString("en-GB", dateStringOptions)}</span>
                                                 </td>
                                             </tr>
                                             <tr>
