@@ -199,11 +199,11 @@ const RegisterCCDV =() =>{
                                             <span>Đăng nhập</span>
                                         </p>
                                     </a>
-                                    <a className="create-new">
-                                        <p>
-                                            <span>Quên mật khẩu?</span>
-                                        </p>
-                                    </a>
+                                    {/*<a className="create-new">*/}
+                                    {/*    <p>*/}
+                                    {/*        <span>Quên mật khẩu?</span>*/}
+                                    {/*    </p>*/}
+                                    {/*</a>*/}
                                 </div>
                             </div>
                         </div>

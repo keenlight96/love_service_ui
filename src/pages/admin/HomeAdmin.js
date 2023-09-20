@@ -22,12 +22,14 @@ const HomeAdmin = () => {
         status: ""
     })
     const [userParam, setUserParam] = useState('');
+    const [idStatus, setIdStatus] = useState("null");
+
     useEffect(() =>{
         dispatch(getAllUser());
         dispatch(getAllCCDV());
         dispatch(getAccountUserFilter(filter));
         dispatch(getAccountCCDVFilter(filter));
-        dispatch(getAllBill());
+        dispatch(getAllBill(idStatus));
         dispatch(getListReport(userParam))
     },[])
     return (

@@ -54,44 +54,44 @@ const NewUserList =() =>{
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách người dùng mới nhất </h4>
                                             <div className="box_right d-flex lms_block">
-                                                <div className="serach_field_2">
-                                                    <div className="search_inner">
-                                                        <form active="#">
-                                                            <div className="search_field">
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Search content here..."
-                                                                />
-                                                            </div>
-                                                            <button type="submit">
-                                                                <i className="ti-search" />
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div className="add_button ms-2">
-                                                    <a
-                                                        href="#"
-                                                        data-toggle="modal"
-                                                        data-target="#addcategory"
-                                                        className="btn_1"
-                                                    >
-                                                        search
-                                                    </a>
-                                                </div>
+                                                {/*<div className="serach_field_2">*/}
+                                                {/*    <div className="search_inner">*/}
+                                                {/*        <form active="#">*/}
+                                                {/*            <div className="search_field">*/}
+                                                {/*                <input*/}
+                                                {/*                    type="text"*/}
+                                                {/*                    placeholder="Search content here..."*/}
+                                                {/*                />*/}
+                                                {/*            </div>*/}
+                                                {/*            <button type="submit">*/}
+                                                {/*                <i className="ti-search" />*/}
+                                                {/*            </button>*/}
+                                                {/*        </form>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="add_button ms-2">*/}
+                                                {/*    <a*/}
+                                                {/*        href="#"*/}
+                                                {/*        data-toggle="modal"*/}
+                                                {/*        data-target="#addcategory"*/}
+                                                {/*        className="btn_1"*/}
+                                                {/*    >*/}
+                                                {/*        search*/}
+                                                {/*    </a>*/}
+                                                {/*</div>*/}
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Nickname</th>
-                                                    <th scope="col">Username</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Role</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Action</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Biệt danh</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Email</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Vai trò</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -105,16 +105,14 @@ const NewUserList =() =>{
                                                     <td>{item.nickname}</td>
                                                     <td>{item.username}</td>
                                                     <td>
-                                                        <a
-                                                            href="https://demo.dashboardpack.com/cdn-cgi/l/email-protection"
-                                                            className="__cf_email__"
-                                                            data-cfemail="65120a170e51555c250208040c094b060a08"
-                                                        >
+                                                        <a className="__cf_email__">
                                                             {item.email}
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a href="#">{item.role.nameRole}</a>
+                                                        {item.role.nameRole === "ROLE_USER" &&
+                                                        <a href="#">Người dùng</a>
+                                                        }
                                                     </td>
                                                     <td>
                                                         <a href="#" className="status_btn">

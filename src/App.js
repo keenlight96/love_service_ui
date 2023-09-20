@@ -23,6 +23,7 @@ import NewCCDVList from "./pages/admin/NewCCDVList";
 import AllUserList from "./pages/admin/AllUserList";
 import AllCCDVList from "./pages/admin/AllCCDVList";
 import AccountReport from "./pages/admin/AccountReport";
+import NewUserList from "./pages/admin/NewUserList";
 import AccountSettings from "./pages/home/AccountSettings";
 import Album from "./pages/home/Album";
 import Revenue from "./pages/profile/Revenue";
@@ -62,10 +63,10 @@ function App() {
                     </Route>
 
                 </Route>
-                <Route path="/" element={<LayoutAdmin />}>
+                <Route path="/" element={<LayoutAdmin/>}>
                     <Route path="/homeAdmin"  element={<HomeAdmin />}>
                         <Route path={"allBills"} element={<ListBill/>}></Route>
-                        <Route path={"NewUser"} element={<NewCCDVList/>}></Route>
+                        <Route path={"NewUser"} element={<NewUserList/>}></Route>
                         <Route path={"allUser"} element={<AllUserList/>}></Route>
                         <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
                         <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>
