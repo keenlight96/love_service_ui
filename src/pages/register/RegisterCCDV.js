@@ -41,7 +41,7 @@ const RegisterCCDV =() =>{
 
     return(
         <>
-            <div style={{display:'flex', backgroundColor:'lightpink',justifyContent:'center'}}>
+            {/*<div style={{display:'flex',justifyContent:'center'}}>*/}
             <div className={'wrapper-register'}>
                 <div className={'container-register'}>
                     <div className={'layoutForm'}>
@@ -143,7 +143,7 @@ const RegisterCCDV =() =>{
                                                     <Field
                                                         type="email"
                                                         name="email"
-                                                        placeholder="Xác thực Email"
+                                                        placeholder="Email"
                                                         maxLength="5000"
                                                         autoComplete="false"
                                                         onFocus = {resetMessage}
@@ -209,7 +209,7 @@ const RegisterCCDV =() =>{
                             </div>
                         </div>
                     </div>
-                </div>
+                {/*</div>*/}
             </div>
 
              </div>
