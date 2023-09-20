@@ -125,31 +125,31 @@ const SidebarAdmin  = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li className="">
-                            <a className="has-arrow" href="#" aria-expanded="false">
-                                <div className="nav_icon_small">
-                                    <img src="/template_adminimg/menu-icon/11.svg" alt=""/>
-                                </div>
-                                <div className="nav_title">
-                                    <span>Vai trò</span>
-                                </div>
-                            </a>
-                            <ul className="mm-collapse">
-                                <li>
-                                    <a href="" id={"id1-8"}>Cài đặt vai trò</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="">
-                            <a href="" aria-expanded="false">
-                                <div className="nav_icon_small">
-                                    <img src="img/menu-icon/10.svg" alt=""/>
-                                </div>
-                                <div className="nav_title">
-                                    <span>Top doanh thu tuần</span>
-                                </div>
-                            </a>
-                        </li>
+                        {/*<li className="">*/}
+                        {/*    <a className="has-arrow" href="#" aria-expanded="false">*/}
+                        {/*        <div className="nav_icon_small">*/}
+                        {/*            <img src="/template_adminimg/menu-icon/11.svg" alt=""/>*/}
+                        {/*        </div>*/}
+                        {/*        <div className="nav_title">*/}
+                        {/*            <span>Vai trò</span>*/}
+                        {/*        </div>*/}
+                        {/*    </a>*/}
+                        {/*    <ul className="mm-collapse">*/}
+                        {/*        <li>*/}
+                        {/*            <a href="" id={"id1-8"}>Cài đặt vai trò</a>*/}
+                        {/*        </li>*/}
+                        {/*    </ul>*/}
+                        {/*</li>*/}
+                        {/*<li className="">*/}
+                        {/*    <a href="" aria-expanded="false">*/}
+                        {/*        <div className="nav_icon_small">*/}
+                        {/*            <img src="img/menu-icon/10.svg" alt=""/>*/}
+                        {/*        </div>*/}
+                        {/*        <div className="nav_title">*/}
+                        {/*            <span>Top doanh thu tuần</span>*/}
+                        {/*        </div>*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
                     </ul>
                 </nav>
             </div>

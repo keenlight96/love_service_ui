@@ -2,6 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import AdminSlice from "../../redux/AdminSlice";
 import {blockAccount, getAllCCDV, getAllUser} from "../../service/AdminService";
+import customAxios from "../../service/api";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import Swal from "sweetalert2";
 
 const NewCCDVList =() =>{
     const dispatch = useDispatch();
@@ -29,6 +32,55 @@ const NewCCDVList =() =>{
 
     const currenUserAc = allCCDVAc.slice(indexOfFirstCCDV, indexOfLastCCDV);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const addUserChat = (username) => {
+        const account = customAxios.get("userDetail/"+ username)
+            .then(r => {
+                if (r.data.account.id != storeUser.account.id) {
+                    let newReceiver = {
+                        id: r.data.account.id,
+                        username: r.data.account.username,
+                        nickname: r.data.account.nickname,
+                        avatar: r.data.account.avatar,
+                        role: {
+                            id: r.data.account.role.id,
+                            nameRole: r.data.account.role.nameRole,
+                        },
+                        status: {
+                            id: r.data.account.status.id,
+                            nameStatus: r.data.account.status.nameStatus,
+                        },
+                        isActive: r.data.account.isActive
+                    }
+                    dispatch(addChatReceivers(newReceiver));
+                    dispatch(setActiveReceiver(newReceiver));
+                    try {
+                        dispatch(getChatWithReceiver(newReceiver.id))
+                    } catch (e) {
+                    }
+
+                    if (!msgBoxToggle) {
+                        dispatch(setMsgBoxToggle());
+                    }
+                }
+            })
+            .catch(reason => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Tài khoản không khả dụng.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+    }
+
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
 
     return(
         <><link rel="stylesheet" href="/template_admin/css/css_sidebar.css"/>
@@ -102,8 +154,8 @@ const NewCCDVList =() =>{
                                                                 {item.id}
                                                             </a>
                                                         </th>
-                                                        <td>{item.nickname}</td>
-                                                        <td>{item.username}</td>
+                                                        <td onClick={() => {addUserChat(item.username)}} style={{cursor: "pointer"}}>{item.nickname}</td>
+                                                        <td onClick={() => {addUserChat(item.username)}} style={{cursor: "pointer"}}>{item.username}</td>
                                                         <td>
                                                             <a className="__cf_email__">
                                                                 {item.email}

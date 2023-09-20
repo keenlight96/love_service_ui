@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllBill} from "../../service/AdminService";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import customAxios from "../../service/api";
+import Swal from "sweetalert2";
 
 const ListBill =() =>{
     const dispatch = useDispatch();
@@ -43,6 +46,55 @@ const ListBill =() =>{
     };
     const [filterBill, setFilterBill] = useState('null');
 
+    const addUserChat = (username) => {
+        const account = customAxios.get("userDetail/"+ username)
+            .then(r => {
+                if (r.data.account.id != storeUser.account.id) {
+                    let newReceiver = {
+                        id: r.data.account.id,
+                        username: r.data.account.username,
+                        nickname: r.data.account.nickname,
+                        avatar: r.data.account.avatar,
+                        role: {
+                            id: r.data.account.role.id,
+                            nameRole: r.data.account.role.nameRole,
+                        },
+                        status: {
+                            id: r.data.account.status.id,
+                            nameStatus: r.data.account.status.nameStatus,
+                        },
+                        isActive: r.data.account.isActive
+                    }
+                    dispatch(addChatReceivers(newReceiver));
+                    dispatch(setActiveReceiver(newReceiver));
+                    try {
+                        dispatch(getChatWithReceiver(newReceiver.id))
+                    } catch (e) {
+                    }
+
+                    if (!msgBoxToggle) {
+                        dispatch(setMsgBoxToggle());
+                    }
+                }
+            })
+            .catch(reason => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Tài khoản không khả dụng.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+    }
+
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
+
     useEffect(() =>{
         dispatch(getAllBill(filterBill));
     },[filterBill])
@@ -81,8 +133,8 @@ const ListBill =() =>{
                         {currentBills.length > 0 &&
                             currentBills.map((item) => (
                                 <tr key={item.id}>
-                                    <td>{item.accountUser.username}</td>
-                                    <td>{item.accountCCDV.username}</td>
+                                    <td onClick={() => {addUserChat(item.accountUser.username)}} style={{cursor: "pointer"}}>{item.accountUser.username}</td>
+                                    <td onClick={() => {addUserChat(item.accountCCDV.username)}} style={{cursor: "pointer"}}>{item.accountCCDV.username}</td>
                                     <td>{item.address}</td>
                                     <td>{item.hour}</td>
                                     <td>

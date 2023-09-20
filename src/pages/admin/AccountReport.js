@@ -2,6 +2,9 @@ import React, {useEffect, useState} from "react";
 import DetailCCDV from "./DetailCCDV";
 import {useDispatch, useSelector} from "react-redux";
 import {activeAccount, blockAccount, getListReport} from "../../service/AdminService";
+import customAxios from "../../service/api";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import Swal from "sweetalert2";
 
 const AccountReport =() =>{
     const dispatch = useDispatch();
@@ -41,6 +44,56 @@ const AccountReport =() =>{
         setIdAccount(object);
         console.log(idAccount)
     };
+
+    const addUserChat = (username) => {
+        const account = customAxios.get("userDetail/"+ username)
+            .then(r => {
+                if (r.data.account.id != storeUser.account.id) {
+                    let newReceiver = {
+                        id: r.data.account.id,
+                        username: r.data.account.username,
+                        nickname: r.data.account.nickname,
+                        avatar: r.data.account.avatar,
+                        role: {
+                            id: r.data.account.role.id,
+                            nameRole: r.data.account.role.nameRole,
+                        },
+                        status: {
+                            id: r.data.account.status.id,
+                            nameStatus: r.data.account.status.nameStatus,
+                        },
+                        isActive: r.data.account.isActive
+                    }
+                    dispatch(addChatReceivers(newReceiver));
+                    dispatch(setActiveReceiver(newReceiver));
+                    try {
+                        dispatch(getChatWithReceiver(newReceiver.id))
+                    } catch (e) {
+                    }
+
+                    if (!msgBoxToggle) {
+                        dispatch(setMsgBoxToggle());
+                    }
+                }
+            })
+            .catch(reason => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Tài khoản không khả dụng.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+    }
+
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
+
     useEffect(() =>{
         dispatch(blockAccount(idAccount)).then(() =>{
             dispatch(getListReport(userParam));
@@ -109,27 +162,14 @@ const AccountReport =() =>{
                                                                 {item.id}
                                                             </a>
                                                         </th>
-                                                        <td>{item.send.username}
-                                                            <a href="#" className="action_btn" >
-                                                                {" "}
-                                                                <i className="ti-eye"/>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a
-                                                                href="https://demo.dashboardpack.com/cdn-cgi/l/email-protection"
-                                                                className="__cf_email__"
-                                                                data-cfemail="65120a170e51555c250208040c094b060a08"
-                                                            >
-                                                                {item.receiver.username}
-                                                            </a>
-                                                        </td>
+                                                        <td onClick={() => {addUserChat(item.send.username)}} style={{cursor: "pointer"}}>{item.send.username}</td>
+                                                        <td onClick={() => {addUserChat(item.receiver.username)}} style={{cursor: "pointer"}}>{item.receiver.username}</td>
                                                         <td>
                                                             {item.receiver.role.nameRole === "ROLE_CCDV" &&
-                                                            <a href="#">Người CCDV</a>
+                                                            <a style={{color: "black"}} href="#">Người CCDV</a>
                                                             }
                                                             {item.receiver.role.nameRole === "ROLE_USER" &&
-                                                                <a href="#">Người dùng</a>
+                                                                <a style={{color: "black"}} href="#">Người dùng</a>
                                                             }
                                                         </td>
                                                         <td>

@@ -399,9 +399,16 @@ const Header = () => {
                                                         {/*<a href="#"*/}
                                                         {/*                         target="_blank"*/}
                                                         {/*                         rel="noopener noreferrer"><span>Group</span></a>*/}
-                                                        <a rel="noopener noreferrer"  onClick={() => {addAdminChat()}}>
-                                                            <span>Chat Admin</span>
-                                                        </a>
+                                                        {
+                                                            storeUser && storeUser.account.role.id == 1 ?
+                                                                <a href={"/homeAdmin"} rel="noopener noreferrer">
+                                                                    <span>Control Panel</span>
+                                                                </a>
+                                                                :
+                                                                <a rel="noopener noreferrer"  onClick={() => {addAdminChat()}}>
+                                                                    <span>Chat Admin</span>
+                                                                </a>
+                                                        }
                                                     </div>
                                                 </div>
                                             </ul>

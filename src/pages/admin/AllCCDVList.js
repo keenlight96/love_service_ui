@@ -3,6 +3,8 @@ import React, {useEffect, useState} from "react";
 import {activeAccount, blockAccount, getAccountCCDVFilter, getAccountUserFilter} from "../../service/AdminService";
 import DetailCCDV from "./DetailCCDV";
 import Swal from "sweetalert2";
+import customAxios from "../../service/api";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 
 const AllCCDVList = () => {
     const dispatch = useDispatch();
@@ -68,6 +70,55 @@ const AllCCDVList = () => {
     // const toggleDetail = () => {
     //     setShowDetail(!showDetail);
     // };
+
+    const addUserChat = (username) => {
+        const account = customAxios.get("userDetail/"+ username)
+            .then(r => {
+                if (r.data.account.id != storeUser.account.id) {
+                    let newReceiver = {
+                        id: r.data.account.id,
+                        username: r.data.account.username,
+                        nickname: r.data.account.nickname,
+                        avatar: r.data.account.avatar,
+                        role: {
+                            id: r.data.account.role.id,
+                            nameRole: r.data.account.role.nameRole,
+                        },
+                        status: {
+                            id: r.data.account.status.id,
+                            nameStatus: r.data.account.status.nameStatus,
+                        },
+                        isActive: r.data.account.isActive
+                    }
+                    dispatch(addChatReceivers(newReceiver));
+                    dispatch(setActiveReceiver(newReceiver));
+                    try {
+                        dispatch(getChatWithReceiver(newReceiver.id))
+                    } catch (e) {
+                    }
+
+                    if (!msgBoxToggle) {
+                        dispatch(setMsgBoxToggle());
+                    }
+                }
+            })
+            .catch(reason => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Tài khoản không khả dụng.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+    }
+
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
 
     return (
         <>
@@ -137,7 +188,7 @@ const AllCCDVList = () => {
                                                                 {item.account.id}
                                                             </a>
                                                         </th>
-                                                        <td>{item.account.nickname}</td>
+                                                        <td onClick={() => {addUserChat(item.account.username)}} style={{cursor: "pointer"}}>{item.account.nickname}</td>
                                                         <td>{item.account.username}
                                                             <a href="#" className="action_btn" onClick={()=>detail(item)}>
                                                                 {" "}
