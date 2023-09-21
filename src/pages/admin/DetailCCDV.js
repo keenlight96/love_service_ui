@@ -1,4 +1,4 @@
-import ShowImages from "../profile/ShowImages";
+ import ShowImages from "../profile/ShowImages";
 import React, {useEffect, useState} from "react";
 import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 import {useDispatch, useSelector} from "react-redux";

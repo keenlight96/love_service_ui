@@ -367,10 +367,10 @@ const Header = () => {
                                                     className="money">
                                                     {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                                                 </span></a></li>
-                                                <li role="presentation" className="menu-item"><a role="menuitem"
-                                                                                                 tabIndex={-1}
-                                                                                                 href="/information/topup"><i
-                                                    className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>
+                                                {/*<li role="presentation" className="menu-item"><a role="menuitem"*/}
+                                                {/*                                                 tabIndex={-1}*/}
+                                                {/*                                                 href="/information/topup"><i*/}
+                                                {/*    className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>*/}
                                                 <li role="presentation" className="menu-item"><a role="menuitem"
                                                                                                  tabIndex={-1}
                                                                                                  href="/information/bills"><i
@@ -477,9 +477,9 @@ const Header = () => {
                                         className="money">
                                         {storeUser && storeUser.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ
                                     </span></a></li>
-                                    <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
-                                                                                     href="/information/topup"><i
-                                        className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>
+                                    {/*<li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}*/}
+                                    {/*                                                 href="/information/topup"><i*/}
+                                    {/*    className="fas fa-wallet"/> <span>Nạp tiền</span></a></li>*/}
                                     <li role="presentation" className="menu-item"><a role="menuitem" tabIndex={-1}
                                                                                      href="/information/bills"><i
                                         className="fas fa-clock"/> <span>Lịch sử thuê</span> </a></li>

@@ -40,10 +40,10 @@ const SidebarInformation = (current) => {
                     element = document.querySelector("#id1-2");
                     element.classList.add("active");
                     break;
-                case "/information/topup":
-                    element = document.querySelector("#id1-3");
-                    element.classList.add("active");
-                    break;
+                // case "/information/topup":
+                //     element = document.querySelector("#id1-3");
+                //     element.classList.add("active");
+                //     break;
                 case "/information/summary":
                     element = document.querySelector("#id2-1");
                     element.classList.add("active");
@@ -56,10 +56,10 @@ const SidebarInformation = (current) => {
                     element = document.querySelector("#id2-3");
                     element.classList.add("active");
                     break;
-                case "/information/setSupply":
-                    element = document.querySelector("#id2-4");
-                    element.classList.add("active");
-                    break;
+                // case "/information/setSupply":
+                //     element = document.querySelector("#id2-4");
+                //     element.classList.add("active");
+                //     break;
             }
         } catch (e) {}
     }, [location.pathname, storeUser])
@@ -116,21 +116,23 @@ const SidebarInformation = (current) => {
                             <div className="panel-collapse collapse in" style={{}}>
                                 <div className="panel-body">
                                     <div className="panel-group">
-                                        <Link to={"/information/info"}>
-                                            <div className="menu__setting--sub panel panel-default">
-                                                <div className="panel-heading">
-                                                    <div className=" panel-title" id={"id1-1"}><i className="fas fa-user-tie" /> Thông tin cá nhân
+                                        <>
+                                            <Link to={"/information/info"}>
+                                                <div className="menu__setting--sub panel panel-default">
+                                                    <div className="panel-heading">
+                                                        <div className="panel-title" id={"id1-1"}><i className="fas fa-user-tie" /> Thông tin cá nhân
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </Link>
+                                            </Link>
+                                        </>
                                         {
                                             storeUser && storeUser.account.role.id != 1 ?
                                                 <>
                                                     <Link to={"/information/bills"}>
                                                         <div className="menu__setting--sub panel panel-default">
                                                             <div className="panel-heading">
-                                                                <div className="  panel-title" id={"id1-2"}><i className="fas fa-history"/> Lịch sử
+                                                                <div className="panel-title" id={"id1-2"}><i className="fas fa-history"/> Lịch sử
                                                                     đơn thuê
                                                                 </div>
                                                             </div>
@@ -138,16 +140,16 @@ const SidebarInformation = (current) => {
                                                     </Link>
                                                    {/* bắt đầu để xem doanh thu*/}
                                                    {/* <Link to={"/information/revenue"}>*/}
-                                                    <Link to={"/information/revenue"}>
-                                                    <div className="menu__setting--sub panel panel-default">
-                                                        <div className="panel-heading">
-                                                            <div className="  panel-title" ><i
-                                                                className="fas fa-sliders-h"/>
-                                                                Thống kê
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    </Link>
+                                                   {/* <Link to={"/information/revenue"}>*/}
+                                                   {/* <div className="menu__setting--sub panel panel-default">*/}
+                                                   {/*     <div className="panel-heading">*/}
+                                                   {/*         <div className="  panel-title" ><i*/}
+                                                   {/*             className="fas fa-sliders-h"/>*/}
+                                                   {/*             Thống kê*/}
+                                                   {/*         </div>*/}
+                                                   {/*     </div>*/}
+                                                   {/* </div>*/}
+                                                   {/* </Link>*/}
                                                     {/*</Link>*/}
                                                     {/*bắt đầu mở modal nhập mật khẩu*/}
                                                     {/*{modalIsOpen && (*/}
@@ -195,14 +197,14 @@ const SidebarInformation = (current) => {
                                                     {/*    </>*/}
                                                     {/*)}*/}
                                                     {/*kết thúc modal*/}
-                                                    <Link to={"/information/topup"}>
-                                                        <div className="menu__setting--sub panel panel-default">
-                                                            <div className="panel-heading">
-                                                                <div className="  panel-title" id={"id1-3"}><i className="fas fa-wallet"/> Nạp tiền
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Link>
+                                                    {/*<Link to={"/information/topup"}>*/}
+                                                    {/*    <div className="menu__setting--sub panel panel-default">*/}
+                                                    {/*        <div className="panel-heading">*/}
+                                                    {/*            <div className="  panel-title" id={"id1-3"}><i className="fas fa-wallet"/> Nạp tiền*/}
+                                                    {/*            </div>*/}
+                                                    {/*        </div>*/}
+                                                    {/*    </div>*/}
+                                                    {/*</Link>*/}
                                                 </>
                                                 :
                                                 <></>
@@ -216,8 +218,8 @@ const SidebarInformation = (current) => {
                                 <div className="menu__setting--main panel panel-default">
                                     <div className="panel-heading">
                                         <div className="panel-title">
-                                            <a aria-expanded="true" className role="button" href="src/components/common/SidebarInformation#">
-                                                NGƯỜI CUNG CẤP DỊCH VỤ <i className="fas fa-chevron-down" /></a>
+                                            <a aria-expanded="true" className role="button" href="#">
+                                                CUNG CẤP DỊCH VỤ <i className="fas fa-chevron-down" /></a>
                                         </div>
                                     </div>
                                     <div className="panel-collapse collapse in" style={{}}>
@@ -226,7 +228,7 @@ const SidebarInformation = (current) => {
                                                 <Link to={"/information/summary"}>
                                                     <div className="menu__setting--sub panel panel-default">
                                                         <div className="panel-heading">
-                                                            <div className="  panel-title" id={"id2-1"}><i className="fas fa-user-tie" /> Tổng quan
+                                                            <div className="  panel-title" id={"id2-1"}><i className="fas fa-user-tie" /> Thống kê
                                                             </div>
                                                         </div>
                                                     </div>
@@ -243,14 +245,6 @@ const SidebarInformation = (current) => {
                                                     <div className="menu__setting--sub panel panel-default">
                                                         <div className="panel-heading">
                                                             <div className="  panel-title" id={"id2-3"}><i className="fas fa-book" /> Album ảnh
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Link>
-                                                <Link to={"/information/setSupply"}>
-                                                    <div className="menu__setting--sub panel panel-default">
-                                                        <div className="panel-heading">
-                                                            <div className="  panel-title" id={"id2-4"}><i className="fas fa-alien-monster" /> Danh sách dịch vụ
                                                             </div>
                                                         </div>
                                                     </div>

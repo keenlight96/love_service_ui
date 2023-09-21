@@ -179,14 +179,14 @@ const AllBillOfUser = () => {
                                 <table className="table table-striped table-bordered table-condensed table-hover">
                                     <thead>
                                     <tr>
-                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "80px"}}>Mã đơn</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "50px"}}>Mã đơn</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Nickname người CCDV</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "320px"}}>Ngày bắt đầu</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "70px"}}>Số giờ thuê</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tổng tiền</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tình trạng</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Xem chi tiết</th>
-                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "150px"}}>Hoạt động</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "200px"}}>Hoạt động</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -206,20 +206,20 @@ const AllBillOfUser = () => {
                                                         Xem chi tiết
                                                     </button>
                                                 </td>
-                                                <td className="actions" style={{width: '200px'}}>
+                                                <td className="actions">
                                                     {item.status.nameStatus === "wait" && (
                                                         <>
-                                                            <button className="action-button cancel-button" onClick={() => openModal(item)}>
+                                                            <button className="action-button cancel-button" style={{margin: "0 2px 0"}} onClick={() => openModal(item)}>
                                                                 Hủy đơn
                                                             </button>
                                                         </>
                                                     )}
                                                     {item.status.nameStatus === "recevied" && (
                                                         <>
-                                                            <button className="action-button cancel-button" onClick={() => openModal(item)}>
+                                                            <button className="action-button cancel-button" style={{margin: "0 2px 0"}} onClick={() => openModal(item)}>
                                                                 Hủy đơn
                                                             </button>
-                                                            <button className="action-button confirm-button" onClick={() =>complete(item.id)}>
+                                                            <button className="action-button confirm-button" style={{margin: "0 2px 0"}} onClick={() =>complete(item.id)}>
                                                                 Xác nhận
                                                             </button>
                                                         </>

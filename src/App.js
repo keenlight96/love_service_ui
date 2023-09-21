@@ -73,13 +73,12 @@ function App() {
                     <Route path={"information"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <Information/> : <Test/> }>
                         <Route path={"info"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
                         <Route path={"bills"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <Bills/> : <Test/>}></Route>
-                        <Route path={"topup"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
-                        <Route path={"summary"} element={storeUser && (storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
-                        <Route path={"supplies"} element={storeUser && (storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
+                        {/*<Route path={"topup"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>*/}
+                        <Route path={"summary"} element={storeUser && (storeUser.account.role.id == 3) ? <Revenue/> : <Test/>}></Route>
+                        <Route path={"supplies"} element={storeUser && (storeUser.account.role.id == 3) ? <RegisterSupply isRegister={false} /> : <Test/>}></Route>
                         <Route path={"album"} element={storeUser && (storeUser.account.role.id == 3) ? <Album/> : <Test/>}></Route>
-                        <Route path={"revenue"} element={storeUser && (storeUser.account.role.id == 3) ? <Revenue/> : <Test/>}></Route>
 
-                        <Route path={"setSupply"} element={storeUser && (storeUser.account.role.id == 3) ? <RegisterSupply isRegister={false} /> : <Test/>}></Route>
+                        {/*<Route path={"setSupply"} element={storeUser && (storeUser.account.role.id == 3) ? <RegisterSupply isRegister={false} /> : <Test/>}></Route>*/}
                     </Route>
 
                 </Route>

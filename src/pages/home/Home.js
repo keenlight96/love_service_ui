@@ -270,8 +270,8 @@ const Home = () => {
                                        placeholder="Giá thấp nhất" style={{fontWeight: 'bold'}} id="minPrice"/>
                                 <input type="text" className="form-control price false btn btn-default"
                                        placeholder="Giá cao nhất" style={{fontWeight: 'bold'}} id="maxPrice"/>
-                                <input type="text" style={{width: '250px', height: '32px', borderRadius: '25px'}}
-                                       placeholder="Nhập nick name để tìm kiếm" id="nickname"/>
+                                <input type="text" className="form-control price false btn btn-default" style={{width: '500px'}}
+                                       placeholder="Nhập nick name" id="nickname"/>
                                 <button type="button" className="form-control btn-filter btn btn-default"
                                         onClick={searchCCdv}>
                                     <i className="fa fa-search"/> Tìm kiếm

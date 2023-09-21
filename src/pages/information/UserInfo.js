@@ -111,19 +111,19 @@ const UserInfo = () => {
 
     return (
         <>
-            <div className="row flowaccount">
-                <div className="col-sm-4 col-xs-12">
-                    <div className="border"><p>TỔNG TIỀN ĐÃ NẠP</p><span>0đ </span></div>
-                </div>
-                <div className="col-sm-4 col-xs-12">
-                    <div className="border"><p>TỔNG TIỀN ĐÃ DONATE</p><span>0đ </span></div>
-                </div>
-                <div className="col-sm-4 col-xs-12">
-                    <div className="border"><p>SỐ GIỜ ĐÃ THUÊ</p><span>0 Giờ</span></div>
-                </div>
-            </div>
+            {/*<div className="row flowaccount">*/}
+            {/*    <div className="col-sm-4 col-xs-12">*/}
+            {/*        <div className="border"><p>TỔNG TIỀN ĐÃ NẠP</p><span>0đ </span></div>*/}
+            {/*    </div>*/}
+            {/*    <div className="col-sm-4 col-xs-12">*/}
+            {/*        <div className="border"><p>TỔNG TIỀN ĐÃ DONATE</p><span>0đ </span></div>*/}
+            {/*    </div>*/}
+            {/*    <div className="col-sm-4 col-xs-12">*/}
+            {/*        <div className="border"><p>SỐ GIỜ ĐÃ THUÊ</p><span>0 Giờ</span></div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
             <div className="row">
-                <div className="col-md-6 col-sm-12 col-xs-12 personalinfo"><h3>Thông tin cá nhân</h3>
+                <div className="col-md-6 col-sm-12 col-xs-12 personalinfo">
                     <h3>Thông tin cá nhân</h3>
                     <UploadAvatar/>
                     <Formik initialValues= {accounts }
@@ -151,7 +151,7 @@ const UserInfo = () => {
                                 }
                             }>
                             <Form className="from-userinfo">
-                            <div className="fieldGroup "><p className="control-label">Họ</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Họ</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                    name="firstName"
                                                                                                    maxLength={5000}
                                                                                                    autoComplete="false"
@@ -160,7 +160,7 @@ const UserInfo = () => {
                                 <ErrorMessage name="firstName" component="div"
                                               className="error"/>
                             </div>
-                            <div className="fieldGroup "><p className="control-label">Tên</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Tên</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                     name="lastName"
                                                                                                     // placeholder  ={accounts.lastName || 'Nhập tên của bạn'}
                                                                                                     // defaultValue ={accounts.lastName || 'Nhập tên của bạn'}
@@ -173,7 +173,7 @@ const UserInfo = () => {
                                 <ErrorMessage name="lastName" component="div"
                                               className="error"/>
                             </div>
-                            <div className="fieldGroup "><p className="control-label">Nick Name</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Nick Name</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                           name="nickname"
                                                                                                           maxLength={5000}
                                                                                                           autoComplete="false"
@@ -181,7 +181,7 @@ const UserInfo = () => {
                                 <ErrorMessage name="nickname" component="div"
                                               className="error"/>
                             </div>
-                                <div className="fieldGroup "><p className="control-label">Số điện thoại</p><Field type="text"
+                                <div className="fieldGroup "><p className="control-label">Số điện thoại</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                               name="phoneNumber"
                                                                                                               maxLength={5000}
                                                                                                               autoComplete="false"
@@ -195,7 +195,7 @@ const UserInfo = () => {
                                 <div className="fieldGroup">
                                     <p className="control-label">Email</p>
                                     <Field
-                                        type="text"
+                                        type="text" style={{padding: "10px", fontSize: "14px"}}
                                         name="email"
                                         maxLength={5000}
                                         autoComplete="false"
@@ -232,6 +232,8 @@ const UserInfo = () => {
                                         style={{
                                             width: '100%', // Chiếm 10% chiều rộng
                                             verticalAlign: 'top', // Để thẻ input nằm trên thẻ div
+                                            marginBottom: "20px",
+                                            padding: "10px", fontSize: "14px"
                                         }}
                                         readOnly={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
@@ -241,7 +243,7 @@ const UserInfo = () => {
                                 </div>
 
 
-                            <div className="fieldGroup "><p className="control-label">Địa chỉ</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Địa chỉ</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                         name="address"
                                                                                                         // placeholder={accounts.address || 'Nhập địa chỉ của bạn'}
                                                                                                         maxLength={5000}
@@ -277,11 +279,12 @@ const UserInfo = () => {
                                             style={{
                                                 textAlign: 'center',
                                                 borderRadius: '7px',
-                                                padding: '7px',
                                                 // margin: '10px',
                                                 outline: 'none',
                                                 width: '100%',
                                                 border: '1px solid #777',
+                                                padding: "10px",
+                                                fontSize: "14px"
                                             }}
                                             disabled={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
@@ -303,7 +306,7 @@ const UserInfo = () => {
                             {/*    className="gender--radio"><input name="gender" type="radio"*/}
                             {/*                                     defaultValue={accounts.gender|| "Nữ"}/>Nữ<span/></label></div>*/}
                             <div className="fieldGroup ">
-                                <p className="control-label">Miền</p>
+                                <p className="control-label">Khu vực</p>
                                 <div>
                                     <Field
                                         as="select"
@@ -311,10 +314,11 @@ const UserInfo = () => {
                                         style={{
                                             textAlign: 'center',
                                             borderRadius: '7px',
-                                            padding: '7px',
                                             outline: 'none',
                                             width: '100%',
                                             border: '1px solid #777',
+                                            padding: "10px",
+                                            fontSize: "14px"
                                         }}
                                         disabled={accounts && accounts.role && accounts.role.nameRole === "ROLE_USER"}
 
@@ -329,7 +333,7 @@ const UserInfo = () => {
                             </div>
 
 
-                            <div className="fieldGroup "><p className="control-label">Chiểu cao (cm)</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Chiểu cao (cm)</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                         name="height"
                                                                                                         // placeholder={accounts.height || 'Nhập chiều cao của bạn'}
                                                                                                         maxLength={5000}
@@ -340,7 +344,7 @@ const UserInfo = () => {
                                 <ErrorMessage name="height" component="div"
                                               className="error"/>
                             </div>
-                            <div className="fieldGroup "><p className="control-label">Cân nặng (kg)</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Cân nặng (kg)</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                           name="weight"
                                                                                                           // placeholder={accounts.weight || 'Nhập cân nặng của bạn'}
                                                                                                           maxLength={5000}
@@ -351,7 +355,7 @@ const UserInfo = () => {
                                 <ErrorMessage name="weight" component="div"
                                               className="error"/>
                             </div>
-                            <div className="fieldGroup "><p className="control-label">Giới thiệu</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Giới thiệu</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                               name="describes"
                                                                                                               // placeholder={accounts.describes || 'Nhập giới thiệu của bạn'}
                                                                                                               maxLength={5000}
@@ -361,7 +365,7 @@ const UserInfo = () => {
                             />
 
                             </div>
-                            <div className="fieldGroup "><p className="control-label">Yêu cầu</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Yêu cầu</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                            name="basicRequest"
                                                                                                            // placeholder={accounts.basicRequest || 'Nhập yêu cầu của bạn'}
                                                                                                            maxLength={5000}
@@ -370,7 +374,7 @@ const UserInfo = () => {
 
                             />
                             </div>
-                            <div className="fieldGroup "><p className="control-label">Trang cá nhân</p><Field type="text"
+                            <div className="fieldGroup "><p className="control-label">Trang cá nhân</p><Field type="text" style={{padding: "10px", fontSize: "14px"}}
                                                                                                         name="facebookLink"
                                                                                                         // placeholder={accounts.facebookLink || 'Nhập địa chỉ trang cá nhân của bạn'}
                                                                                                         maxLength={5000}

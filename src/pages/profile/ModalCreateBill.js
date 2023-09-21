@@ -236,9 +236,10 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         <div role="dialog">
             <div className="fade modal-backdrop in"/>
             <div role="dialog" tabIndex={-1} className="fade modal-donate in modal"
-                 style={{display: 'block', paddingLeft: '17px'}}>
-                <div className="modal-dialog">
-                    <div className="modal-content" role="document">
+                 style={{display: 'flex', justifyContent: "center"}}>
+                <div className="modal-dialog" style={{width: "1400px", height: "800px", marginLeft: "0px", marginRight: "0px",
+                    display: "flex", justifyContent: "center"}}>
+                    <div className="modal-content" role="document" style={{maxWidth: "1320px", height: "590px"}}>
                         <div className="modal-header">
                             <button type="button" className="close" onClick={close}><span
                                 aria-hidden="true">×</span><span
@@ -247,125 +248,135 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                         <div className="modal-body" style={{
                             overflow: 'auto', maxHeight: '550px'
                         }}>
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td>Player:</td>
-                                    <td>{userDetail.account.nickname}</td>
-                                </tr>
-                                <tr>
-                                    <td><span>Thời gian muốn thuê</span>:</td>
-                                    <td><select name="hour" className="form-control" onChange={pricing}>
-                                        <option value={1}>1&nbsp;giờ</option>
-                                        <option value={2}>2&nbsp;giờ</option>
-                                        <option value={3}>3&nbsp;giờ</option>
-                                        <option value={4}>4&nbsp;giờ</option>
-                                        <option value={5}>5&nbsp;giờ</option>
-                                        <option value={6}>6&nbsp;giờ</option>
-                                        <option value={7}>7&nbsp;giờ</option>
-                                        <option value={8}>8&nbsp;giờ</option>
-                                        <option value={9}>9&nbsp;giờ</option>
-                                        <option value={10}>10&nbsp;giờ</option>
-                                        <option value={11}>11&nbsp;giờ</option>
-                                        <option value={12}>12&nbsp;giờ</option>
-                                        <option value={13}>13&nbsp;giờ</option>
-                                        <option value={14}>14&nbsp;giờ</option>
-                                        <option value={15}>15&nbsp;giờ</option>
-                                        <option value={16}>16&nbsp;giờ</option>
-                                        <option value={17}>17&nbsp;giờ</option>
-                                        <option value={18}>18&nbsp;giờ</option>
-                                        <option value={19}>19&nbsp;giờ</option>
-                                        <option value={20}>20&nbsp;giờ</option>
-                                        <option value={21}>21&nbsp;giờ</option>
-                                        <option value={22}>22&nbsp;giờ</option>
-                                        <option value={23}>23&nbsp;giờ</option>
-                                        <option value={24}>24&nbsp;giờ</option>
-                                    </select></td>
-                                </tr>
-                                <tr>
-                                    <td><span>Chi phí</span>:</td>
-                                    <td><span className="price">{total}đ</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span>Số dư hiện tại</span>:</td>
-                                    {user ? <td>
-                                        <span className="total-amount">{user.balance}đ</span><span
-                                        className="load-more-credit">+</span></td> : <td>
-                                        <span className="total-amount">0đ</span><span
-                                        className="load-more-credit">+</span></td>}
+                            <div className={"container"}>
+                                <div className={"row"}>
+                                    <div className={"col-md-5"}>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>Player:</td>
+                                                <td>{userDetail.account.nickname}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><span>Thời gian muốn thuê</span>:</td>
+                                                <td><select name="hour" className="form-control" onChange={pricing}>
+                                                    <option value={1}>1&nbsp;giờ</option>
+                                                    <option value={2}>2&nbsp;giờ</option>
+                                                    <option value={3}>3&nbsp;giờ</option>
+                                                    <option value={4}>4&nbsp;giờ</option>
+                                                    <option value={5}>5&nbsp;giờ</option>
+                                                    <option value={6}>6&nbsp;giờ</option>
+                                                    <option value={7}>7&nbsp;giờ</option>
+                                                    <option value={8}>8&nbsp;giờ</option>
+                                                    <option value={9}>9&nbsp;giờ</option>
+                                                    <option value={10}>10&nbsp;giờ</option>
+                                                    <option value={11}>11&nbsp;giờ</option>
+                                                    <option value={12}>12&nbsp;giờ</option>
+                                                    <option value={13}>13&nbsp;giờ</option>
+                                                    <option value={14}>14&nbsp;giờ</option>
+                                                    <option value={15}>15&nbsp;giờ</option>
+                                                    <option value={16}>16&nbsp;giờ</option>
+                                                    <option value={17}>17&nbsp;giờ</option>
+                                                    <option value={18}>18&nbsp;giờ</option>
+                                                    <option value={19}>19&nbsp;giờ</option>
+                                                    <option value={20}>20&nbsp;giờ</option>
+                                                    <option value={21}>21&nbsp;giờ</option>
+                                                    <option value={22}>22&nbsp;giờ</option>
+                                                    <option value={23}>23&nbsp;giờ</option>
+                                                    <option value={24}>24&nbsp;giờ</option>
+                                                </select></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span>Chi phí</span>:</td>
+                                                <td><span className="price">{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span>Số dư hiện tại</span>:</td>
+                                                {user ? <td>
+                                                    <span className="total-amount">{user.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} đ</span></td> : <td>
+                                                    <span className="total-amount">0 đ</span></td>}
 
-                                </tr>
-                                <tr>
-                                    <td>Địa Chỉ :</td>
-                                    <td><textarea id="textAddress" placeholder="Nhập địa chỉ  " name="address"
-                                                  maxLength={255} type="text" className="form-control"
-                                                  defaultValue={""}/><p className="err-message"/></td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}><textarea id="testMessage"
-                                                              placeholder=" Gửi lời nhắn cho người được thuê "
-                                                              name="MessageBills"
+                                            </tr>
+                                            <tr>
+                                                <td>Địa Chỉ :</td>
+                                                <td><textarea id="textAddress" placeholder="Nhập địa chỉ  " name="address"
                                                               maxLength={255} type="text" className="form-control"
                                                               defaultValue={""}/><p className="err-message"/></td>
-                                </tr>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}><textarea id="testMessage"
+                                                                          placeholder=" Gửi lời nhắn cho người được thuê "
+                                                                          name="MessageBills"
+                                                                          maxLength={255} type="text" className="form-control"
+                                                                          defaultValue={""}/><p className="err-message"/></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div className={"col-md-7"}>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>Chọn Ngày :</td>
+                                                <td><select name="dateCreate" className="form-control" onChange={getData}>
+                                                    <option id="day0" value={sevenDay[0].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
+                                                    </option>
+                                                    <option id="day1" value={sevenDay[1].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
+                                                    </option>
+                                                    <option id="day2" value={sevenDay[2].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
+                                                    </option>
+                                                    <option id="day3" value={sevenDay[3].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth() + 1}-{sevenDay[3].getFullYear()}
+                                                    </option>
 
-                                <tr>
-                                    <td>Chọn Ngày :</td>
-                                    <td><select name="dateCreate" className="form-control" onChange={getData}>
-                                        <option id="day0" value={sevenDay[0].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[0].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
-                                        </option>
-                                        <option id="day1" value={sevenDay[1].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[1].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
-                                        </option>
-                                        <option id="day2" value={sevenDay[2].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[2].getDate()}-{sevenDay[2].getMonth() + 1}-{sevenDay[2].getFullYear()}
-                                        </option>
-                                        <option id="day3" value={sevenDay[3].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[3].getDate()}-{sevenDay[3].getMonth() + 1}-{sevenDay[3].getFullYear()}
-                                        </option>
+                                                    <option id="day4" value={sevenDay[4].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth() + 1}-{sevenDay[4].getFullYear()}
+                                                    </option>
 
-                                        <option id="day4" value={sevenDay[4].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[4].getDate()}-{sevenDay[4].getMonth() + 1}-{sevenDay[4].getFullYear()}
-                                        </option>
+                                                    <option id="day5" value={sevenDay[5].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth() + 1}-{sevenDay[5].getFullYear()}
+                                                    </option>
 
-                                        <option id="day5" value={sevenDay[5].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[5].getDate()}-{sevenDay[5].getMonth() + 1}-{sevenDay[5].getFullYear()}
-                                        </option>
+                                                    <option id="day6" value={sevenDay[6].getDate()}>
+                                                        Ngày
+                                                        :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth() + 1}-{sevenDay[6].getFullYear()}
+                                                    </option>
 
-                                        <option id="day6" value={sevenDay[6].getDate()}>
-                                            Ngày
-                                            :&nbsp;{sevenDay[6].getDate()}-{sevenDay[6].getMonth() + 1}-{sevenDay[6].getFullYear()}
-                                        </option>
+                                                </select></td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}>
+                                                    <div className="table-boxTime" style={{overflow: "initial"}}>
+                                                        {hourInDay.length > 0 && hourInDay.map((value, index) => (
+                                                            value === 0 ?
+                                                                <div className="item-box" onClick={() => handClick(index)}
+                                                                     key={index}>&nbsp;{index}h00</div> :
+                                                                value === 1 ?
+                                                                    <div className="item-box-unavailable"
+                                                                         key={index}>&nbsp;{index}h00&nbsp; </div> :
+                                                                    value === 2 ?
+                                                                        <div className="item-box-pick"
+                                                                             onClick={() => handClick(index)}
+                                                                             key={index}>&nbsp;{index}h00&nbsp; </div> : <></>
+                                                        ))}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
 
-                                    </select></td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}>
-                                        <div className="table-boxTime">
-                                            {hourInDay.length > 0 && hourInDay.map((value, index) => (
-                                                value === 0 ?
-                                                    <div className="item-box" onClick={() => handClick(index)}
-                                                         key={index}>&nbsp;{index}h00</div> :
-                                                    value === 1 ?
-                                                        <div className="item-box-unavailable"
-                                                             key={index}>&nbsp;{index}h00&nbsp; </div> :
-                                                        value === 2 ?
-                                                            <div className="item-box-pick"
-                                                                 onClick={() => handClick(index)}
-                                                                 key={index}>&nbsp;{index}h00&nbsp; </div> : <></>
-                                            ))}
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn-fill btn btn-danger" onClick={submit}><span>Thuê</span>
