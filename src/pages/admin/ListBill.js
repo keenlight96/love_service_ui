@@ -214,7 +214,7 @@ const ListBill =() =>{
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Tên tài khoản nguời thuê:</td>
+                                                <td>Tên tài khoản người thuê:</td>
                                                 <td>{objects.accountUser.username}</td>
                                             </tr>
                                             <tr>
@@ -294,14 +294,14 @@ const ListBill =() =>{
                                                 )
                                             )}
 
-                                            <tr>
-                                                <td>
-                                                    <span>Nhận xét admin nếu có </span>:
-                                                </td>
-                                                <td>
-                                                    <span className="price">{objects.adminMessage}</span>
-                                                </td>
-                                            </tr>
+                                            {/*<tr>*/}
+                                            {/*    <td>*/}
+                                            {/*        <span>Nhận xét admin nếu có </span>:*/}
+                                            {/*    </td>*/}
+                                            {/*    <td>*/}
+                                            {/*        <span className="price">{objects.adminMessage}</span>*/}
+                                            {/*    </td>*/}
+                                            {/*</tr>*/}
                                             </tbody>
                                         </table>
                                     </div>

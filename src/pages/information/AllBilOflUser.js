@@ -180,7 +180,7 @@ const AllBillOfUser = () => {
                                     <thead>
                                     <tr>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "50px"}}>Mã đơn</th>
-                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Nickname người CCDV</th>
+                                        <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Tên tài khoản người CCDV</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "320px"}}>Ngày bắt đầu</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "70px"}}>Số giờ thuê</th>
                                         <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tổng tiền</th>
@@ -193,7 +193,7 @@ const AllBillOfUser = () => {
                                     {currentBills.length > 0 && currentBills.map((item) => (
                                             <tr key={item.id} className={focusBillId && focusBillId == item.id ? "flicker-border" : ""}>
                                                 <td style={{textAlign: "center"}}>{item.id}</td>
-                                                <td>{item.accountCCDV.nickname}</td>
+                                                <td>{item.accountCCDV.username}</td>
                                                 <td>{new Date(item.dateStart).toLocaleString("en-GB", dateStringOptions)} - {new Date(item.dateEnd).toLocaleString("en-GB", dateStringOptions)}</td>
                                                 <td style={{textAlign: "center"}}>{item.hour}</td>
                                                 <td style={{textAlign: "right"}}>{item.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
@@ -284,8 +284,8 @@ const AllBillOfUser = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Nickname người cung cấp dịch vụ:</td>
-                                                <td>{objects.accountCCDV.nickname}</td>
+                                                <td>Tên tài khoản người CCDV:</td>
+                                                <td>{objects.accountCCDV.username}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -357,8 +357,8 @@ const AllBillOfUser = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Nick name ngừoi thuê:</td>
-                                                <td>{objects.accountUser.username}</td>
+                                                <td>Tên tài khoản người CCDV:</td>
+                                                <td>{objects.accountCCDV.username}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -433,14 +433,14 @@ const AllBillOfUser = () => {
                                                 )
                                             )}
 
-                                            <tr>
-                                                <td>
-                                                    <span>Nhận xét admin nếu có </span>:
-                                                </td>
-                                                <td>
-                                                    <span className="price">{objects.adminMessage}</span>
-                                                </td>
-                                            </tr>
+                                            {/*<tr>*/}
+                                            {/*    <td>*/}
+                                            {/*        <span>Nhận xét admin nếu có </span>:*/}
+                                            {/*    </td>*/}
+                                            {/*    <td>*/}
+                                            {/*        <span className="price">{objects.adminMessage}</span>*/}
+                                            {/*    </td>*/}
+                                            {/*</tr>*/}
                                             {hover ?
                                                 <>
                                                     <tr>

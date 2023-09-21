@@ -188,7 +188,7 @@ const AllBillByOfCCDV = () => {
                         <thead>
                         <tr>
                             <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "50px"}}>Mã đơn</th>
-                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Nickname người CCDV</th>
+                            <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "180px"}}>Tên tài khoản người thuê</th>
                             <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "320px"}}>Ngày bắt đầu</th>
                             <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "70px"}}>Số giờ thuê</th>
                             <th style={{fontFamily: "Poppins", fontSize: "13px", fontWeight: "700", width: "100px"}}>Tổng tiền</th>
@@ -202,7 +202,7 @@ const AllBillByOfCCDV = () => {
                                         currentBills.map((item) => (
                                             <tr key={item.id} className={focusBillId && focusBillId == item.id ? "flicker-border" : ""}>
                                                 <td style={{textAlign: "center"}}>{item.id}</td>
-                                                <td>{item.accountCCDV.nickname}</td>
+                                                <td>{item.accountUser.username}</td>
                                                 <td>{new Date(item.dateStart).toLocaleString("en-GB", dateStringOptions)} - {new Date(item.dateEnd).toLocaleString("en-GB", dateStringOptions)}</td>
                                                 <td style={{textAlign: "center"}}>{item.hour}</td>
                                                 <td style={{textAlign: "right"}}>{item.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</td>
@@ -296,8 +296,8 @@ const AllBillByOfCCDV = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Nickname người thuê:</td>
-                                                <td>{objects.accountUser.nickname}</td>
+                                                <td>Tên tài khoản người thuê:</td>
+                                                <td>{objects.accountUser.username}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -374,8 +374,8 @@ const AllBillByOfCCDV = () => {
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td>Nick name ngừoi thuê:</td>
-                                                <td>{objects.accountUser.nickname}</td>
+                                                <td>Tên tài khoản người thuê:</td>
+                                                <td>{objects.accountUser.username}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -450,14 +450,14 @@ const AllBillByOfCCDV = () => {
                                                 )
                                             )}
 
-                                            <tr>
-                                                <td>
-                                                    <span>Nhận xét admin nếu có </span>:
-                                                </td>
-                                                <td>
-                                                    <span className="price">{objects.adminMessage}</span>
-                                                </td>
-                                            </tr>
+                                            {/*<tr>*/}
+                                            {/*    <td>*/}
+                                            {/*        <span>Nhận xét admin nếu có </span>:*/}
+                                            {/*    </td>*/}
+                                            {/*    <td>*/}
+                                            {/*        <span className="price">{objects.adminMessage}</span>*/}
+                                            {/*    </td>*/}
+                                            {/*</tr>*/}
                                             {hover ?
                                                 <>
                                                     <tr>
