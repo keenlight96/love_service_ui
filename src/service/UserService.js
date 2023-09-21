@@ -4,8 +4,10 @@ import customAxios from "./api";
 export const checkToken = createAsyncThunk(
     "checkToken",
     async () => {
+        console.log(1)
         try {
             const res = await customAxios.post("userDetail/checkToken", "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+            console.log(2)
             return res.data;
         } catch (e) {
             return null;

@@ -33,6 +33,14 @@ import axios from "axios";
              }
          });
      }
+
+     static async registerUserGoogle2(values) {
+         return await axios.post("http://localhost:8080/accounts/registerUserGoogle2", values, {
+             headers: {
+                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+             }
+         });
+     }
      static async checkProfile(id){
          return await axios.get("http://localhost:8080/accounts/checkProfileExists/"+id)
      }
@@ -50,5 +58,13 @@ import axios from "axios";
      static async getListSupply(){
          return await axios.get("http://localhost:8080/supplies/getSupplyList")
      }
+     // edit supply bi id user profile
+     static async setNewListSupply(id,list){
+         return await  axios.post("http://localhost:8080/supplies/setSupply?id="+id,list)
+     }
+     static async setNewPrice(name,price){
+         return await  axios.get("http://localhost:8080/userDetail/setPrice?username="+name+"&price="+price)
+     }
+
 }
 export default SignupCCDV;

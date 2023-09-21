@@ -1,12 +1,9 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import React, {useEffect, useState} from "react";
 import SignupCCDV from "../../service/custom/SignupCCDV";
-// import React, {useState} from "react";
 import * as Yup from "yup";
-// import  from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
-import {DatePicker, Select, Space, TimePicker} from 'antd';
 import {useLocation, useNavigate, useParams} from "react-router";
 import Swal from "sweetalert2";
 import RegisterSupply from "../../components/common/RegisterSupply";
@@ -43,13 +40,13 @@ const RegisterProfileGoogle =()=> {
                 console.error('Lỗi khi lấy dữ liệu:', error);
             });
     }, []);
-    const handleCheckboxChange = (event, id) => {
-        if (event.target.checked) {
-            setSelectedIds([...selectedIds, id]);
-        } else {
-            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-        }
-    };
+    // const handleCheckboxChange = (event, id) => {
+    //     if (event.target.checked) {
+    //         setSelectedIds([...selectedIds, id]);
+    //     } else {
+    //         setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    //     }
+    // };
     // const [type, setType] = useState('date');
     // const {Option} = Select;
     // const PickerWithType = ({type, onChange}) => {
@@ -141,7 +138,7 @@ const RegisterProfileGoogle =()=> {
                                                     nickName: accountGoogle.name,
                                                     avatar: accountGoogle.picture,
                                                 }
-                                                SignupCCDV.registerUserGoogle(account)
+                                                SignupCCDV.registerUserGoogle2(account)
                                                     .then(async (response) => {
                                                         console.log(response)
                                                         if (response.data.validStatus === 'SUCCESSFULL') {

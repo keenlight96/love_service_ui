@@ -23,6 +23,13 @@ export const addChatReceivers = createAsyncThunk(
     }
 )
 
+export const updateChatReceivers = createAsyncThunk(
+    "updateChatReceivers",
+    async (message) => {
+        return message;
+    }
+)
+
 export const getChatWithReceiver = createAsyncThunk(
     "getChatWithReceiver",
     async (id) => {
@@ -59,6 +66,13 @@ export const setActiveReceiver = createAsyncThunk(
     }
 )
 
+export const setReadMessageReceiver = createAsyncThunk(
+    "setReadMessageReceiver",
+    async (receiverId) => {
+        return receiverId;
+    }
+)
+
 // Notification
 export const getAllNotifications = createAsyncThunk(
     "getAllNotifications",
@@ -72,5 +86,21 @@ export const addNotification = createAsyncThunk(
     "addNotification",
     async (newNotification) => {
         return newNotification;
+    }
+)
+
+export const confirmReadNotification = createAsyncThunk(
+    "confirmReadNotification",
+    async (notificationId) => {
+        await customAxios.post("message/confirmReadNotification/" + notificationId, "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return notificationId;
+    }
+)
+
+export const confirmReadAllNotifications = createAsyncThunk(
+    "confirmReadAllNotifications",
+    async (userId) => {
+        await customAxios.post("message/confirmReadAllNotifications/" + userId, "", {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        return userId;
     }
 )

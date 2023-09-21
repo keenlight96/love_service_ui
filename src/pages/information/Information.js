@@ -18,10 +18,10 @@ const Information = () => {
                 </div>
                 <div className="wrapper">
                     <div className="setting__main row">
-                        <div className="setting__main--menu col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <div className="setting__main--menu col-lg-2 col-md-2 col-sm-12 col-xs-12">
                             <SidebarInformation/>
                         </div>
-                        <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                        <div className="col-lg-10 col-md-10 col-sm-12 col-xs-12">
                             <div className="aside">
 
                                 {/*Outlet*/}

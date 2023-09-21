@@ -61,21 +61,6 @@ function RegisterUserOrCCDV() {
                     <div className="wrapper">
                         <div className="container">
 
-                            <div className="leftside">
-                                <div className="air-balloon one">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon two">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon three">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon foure">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                            </div>
-
                             <div className="row login-page">
                                 <div className="col-md-7 hidden-sm hidden-xs image-login">
                                     <img style={{height: '100%', borderRadius: '8px', boxShadow: '5px 5px 7px 0'}}
@@ -96,34 +81,20 @@ function RegisterUserOrCCDV() {
                                     <div id={"signInDiv"}></div>
 
                                     <div className={"row"}>
-                                        <div className={"col-md-6"} onClick={() => {registerUser()}}>
-                                            <a className="create-new" href={"#"}>
-                                                <p><span>Đăng ký người dùng</span></p>
-                                            </a>
+                                        <div className={"col-md-6"} onClick={() => {registerUser().then(r => {})}}>
+                                            <button className="create-new" onClick={() =>{navigate("/registerUser")}} style={{marginTop:'25px', background:'rgb(240, 86, 74)',borderRadius:'10px',color:'rgb(255, 255, 255)',width:'100%',border:'none',height:'40px', fontSize:'15px',fontWeight:'50%'}}>
+                                                <span>Đăng ký người dùng</span>
+                                            </button>
                                         </div>
                                         <div className={"col-md-6"}>
-                                            <a className="create-new" href={"/registerProfileGoogle"}>
-                                                <p><span>Đăng ký cung cấp dịch vụ</span></p>
-                                            </a>
+                                            <button className="create-new" onClick={() => {navigate("/registerProfileGoogle")}} style={{marginTop:'25px', background:'rgb(240, 86, 74)',borderRadius:'10px',color:'rgb(255, 255, 255)',width:'100%',border:'none',height:'40px', fontSize:'15px',fontWeight:'50%'}}>
+                                               <span>Đăng ký cung cấp dịch vụ</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="rightside">
-                                <div className="air-balloon one">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon two">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon three">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                                <div className="air-balloon foure">
-                                    <img src="/resources/img/404-balloon.png" alt="404-balloon"/>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

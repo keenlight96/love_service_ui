@@ -92,8 +92,8 @@ function UploadAvatar() {
                         .then(response => {
                             setAvatarUpload(response.data.avatar);
                             closeModal();
+                            console.log("---------------")
                             dispatch(checkToken());
-
                         })
                         .catch(error => {
                             console.log(error);
@@ -107,8 +107,9 @@ function UploadAvatar() {
         <>
 
             <div className="d-flex img-avatar">
-                <img src={storeUser ? storeUser.account.avatar : "../resources/raw/avatar6.png"} className alt="avatar"
-                     sizes="sm"/>
+                <a href="">
+                <img src={storeUser ? storeUser.account.avatar : "../resources/raw/avatar6.png"} style={{objectFit: "cover"}} className alt="avatar"
+                     sizes="sm"/></a>
 
                 <div className="cropimg-avatar">
                     <button type="button" onClick={openModal}><span> Thay Đổi<p>JPG, GIF or PNG, &lt;5 MB. </p></span>

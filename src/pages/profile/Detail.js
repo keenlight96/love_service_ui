@@ -5,17 +5,18 @@ import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 import ShowImages from "./ShowImages";
 import {convertToFormattedDate} from "../../service/custom/general.function";
 import {getAllReviewsByProviderUsername, isAbleToReview, sendReview} from "../../service/ReviewService";
-import useModal from "./CreateBill/UseModal";
-import ModalCreateBill from "./CreateBill/ModalCreateBill";
+import useModal from "./UseModal";
+import ModalCreateBill from "./ModalCreateBill";
 
 // Start Pagination
 // import
 import {useMemo} from "react";
 import Pagination from "../../components/common/Pagination";
+import {checkToken} from "../../service/UserService";
 
 // Số phần tử 1 trang
 let PageSize = 5;
@@ -118,6 +119,7 @@ function Detail() {
             }).catch(error => {
             console.log(error);
         });
+        dispatch(checkToken());
     }, []);
 
     useEffect(() => {
@@ -147,26 +149,32 @@ function Detail() {
     }, [reviews])
 
     const addNewChat = () => {
-        let newReceiver = {
-            id: userDetail.account.id,
-            username: userDetail.account.username,
-            nickname: userDetail.account.nickname,
-            avatar: userDetail.account.avatar,
-            role: {
-                id: userDetail.account.role.id,
-                nameRole: userDetail.account.role.nameRole,
-            },
-            status: {
-                id: userDetail.account.status.id,
-                nameStatus: userDetail.account.status.nameStatus,
-            },
-            isActive: userDetail.account.isActive
-        }
-        dispatch(addChatReceivers(newReceiver));
-        dispatch(setActiveReceiver(newReceiver));
+        if (userDetail.account.id != storeUser.account.id) {
+            let newReceiver = {
+                id: userDetail.account.id,
+                username: userDetail.account.username,
+                nickname: userDetail.account.nickname,
+                avatar: userDetail.account.avatar,
+                role: {
+                    id: userDetail.account.role.id,
+                    nameRole: userDetail.account.role.nameRole,
+                },
+                status: {
+                    id: userDetail.account.status.id,
+                    nameStatus: userDetail.account.status.nameStatus,
+                },
+                isActive: userDetail.account.isActive
+            }
+            dispatch(addChatReceivers(newReceiver));
+            dispatch(setActiveReceiver(newReceiver));
+            try {
+                dispatch(getChatWithReceiver(newReceiver.id))
+            } catch (e) {
+            }
 
-        if (!msgBoxToggle) {
-            dispatch(setMsgBoxToggle());
+            if (!msgBoxToggle) {
+                dispatch(setMsgBoxToggle());
+            }
         }
     }
     const user = useSelector(state => (state.user.user.current));
@@ -231,7 +239,7 @@ function Detail() {
                                             <div className="avt avt-lg">
                                                 {
                                                     userDetail.account && <img src={userDetail.account.avatar} alt="Avatar"
-                                                                               style={{width: "100%", height: "100%"}}/>
+                                                                               style={{objectFit: "cover", height: "100%"}}/>
                                                 }
                                             </div>
                                         </div>
@@ -248,21 +256,21 @@ function Detail() {
                                     <div className="member-since">
                                         <div>Ngày tham gia:</div>
                                         <span>
-                                {new Date(userDetail.dateCreate).toLocaleDateString()}
+                                {new Date(userDetail.dateCreate).toLocaleDateString("en-GB")}
                             </span>
                                     </div>
                                 </div>
                                 <div className="player-profile-right-wrap col-md-3 col-md-push-6">
                                     <div className="right-player-profile"><p className="price-player-profile">{userDetail.price} đ/h</p>
                                         <div className="rateting-style">
-                                            {avgStar.toFixed(1)}
+                                            {avgStar.toFixed(1).replace(".", ",")}
                                             &nbsp;
                                             <i className="fas fa-star"></i>
                                             &nbsp;
                                             <span>{reviews ? reviews.length : <></>} <span>Đánh giá</span></span>
                                         </div>
                                         <div className="text-center">
-                                            {user?                                    <button className="btn-my-style red" onClick={toggle}>Thuê</button>
+                                            {storeUser && storeUser.account.role.id == 2 ? <button className="btn-my-style red" onClick={toggle}>Thuê</button>
                                                 :<></>}                                            {/*<button className="btn-my-style white">Donate</button>*/}
                                             <button className="btn-my-style white" onClick={() => {addNewChat()}}>
                                                 <i className="fas fa-comment-alt"></i>Chat

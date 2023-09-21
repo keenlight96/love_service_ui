@@ -2,6 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import AdminSlice from "../../redux/AdminSlice";
 import {blockAccount, getAllUser} from "../../service/AdminService";
+import customAxios from "../../service/api";
+import {addChatReceivers, getChatWithReceiver, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
+import Swal from "sweetalert2";
 
 const NewUserList =() =>{
     const dispatch = useDispatch();
@@ -30,6 +33,55 @@ const NewUserList =() =>{
     const currenUserAc = allUserAc.slice(indexOfFirstUser, indexOfLastUser);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const addUserChat = (username) => {
+        const account = customAxios.get("userDetail/"+ username)
+            .then(r => {
+                if (r.data.account.id != storeUser.account.id) {
+                    let newReceiver = {
+                        id: r.data.account.id,
+                        username: r.data.account.username,
+                        nickname: r.data.account.nickname,
+                        avatar: r.data.account.avatar,
+                        role: {
+                            id: r.data.account.role.id,
+                            nameRole: r.data.account.role.nameRole,
+                        },
+                        status: {
+                            id: r.data.account.status.id,
+                            nameStatus: r.data.account.status.nameStatus,
+                        },
+                        isActive: r.data.account.isActive
+                    }
+                    dispatch(addChatReceivers(newReceiver));
+                    dispatch(setActiveReceiver(newReceiver));
+                    try {
+                        dispatch(getChatWithReceiver(newReceiver.id))
+                    } catch (e) {
+                    }
+
+                    if (!msgBoxToggle) {
+                        dispatch(setMsgBoxToggle());
+                    }
+                }
+            })
+            .catch(reason => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Tài khoản không khả dụng.',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            })
+    }
+
+    const storeUser = useSelector(state => {
+        return state.user.user.current;
+    });
+    const msgBoxToggle = useSelector(state => {
+        return state.chatting.chatting.msgBoxToggle;
+    });
+
     return(
         <><link rel="stylesheet" href="/template_admin/css/css_sidebar.css"/>
             <link rel="stylesheet" href="/template_admin/vendors/themefy_icon/themify-icons.css" />
@@ -54,44 +106,44 @@ const NewUserList =() =>{
                                         <div className="white_box_tittle list_header">
                                             <h4>Danh sách người dùng mới nhất </h4>
                                             <div className="box_right d-flex lms_block">
-                                                <div className="serach_field_2">
-                                                    <div className="search_inner">
-                                                        <form active="#">
-                                                            <div className="search_field">
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Search content here..."
-                                                                />
-                                                            </div>
-                                                            <button type="submit">
-                                                                <i className="ti-search" />
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div className="add_button ms-2">
-                                                    <a
-                                                        href="#"
-                                                        data-toggle="modal"
-                                                        data-target="#addcategory"
-                                                        className="btn_1"
-                                                    >
-                                                        search
-                                                    </a>
-                                                </div>
+                                                {/*<div className="serach_field_2">*/}
+                                                {/*    <div className="search_inner">*/}
+                                                {/*        <form active="#">*/}
+                                                {/*            <div className="search_field">*/}
+                                                {/*                <input*/}
+                                                {/*                    type="text"*/}
+                                                {/*                    placeholder="Search content here..."*/}
+                                                {/*                />*/}
+                                                {/*            </div>*/}
+                                                {/*            <button type="submit">*/}
+                                                {/*                <i className="ti-search" />*/}
+                                                {/*            </button>*/}
+                                                {/*        </form>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
+                                                {/*<div className="add_button ms-2">*/}
+                                                {/*    <a*/}
+                                                {/*        href="#"*/}
+                                                {/*        data-toggle="modal"*/}
+                                                {/*        data-target="#addcategory"*/}
+                                                {/*        className="btn_1"*/}
+                                                {/*    >*/}
+                                                {/*        search*/}
+                                                {/*    </a>*/}
+                                                {/*</div>*/}
                                             </div>
                                         </div>
                                         <div className="QA_table mb_30">
                                             <table className="table lms_table_active ">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">id</th>
-                                                    <th scope="col">Nickname</th>
-                                                    <th scope="col">Username</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Role</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Action</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>id</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Biệt danh</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Tài khoản</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Email</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Vai trò</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Trạng thái</th>
+                                                    <th scope="col" style={{fontSize :'14px', fontWeight: 'bold'}}>Hoạt động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -102,19 +154,17 @@ const NewUserList =() =>{
                                                             {item.id}
                                                         </a>
                                                     </th>
-                                                    <td>{item.nickname}</td>
-                                                    <td>{item.username}</td>
+                                                    <td onClick={() => {addUserChat(item.username)}} style={{cursor: "pointer"}}>{item.nickname}</td>
+                                                    <td onClick={() => {addUserChat(item.username)}} style={{cursor: "pointer"}}>{item.username}</td>
                                                     <td>
-                                                        <a
-                                                            href="https://demo.dashboardpack.com/cdn-cgi/l/email-protection"
-                                                            className="__cf_email__"
-                                                            data-cfemail="65120a170e51555c250208040c094b060a08"
-                                                        >
+                                                        <a className="__cf_email__">
                                                             {item.email}
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a href="#">{item.role.nameRole}</a>
+                                                        {item.role.nameRole === "ROLE_USER" &&
+                                                        <a href="#">Người dùng</a>
+                                                        }
                                                     </td>
                                                     <td>
                                                         <a href="#" className="status_btn">

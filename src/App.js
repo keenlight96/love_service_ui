@@ -23,13 +23,33 @@ import NewCCDVList from "./pages/admin/NewCCDVList";
 import AllUserList from "./pages/admin/AllUserList";
 import AllCCDVList from "./pages/admin/AllCCDVList";
 import AccountReport from "./pages/admin/AccountReport";
+import NewUserList from "./pages/admin/NewUserList";
 import AccountSettings from "./pages/home/AccountSettings";
 import Album from "./pages/home/Album";
 import Revenue from "./pages/profile/Revenue";
 import RegisterUserOrCCDV from "./pages/register/RegisterUserOrCCDV";
 import RegisterProfileGoogle from "./pages/register/RegisterProfileGoogle";
+import EditSuppleAndPrice from "./pages/information/EditSuppleAndPrice";
+import RegisterSupply from "./components/common/RegisterSupply";
+import SupplyInfo from "./pages/information/SupplyInfo";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {checkToken} from "./service/UserService";
 
 function App() {
+    const storeUser = useSelector(state => {
+        console.log(state.user.user.current)
+        // if (!state.user.user.current) {
+        //
+        // }
+        return state.user.user.current;
+    });
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(checkToken());
+    }, []);
+
     return (
         <>
             <Routes>
@@ -50,28 +70,32 @@ function App() {
                     <Route path={"profile/:username"} element={<Detail/>}></Route>
 
                     {/*Page Information*/}
-                    <Route path={"information"} element={<Information/>}>
-                        <Route path={"info"} element={<UserInfo/>}></Route>
-                        <Route path={"bills"} element={<Bills/>}></Route>
-                        <Route path={"topup"} element={<UserInfo/>}></Route>
-                        <Route path={"summary"} element={<UserInfo/>}></Route>
-                        <Route path={"supplies"} element={<UserInfo/>}></Route>
-                        <Route path={"album"} element={<Album/>}></Route>
-                        <Route path={"revenue"} element={<Revenue/>}></Route>
+                    <Route path={"information"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <Information/> : <Test/> }>
+                        <Route path={"info"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>
+                        <Route path={"bills"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <Bills/> : <Test/>}></Route>
+                        {/*<Route path={"topup"} element={storeUser && (storeUser.account.role.id == 2 || storeUser.account.role.id == 3) ? <UserInfo/> : <Test/>}></Route>*/}
+                        <Route path={"summary"} element={storeUser && (storeUser.account.role.id == 3) ? <Revenue/> : <Test/>}></Route>
+                        <Route path={"supplies"} element={storeUser && (storeUser.account.role.id == 3) ? <RegisterSupply isRegister={false} /> : <Test/>}></Route>
+                        <Route path={"album"} element={storeUser && (storeUser.account.role.id == 3) ? <Album/> : <Test/>}></Route>
 
+                        {/*<Route path={"setSupply"} element={storeUser && (storeUser.account.role.id == 3) ? <RegisterSupply isRegister={false} /> : <Test/>}></Route>*/}
                     </Route>
 
                 </Route>
-                <Route path="/" element={<LayoutAdmin />}>
-                    <Route path="/homeAdmin"  element={<HomeAdmin />}>
-                        <Route path={"allBills"} element={<ListBill/>}></Route>
-                        <Route path={"NewUser"} element={<NewCCDVList/>}></Route>
-                        <Route path={"allUser"} element={<AllUserList/>}></Route>
-                        <Route path={"newCCDv"} element={<NewCCDVList/>}></Route>
-                        <Route path={"allCCDv"} element={<AllCCDVList/>}></Route>
-                        <Route path={"allListReport"} element={<AccountReport/>}></Route>
-                    </Route>
-                </Route>
+                {
+                    storeUser && storeUser.account.role.id == 1 ?
+                        <Route path="/" element={storeUser && storeUser.account.role.id == 1 ? <LayoutAdmin/> : <Test/>}>
+                            <Route path="/homeAdmin"  element={storeUser && storeUser.account.role.id == 1 ? <HomeAdmin/> : <Test/>}>
+                                <Route path={"allBills"} element={storeUser && storeUser.account.role.id == 1 ? <ListBill/> : <Test/>}></Route>
+                                <Route path={"NewUser"} element={storeUser && storeUser.account.role.id == 1 ? <NewUserList/> : <Test/>}></Route>
+                                <Route path={"allUser"} element={storeUser && storeUser.account.role.id == 1 ? <AllUserList/> : <Test/>}></Route>
+                                <Route path={"newCCDv"} element={storeUser && storeUser.account.role.id == 1 ? <NewCCDVList/> : <Test/>}></Route>
+                                <Route path={"allCCDv"} element={storeUser && storeUser.account.role.id == 1 ? <AllCCDVList/> : <Test/>}></Route>
+                                <Route path={"allListReport"} element={storeUser && storeUser.account.role.id == 1 ? <AccountReport/> : <Test/>}></Route>
+                            </Route>
+                        </Route>
+                        : <></>
+                }
             </Routes>
         </>
     );

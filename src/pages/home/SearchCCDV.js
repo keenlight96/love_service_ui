@@ -1,19 +1,19 @@
-import React from 'react';
-import {useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
 
-function TopServiceCCDV() {
-    const topViews = useSelector(state => {
-        return state.CCDVs.CCDVs.topViews;
+const SearchCCDV = () =>{
+    const searchCCDv = useSelector(state => {
+        return state.CCDVs.CCDVs.search;
     })
-    return (
+     return(
         <>
             <div className="box newest-ccdvs">
-                <header className="title-header vip"><h5 className="title-header-left">Được quan tâm nhất</h5>
+                <header className="title-header vip"><h5 className="title-header-left">Kết quả tìm kiếm</h5>
                     {/*<p className="title-header-right"><span>Làm mới</span><i className="fas fa-sync false" /></p>*/}
                 </header>
                 <div className="card-player row">
-                    {topViews && topViews.map((item, key) => (
+                    {searchCCDv && searchCCDv.map((item, key) => (
                         <Link to={"/profile/" + item.userProfile.account.username}>
                             <div className="col-md-3" key={key}>
                                 <div className="player-information-card-wrap">
@@ -32,7 +32,7 @@ function TopServiceCCDV() {
                                             <div className="div--flex">
                                                 <div className="rate">
                                                     <i className="fas fa-star" />
-                                                    <p>{item.rate == null ? 0 : item.rate.toFixed(1).replace(".", ",")} <i>({item.countRate})</i></p>
+                                                    <p>{item.rate == null ? 0 : item.rate.toFixed(1)} <i>({item.countRate})</i></p>
                                                 </div>
                                                 <div className="rate">
                                                     <i className="fas fa-eye" />
@@ -48,6 +48,6 @@ function TopServiceCCDV() {
                 </div>
             </div>
         </>
-    );
+    )
 }
-export default TopServiceCCDV;
+export default SearchCCDV;

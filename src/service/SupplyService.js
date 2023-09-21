@@ -28,6 +28,7 @@ export const getSupplyByUserID2 = createAsyncThunk(
     "getSupplyByUserID2",
     async (idUser) => {
         const rs = await customAxios.get("supplies/getSupplyByUserID2?id=" + idUser,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+        console.log(rs)
         return rs.data;
     }
 )

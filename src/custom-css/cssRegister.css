@@ -1,17 +1,18 @@
 .layoutForm {
-    box-shadow: 0 25px 30px -13px rgba(40, 40, 40, 0.4);
+    /*box-shadow: 0 25px 30px -13px rgba(40, 40, 40, 0.4);*/
     border-radius: 10px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    /*padding-top: 30px;*/
+    /*padding-bottom: 30px;*/
+    /*-webkit-transform: translateZ(0);*/
+    /*transform: translateZ(0);*/
     display: flex;
-    background-color:  #f5abc8
+    /*background-color: #FFFFFF*/
 ;
 }
 
 .layout1 {
     width: 70%;
+
 }
 
 .layout2 {
@@ -19,6 +20,7 @@
     width: 30%;
     padding: 10px;
     margin: 50px;
+
 }
 
 .contentmain {

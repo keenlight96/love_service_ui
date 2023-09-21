@@ -1,4 +1,4 @@
-import ShowImages from "../profile/ShowImages";
+ import ShowImages from "../profile/ShowImages";
 import React, {useEffect, useState} from "react";
 import {addChatReceivers, setActiveReceiver, setMsgBoxToggle} from "../../service/ChattingService";
 import {useDispatch, useSelector} from "react-redux";
@@ -100,15 +100,6 @@ const DetailCCDV =(object) =>{
                                     </div>
                                 </div>
                             </div>
-                            {/*<div className="rent-time-wrap"><p className="ready">Đang sẵn sàng</p></div>*/}
-                            {/*<div className="social-icon">*/}
-                            {/*    <div className="icon-wrap user-page">*/}
-                            {/*        <a href="https://playerduo.net/rabbitnee" target="_blank" rel="noopener noreferrer">*/}
-                            {/*            {userDetail.account && <img src={userDetail.account.avatar} style={{width:"50px",height:"50px"}} alt="PD" title="Trang cá nhân"*/}
-                            {/*                                        className="option-icon img-rounded"/>}*/}
-                            {/*        </a>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
                             <div className="member-since">
                                 <div>Ngày tham gia:</div>
                                 <span>
@@ -124,8 +115,6 @@ const DetailCCDV =(object) =>{
                                     className="fas fa-star-half-alt"></i>&nbsp;<span>352 <span>Đánh giá</span></span>
                                 </div>
                                 <div className="text-center">
-                                    <button className="btn-my-style red">Thuê</button>
-                                    {/*<button className="btn-my-style white">Donate</button>*/}
                                     <button className="btn-my-style white" onClick={() => {addNewChat()}}>
                                         <i className="fas fa-comment-alt"></i>Chat
                                     </button>
@@ -250,191 +239,5 @@ const DetailCCDV =(object) =>{
             </div>
         </>
     )
-    // return(
-    //     <>
-    //
-    //         <link rel="icon" type="image/png" sizes="192x192" href="../resources/raw/android-icon-192x192.png" />
-    //         <link rel="icon" type="image/png" sizes="32x32" href="../resources/raw/favicon-32x32.png" />
-    //         <link rel="icon" type="image/png" sizes="96x96" href="../resources/raw/favicon-96x96.png" />
-    //         <link rel="icon" type="image/png" sizes="16x16" href="../resources/raw/favicon-16x16.png" />
-    //         <link rel="manifest" href="https://playerduo.net/manifest.json" />
-    //         <meta name="msapplication-TileColor" content="#ffffff" />
-    //         <meta name="msapplication-TileImage" content="/favicons/ms-icon-144x144.png" />
-    //         <meta name="theme-color" content="#ffffff" />
-    //         <link rel="shortcut icon" href="../resources/raw/favicon.ico" />
-    //         <link href="../resources/all.css" rel="stylesheet" />
-    //         <link href="../resources/css.css" rel="stylesheet" />
-    //         <link href="../resources/8.97b85fe3.chunk.css" rel="stylesheet" />
-    //         <link href="../resources/main.3e229f12.chunk.css" rel="stylesheet" />
-    //         <link rel="stylesheet" type="text/css" href="../resources/0.cbdbec7b.chunk.css" />
-    //         <link rel="stylesheet" type="text/css" href="../resources/3.fe7e74cf.chunk.css" />
-    //         <link rel="stylesheet" type="text/css" href="../resources/10.697bc269.chunk.css" />
-    //         <link rel="stylesheet" href="../resources/css-user-profile.css" />
-    //         <div >
-    //             <div className="hidden">
-    //                 <audio src="../resources/raw/notification-sound.805a8904.mp3"/>
-    //                 <audio src="../resources/raw/notification-group-sound.4c7ac55b.mp3"/>
-    //                 <audio src="../resources/raw/unconvinced.1de6c75d.mp3"/>
-    //             </div>
-    //             <div className="notifications-wrapper"/>
-    //             <div className="message__popup  false">
-    //                 <div className="message__popup--icon">
-    //                     <img src="../resources/raw/popup-chat.png" className alt="PD"/></div>
-    //             </div>
-    //             <div className="wrapper">
-    //                 <div className="container player-infomation">
-    //                     <div className="player-profile-left-wrap col-md-3">
-    //                         <div className="avt-player false">
-    //                             <div>
-    //                                 <div className="avt avt-lg">
-    //                                     {
-    //                                         object.data.account && <img src={object.data.account.avatar} alt="Avatar"
-    //                                                                    style={{width: "100%", height: "100%"}}/>
-    //                                     }
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-    //                         <div className="member-since">
-    //                             <div>Ngày tham gia:</div>
-    //                             <span>
-    //                             {new Date(object.data.userProfile.dateCreate).toLocaleDateString()}
-    //                         </span>
-    //                         </div>
-    //                     </div>
-    //                     <div className="player-profile-right-wrap col-md-3 col-md-push-6">
-    //                         <div className="right-player-profile"><p className="price-player-profile">{object.data.userProfile.price} đ/h</p>
-    //                             <div className="rateting-style"><i className="fas fa-star"></i><i
-    //                                 className="fas fa-star"></i><i
-    //                                 className="fas fa-star"></i><i className="fas fa-star"></i><i
-    //                                 className="fas fa-star-half-alt"></i>&nbsp;<span>352 <span>Đánh giá</span></span>
-    //                             </div>
-    //                             <div className="text-center">
-    //                                 <button className="btn-my-style red">Thuê</button>
-    //                                 {/*<button className="btn-my-style white">Donate</button>*/}
-    //                                 <button className="btn-my-style white" onClick={() => {addNewChat()}}>
-    //                                     <i className="fas fa-comment-alt"></i>Chat
-    //                                 </button>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                     <div className="player-profile-main-wrap col-md-6 col-md-pull-3">
-    //                         <div>
-    //                             <div className="row">
-    //                                 <div className="center-item col-md-12">
-    //                                     <span className="name-player-profile hidden-over-name">{object.data.account && object.data.account.nickname}</span>
-    //                                     {/*<button className="btn-follow-player"><i className="fas fa-heart"></i>&nbsp;*/}
-    //                                     {/*    <span className="plus">*/}
-    //                                     {/*        <span>Theo dõi</span>*/}
-    //                                     {/*    </span>*/}
-    //                                     {/*</button>*/}
-    //                                 </div>
-    //                             </div>
-    //                             <div className="nav-player-profile row">
-    //                                 <div className="col-md-3 col-xs-6">
-    //                                     <div className="item-nav-name"><span>Đã được thuê</span></div>
-    //                                     {/*<div className="item-nav-value">{bill.length}&nbsp;<span> lần</span></div>*/}
-    //                                 </div>
-    //                                 <div className="col-md-3 col-xs-6">
-    //                                     <div className="item-nav-name"><span>Số lượt xem</span></div>
-    //                                     <div className="item-nav-value">{object.data.userProfile.views} <span> lượt</span></div>
-    //                                 </div>
-    //                                 {/*<div className="col-md-3 col-xs-6">*/}
-    //                                 {/*    <div className="item-nav-name"><span>Tỷ lệ hoàn thành</span></div>*/}
-    //                                 {/*    <div className="item-nav-value">100&nbsp;%</div>*/}
-    //                                 {/*</div>*/}
-    //                             </div>
-    //                             <div>
-    //                                 <div className="game-category row">
-    //                                     <div className="title-player-profile row">
-    //                                         <div className="col-xs-6"><span>Dịch vụ</span></div>
-    //                                     </div>
-    //                                     {object.data.userProfile.supplies && object.data.userProfile.supplies.length > 0 && object.data.userProfile.supplies.map((item, key) => (
-    //                                         <div className="choose-game" style={{background: "url(&quot;715867c6-698f-411a-b4f9-1e9093130b60__2649fa50-37c9-11ed-838c-b120e70abb59__game_backgrounds.jpg&quot;) center center no-repeat"}}>
-    //                                             <p className="overlay" key={key}>{item.nameSupply}</p>
-    //
-    //                                         </div>
-    //                                     ))}
-    //
-    //                                 </div>
-    //                                 <div>
-    //                                     <div className="title-player-profile row">
-    //                                         <div className="col-xs-6"><span>Thông tin</span></div>
-    //                                     </div>
-    //                                     <div className="content-player-profile">
-    //                                         <div className="album-of-player">
-    //                                             {/*{image.length > 0 && <ShowImages images={image}/>}*/}
-    //
-    //                                             {/*<div>*/}
-    //                                             {/*    <a href="https://playerduo.net/api/upload-service/images/029f1f12-4fb8-4b21-8171-ca7bf863e2f8__ae016c20-4679-11ee-a657-a54d6be1d46a__player_album.jpg"*/}
-    //                                             {/*       style={{display: "block"}}>*/}
-    //                                             {/*        {image && image.map(image => (*/}
-    //                                             {/*            <img key={image.id} src={image.img}*/}
-    //                                             {/*                 alt={`Ảnh chân dung ${image.id}`}*/}
-    //                                             {/*                 style={{width: "50px", height: "50px"}}/>))}*/}
-    //                                             {/*    </a>*/}
-    //
-    //                                             {/*    <div className="clearfix"></div>*/}
-    //                                             {/*</div>*/}
-    //                                         </div>
-    //                                         <table className={"table table-bordered"}>
-    //                                             <tbody>
-    //                                             <tr>
-    //                                                 <td>Họ tên</td>
-    //                                                 <td>{object.data.userProfile.firstName} {object.data.userProfile.lastName}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Giới tính</td>
-    //                                                 <td>{object.data.userProfile.gender}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Năm sinh</td>
-    //                                                 <td>{new Date(object.data.userProfile.birthday).toLocaleDateString()}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Chiều cao</td>
-    //                                                 <td>{object.data.userProfile.height}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Cân nặng</td>
-    //                                                 <td>{object.data.userProfile.weight}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Địa chỉ</td>
-    //                                                 <td>{object.data.userProfile.address}, {object.data.userProfile.country}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Mô tả về bản thân</td>
-    //                                                 <td>{object.data.userProfile.describes}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Yêu cầu với người thuê</td>
-    //                                                 <td>{object.data.userProfile.basicRequest}</td>
-    //                                             </tr>
-    //                                             <tr>
-    //                                                 <td>Facebook</td>
-    //                                                 <td><a href={object.data.userProfile.facebookLink} target="_blank"
-    //                                                        rel="noopener noreferrer">{object.data.userProfile.facebookLink}</a></td>
-    //                                             </tr>
-    //                                             </tbody>
-    //                                         </table>
-    //                                         {/*<p>Tên: {object.data.userProfile.firstName} {object.data.userProfile.lastName}</p>*/}
-    //                                         {/*<p>Địa Chỉ: {object.data.userProfile.address}, {object.data.userProfile.country}</p>*/}
-    //                                         {/*<p>Năm Sinh: {object.data.userProfile.birthday}</p>*/}
-    //                                         {/*<p>Giới Tính: {object.data.userProfile.gender}</p>*/}
-    //                                         {/*<p>Chiều Cao: {object.data.userProfile.height}</p>*/}
-    //                                         {/*<p>Cân Nặng: {object.data.userProfile.weight}</p>*/}
-    //                                         {/*<p>Mô tả về bản thân: {object.data.userProfile.describes}</p>*/}
-    //                                         {/*<p>Yêu cầu với người thuê: {object.data.userProfile.basicRequest}</p>*/}
-    //                                     </div>
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </>
-    //
-    // )
 }
 export default DetailCCDV;
