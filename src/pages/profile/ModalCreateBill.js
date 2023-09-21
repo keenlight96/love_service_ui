@@ -101,6 +101,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                     id: JSON.parse(localStorage.getItem("account")).id
                 }
             }
+            console.log(tempBill)
             axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
                 .then(data => {
                     hide();

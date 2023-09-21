@@ -9,6 +9,7 @@ import {
     setChatWithReceiver,
     setMsgBoxToggle, setReadMessageReceiver, setStompClient
 } from "../../service/ChattingService";
+import {checkToken} from "../../service/UserService";
 
 const Chat = () => {
     const storeUser = useSelector(state => {
@@ -69,6 +70,7 @@ const Chat = () => {
                         updateReceivers(converter);
                     } else if (converter.type == "notification") {
                         dispatch(addNotification(converter));
+                        dispatch(checkToken());
                     }
                 });
             });
