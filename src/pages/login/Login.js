@@ -63,16 +63,16 @@ function Login() {
                 }
             } else if (data.status.nameStatus === "emailverify") {
                 navigate("/login");
-                setMessage("tài khoản xác nhận email");
+                setMessage("Tài khoản xác nhận email");
             } else if (data.status.nameStatus === "register") {
                 navigate("/login");
-                setMessage("tài khoản chưa được chấp nhận");
+                setMessage("Tài khoản chưa được chấp nhận");
             } else if (data.status.nameStatus === "block") {
                 navigate("/login");
-                setMessage("tài khoản của bạn đã bị khóa");
+                setMessage("Tài khoản của bạn đã bị khóa");
             } else if (!data.isActive) {
                 navigate("/login");
-                setMessage("tài khoản của bạn đã bị xóa");
+                setMessage("Tài khoản của bạn đã bị xóa");
             } else {
                 // else này đang ko nhận
                 navigate("/login");
