@@ -109,10 +109,8 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                                             <>
                                                 <div className="col-md-3" style={{padding: "0px 5px"}} key={key}>
                                                     <a onClick={() => toggleModal(key)}>
-
                                                         <div className="fadeDiv" style={{fontFamily: "Arial"}}>
                                                             <img style={{
-                                                                // width: "100%",
                                                                 objectFit: "cover",
                                                                 height: "250px",
                                                                 marginTop: "10px",
@@ -121,7 +119,7 @@ const ShowImageAlbumPlayer = ({imageAlbum}) => {
                                                                 position: "relative"
                                                             }} src={item.img} className alt=""/>
                                                             <div style={{
-                                                                // width: "100%",
+
                                                                 height: "250px",
                                                                 objectFit: "cover",
                                                                 marginTop: "-250px",
