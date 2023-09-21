@@ -9,6 +9,7 @@ function Revenue() {
     const [dateStart, setDateStart] = useState();
     const [dateEnd, setDateEnd] = useState();
     const [chartData, setChartData] = useState({});
+    const [totalRevenue, setTotalRevenue] = useState(0);
     const id = JSON.parse(localStorage.getItem("account")).id;
     let currentDate = new Date();
     currentDate.setDate(1);
@@ -34,6 +35,7 @@ function Revenue() {
                     },
                 ],
             })
+            calculateTotalRevenue(data);
         }catch (e){}
 
     }
@@ -67,10 +69,15 @@ function Revenue() {
         }
 
     }
+    const calculateTotalRevenue = (data) => {
+        const total = data.reduce((sum, item) => sum + item.revenue, 0);
+        setTotalRevenue(total);
+    }
 
     return (
         <>
-            <h2>Doanh Thu</h2>
+            <h2> Doanh Thu</h2>
+
             <table>
                 <tr>
                     <td>Từ ngày:</td>
@@ -106,6 +113,10 @@ function Revenue() {
                         </button>
                     </td>
                 </tr>
+                <tr>
+                    <td>Tổng Doanh Thu:</td>
+                    <td>{totalRevenue}VND</td>
+                </tr>
             </table>
             <div>{chartData && chartData.datasets && (
                 <Bar data={chartData}
@@ -116,13 +127,13 @@ function Revenue() {
                      }}/>
             )}
 
-                {chartData && chartData.datasets && (
-                    <Line data={chartData} options={{
-                        responsive: true,
-                        plugins: {legend: {position: "top"}},
-                        title: {display: true, text: "Revenue"},
-                    }}/>
-                )}
+                {/*{chartData && chartData.datasets && (*/}
+                {/*    <Line data={chartData} options={{*/}
+                {/*        responsive: true,*/}
+                {/*        plugins: {legend: {position: "top"}},*/}
+                {/*        title: {display: true, text: "Revenue"},*/}
+                {/*    }}/>*/}
+                {/*)}*/}
 
             </div>
             {/*{modal && (*/}
