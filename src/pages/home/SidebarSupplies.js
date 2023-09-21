@@ -44,9 +44,9 @@ const SidebarSupplies = () => {
                 <div className="fixed-cate"><p><span>Danh sách dịch vụ</span></p>
                     <ul className="list-group">
                         {supplies && supplies.map((item, key) => (
-                            <li className="list-item " key={key} onClick={(e) => {updateChosenSupplies(e, item)}}>
+                            <li className="list-item " key={key} style={{marginBottom: "10px"}} onClick={(e) => {updateChosenSupplies(e, item)}}>
                                 <div className="media">
-                                    <div className="media-body media-middle"><p className="media-heading">{item.nameSupply}</p>
+                                    <div className="media-body media-middle"><p className="media-heading" style={{fontSize: "13px"}}>{item.nameSupply}</p>
                                     </div>
                                 </div>
                             </li>

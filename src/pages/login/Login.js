@@ -49,7 +49,7 @@ function Login() {
             const response = await LoginService.login(values);
             const data = response.data;
             console.log(data.isActive);
-            if (data.status.nameStatus === "active" && data.isActive) {
+            if ((data.status.nameStatus === "active" || data.status.nameStatus === "inActive") && data.isActive) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("account", JSON.stringify(data));
                 dispatch(checkToken());

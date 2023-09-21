@@ -179,7 +179,7 @@ const Home = () => {
                                 <div className="carousel-inner">
                                     <div className="item active"><a href="src/pages/home/Home" target="_blank"
                                                                     rel="noopener noreferrer"><img
-                                        src="../resources/raw/446982ba-1aeb-4730-8d52-8e4308776e4b__ca8ef380-0f15-11ee-a657-a54d6be1d46a__admin_banner.jpg"
+                                        src="../resources/raw/banner1.png"
                                         className="img-responsive" alt="banner"/></a></div>
                                     <div className="item"><a href="https://www.facebook.com/groups/playerduovn"
                                                              target="_blank" rel="noopener noreferrer"><img

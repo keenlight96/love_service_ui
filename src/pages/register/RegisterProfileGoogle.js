@@ -205,7 +205,7 @@ const RegisterProfileGoogle =()=> {
                                     <Form>
                                         <div className={"row"}>
                                             <div className={"col-md-6"} style={{textAlign: "center"}}>
-                                                <h4>Thông tin cơ bản:</h4>
+                                                <h4 style={{fontSize: "35px", marginBottom: "50px"}}>THÔNG TIN CƠ BẢN</h4>
                                                 <table style={{marginLeft: "auto", marginRight: "auto"}}>
                                                     <tr className={"row"}>
                                                         <td className={"col-md-6"}>
@@ -220,7 +220,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                     readOnly={true}
@@ -241,7 +241,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                     readOnly={true}
@@ -261,7 +261,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none',
                                                                         width: '190px',
                                                                         border: '2px solid black',
@@ -282,7 +282,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none',
                                                                         width: '190px',
                                                                         border: '2px solid black',
@@ -310,7 +310,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -331,7 +331,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -353,7 +353,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -373,7 +373,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -395,7 +395,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -415,7 +415,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -437,7 +437,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -457,7 +457,7 @@ const RegisterProfileGoogle =()=> {
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -472,14 +472,14 @@ const RegisterProfileGoogle =()=> {
                                                                 <Field
                                                                     type="text"
                                                                     name="price"
-                                                                    placeholder="Mức giá cho thuê theo giờ"
+                                                                    placeholder="Giá thuê theo giờ"
                                                                     maxLength="5000"
                                                                     autoComplete="false"
                                                                     style={{
                                                                         textAlign: 'center',
                                                                         borderRadius: '7px',
                                                                         padding: '7px',
-                                                                        margin: '10px',
+                                                                        margin: '14px',
                                                                         outline: 'none'
                                                                     }}
                                                                 />
@@ -498,7 +498,7 @@ const RegisterProfileGoogle =()=> {
                                                                     textAlign: 'center',
                                                                     borderRadius: '7px',
                                                                     padding: '7px',
-                                                                    margin: '10px',
+                                                                    margin: '14px',
                                                                     outline: 'none',
                                                                     width:'190px'
                                                                 }}
@@ -512,7 +512,15 @@ const RegisterProfileGoogle =()=> {
                                                 <RegisterSupply isRegister={true}/>
                                             </div>
                                             <div className={"col-md-12"} style={{textAlign: "center"}}>
-                                                <button type={"submit"} style={{width: '100px'}}>Xác nhận</button>
+                                                <button type={"submit"} style={{marginTop: '25px',
+                                                    background: '#f0564a',
+                                                    borderRadius: '10px',
+                                                    width: '25%',
+                                                    color: '#fff',
+                                                    border: 'none',
+                                                    height: '40px',
+                                                    fontSize: '15px',
+                                                    fontWeight: '600'}}>Xác nhận</button>
                                             </div>
                                         </div>
                                     </Form>
