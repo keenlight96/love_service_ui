@@ -88,7 +88,7 @@ function UploadAvatar() {
                 getDownloadURL(snapshot.ref).then((url) => {
                     let data1 = {...avatars, avatar: url}
                     console.log(data1)
-                    axios.post("http://localhost:8080/accounts/avatar/" + id, data1)
+                    axios.post("http://45.117.179.204:8080/accounts/avatar/" + id, data1)
                         .then(response => {
                             setAvatarUpload(response.data.avatar);
                             closeModal();

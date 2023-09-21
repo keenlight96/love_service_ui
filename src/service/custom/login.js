@@ -2,11 +2,11 @@ import axios from "axios";
 
 class LoginService{
     static async login(account){
-        return await axios.post("http://localhost:8080/login", account);
+        return await axios.post("http://45.117.179.204:8080/login", account);
     }
 
     static async loginGoogle(account){
-        return await axios.post("http://localhost:8080/login/google", account);
+        return await axios.post("http://45.117.179.204:8080/login/google", account);
     }
 
     static async logout(){

@@ -8,7 +8,7 @@ function SearchByFilter() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.post("http://localhost:8080/userDetail/filter")
+        axios.post("http://45.117.179.204:8080/userDetail/filter")
             .then(response => {
                 setUserProfileFilterDTO(response.data);
                 console.log(response.data);

@@ -30,7 +30,7 @@ function Album() {
                 getDownloadURL(snapshot.ref).then((url) => {
                     let data1 = {...album, img: [url]}
                     console.log(data1)
-                    axios.post("http://localhost:8080/images/album", data1)
+                    axios.post("http://45.117.179.204:8080/images/album", data1)
                         .then(response => {
                             setImageUrls(response.data.img);
                             load()
@@ -44,7 +44,7 @@ function Album() {
     }
 
     const load = () => {
-        axios.get("http://localhost:8080/images/" + id)
+        axios.get("http://45.117.179.204:8080/images/" + id)
             .then(response => {
                 setImageUrls(response.data)
                 console.log(response.data)

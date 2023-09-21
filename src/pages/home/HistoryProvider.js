@@ -10,7 +10,7 @@ const HistoryProvider = () => {
     const account = JSON.parse(localStorage.getItem("account"));
     console.log(account.id)
     const getAccountProvider = () => {
-        axios.get("http://localhost:8080/bills/" +account.id).then(res => {
+        axios.get("http://45.117.179.204:8080/bills/" +account.id).then(res => {
             // Truy cập danh sách tài khoản đã thuê từ res.data
             const rentedAccounts = res.data;
 

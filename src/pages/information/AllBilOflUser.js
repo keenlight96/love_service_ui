@@ -148,7 +148,7 @@ const AllBillOfUser = () => {
                 id: objects.id
             }
         }
-        axios.post("http://localhost:8080/reports/sendReport", report, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.post("http://45.117.179.204:8080/reports/sendReport", report, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(data => {
                 Swal.fire({
                     position: 'center',

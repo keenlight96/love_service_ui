@@ -46,7 +46,7 @@ const RegisterProfile =()=> {
     });
     useEffect(() => {
         axios
-            .get('http://localhost:8080/supplies/getAllSupply')
+            .get('http://45.117.179.204:8080/supplies/getAllSupply')
             .then((res) => {
                 setSupply(res.data);
             })

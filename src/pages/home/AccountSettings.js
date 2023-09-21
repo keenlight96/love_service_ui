@@ -9,7 +9,7 @@ function AccountSettings() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/bills/findBill/${id.id}`)
+        axios.get(`http://45.117.179.204:8080/bills/findBill/${id.id}`)
             .then(response => {
                 setBillDetail(response.data);
                 console.log(response.data)

@@ -97,7 +97,7 @@ const Header = () => {
         }
 
     const swapStatusCCDV = () => {
-        axios.get("http://localhost:8080/accounts/workOrRest?id=" + user.id).then(
+        axios.get("http://45.117.179.204:8080/accounts/workOrRest?id=" + user.id).then(
             res => {
                 Swal.fire({
                     position: 'center',

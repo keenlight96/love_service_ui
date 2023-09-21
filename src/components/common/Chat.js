@@ -54,7 +54,7 @@ const Chat = () => {
             stompClient.disconnect();
         }
 
-        let socket = new WebSocket('ws://localhost:8080/gkz-stomp-endpoint/websocket');
+        let socket = new WebSocket('ws://45.117.179.204:8080/gkz-stomp-endpoint/websocket');
         let stompClient2 = Stomp.over(socket);
         dispatch(setStompClient(stompClient2));
 

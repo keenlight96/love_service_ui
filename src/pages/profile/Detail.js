@@ -94,7 +94,7 @@ function Detail() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/userDetail/` + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.get(`http://45.117.179.204:8080/userDetail/` + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(response => {
                 // console.log(response.data.userProfile);
                 // let {birthday} = response.data.userProfile;
@@ -113,7 +113,7 @@ function Detail() {
             .catch(error => {
                 console.log(error);
             });
-        axios.get("http://localhost:8080/userDetail/increaseView?username=" + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.get("http://45.117.179.204:8080/userDetail/increaseView?username=" + username, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(res => {
                 console.log(res.data)
             }).catch(error => {

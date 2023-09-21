@@ -31,7 +31,7 @@ const UserInfo = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/accounts/account-profile/${accountId}`)
+        axios.get(`http://45.117.179.204:8080/accounts/account-profile/${accountId}`)
             .then(res => {
                 if (res.data) {
                     console.log('thongtin:', res.data);
@@ -138,7 +138,7 @@ const UserInfo = () => {
                                 //     setMessage('Do bạn đăng kí bằng google nên không thể sửa tài khoản email.')
                                 //     return
                                 // }
-                                    axios.post(`http://localhost:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
+                                    axios.post(`http://45.117.179.204:8080/userDetail/change-user-profile/${accountId}`,values).then(res => {
                                         Swal.fire({
                                             position: 'center',
                                             icon: 'success',

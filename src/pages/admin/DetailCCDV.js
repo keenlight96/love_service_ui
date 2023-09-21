@@ -17,7 +17,7 @@ const DetailCCDV =(object) =>{
     });
     let userName = object.data.account.username;
     useEffect(() => {
-        axios.get(`http://localhost:8080/userDetail/` + userName,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.get(`http://45.117.179.204:8080/userDetail/` + userName,{headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(response => {
                 // console.log(response.data.userProfile);
                 // let {birthday} = response.data.userProfile;

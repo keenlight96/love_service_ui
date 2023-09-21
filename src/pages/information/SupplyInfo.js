@@ -14,7 +14,7 @@ const SupplyInfo = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/supplies/getSupplyByAccountID${accountId}`)
+        axios.get(`http://45.117.179.204:8080/supplies/getSupplyByAccountID${accountId}`)
             .then(res => {
                 if (res.data) {
                     console.log('thongtin:', res.data);

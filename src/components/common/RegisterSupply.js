@@ -127,7 +127,7 @@ function RegisterSupply(isRegister) {
     //     });
     //
     //     // sử dụng idUser để call API
-    //     axios.post("http://localhost:8080/supplies/createSupply?id=" + idUser + "?cost=" + costIP , result).then(data => {
+    //     axios.post("http://45.117.179.204:8080/supplies/createSupply?id=" + idUser + "?cost=" + costIP , result).then(data => {
     //         alert("Thêm dữ liệu thành công")
     //     })
     //

@@ -25,7 +25,7 @@ const EditSuppleAndPrice = () => {
         dispatch(getAllActiveSupplies());
         const idUser = JSON.parse(localStorage.getItem("account")).id;
         // dispatch(getSupplyByUserID(idUser));
-        axios.get("http://localhost:8080/supplies/getSupplyByUserID?id=" + idUser, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+        axios.get("http://45.117.179.204:8080/supplies/getSupplyByUserID?id=" + idUser, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
             .then(data => {
                 setUserSupply(data.data)
                 x(data.data)

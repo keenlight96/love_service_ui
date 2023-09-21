@@ -41,7 +41,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
         setTotal(userDetail.price);
         dispatch(getAllBillIn7DayByCCDV(userDetail.id));
         fillDay();
-        axios.get(`http://localhost:8080/bills/getAllBill7DayByIDCCDV?id=${userDetail.id}`).then(data => {
+        axios.get(`http://45.117.179.204:8080/bills/getAllBill7DayByIDCCDV?id=${userDetail.id}`).then(data => {
             fillData(data.data);
             setBillCCDV(data.data);
             console.log(data.data)
@@ -102,7 +102,7 @@ const ModalCreateBill = ({isShowing, hide, userDetail}) => {
                 }
             }
             console.log(tempBill)
-            axios.post("http://localhost:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
+            axios.post("http://45.117.179.204:8080/bills/createBill", tempBill, {headers: {Authorization: "Bearer " + localStorage.getItem("token")}})
                 .then(data => {
                     hide();
                     if (data.data != null) {

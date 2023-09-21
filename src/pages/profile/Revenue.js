@@ -16,7 +16,7 @@ function Revenue() {
     currentDate.setMonth(currentDate.getMonth() + 1);
     const fetchData = async () => {
         try{
-            const {data} = await axios.post("http://localhost:8080/revenues/totalRevenueByDay/" + id + "/" + dateStart + "/" + dateEnd);
+            const {data} = await axios.post("http://45.117.179.204:8080/revenues/totalRevenueByDay/" + id + "/" + dateStart + "/" + dateEnd);
             setChartData({
                 labels: data.map((item) => {
                     let date = new Date(item.day);

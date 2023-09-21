@@ -13,7 +13,7 @@ const ChangePrice = () => {
             }
                     onSubmit={(values) => {
                         const id = JSON.parse(localStorage.getItem("account")).id
-                        axios.post('http://localhost:8080/userDetail/change-price/' + id, values)
+                        axios.post('http://45.117.179.204:8080/userDetail/change-price/' + id, values)
                             .then(async (res) => {
                                 Swal.fire({
                                     position: 'center',
