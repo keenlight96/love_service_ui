@@ -22,14 +22,18 @@ const HomeAdmin = () => {
         status: ""
     })
     const [userParam, setUserParam] = useState('');
-    const [idStatus, setIdStatus] = useState("null");
+    const [filterBill, setFilterBill] = useState({
+        idStatus: "null",
+        usernameCCDV: "",
+        usernameUser:""
+    });
 
     useEffect(() =>{
         dispatch(getAllUser());
         dispatch(getAllCCDV());
         dispatch(getAccountUserFilter(filter));
         dispatch(getAccountCCDVFilter(filter));
-        dispatch(getAllBill(idStatus));
+        dispatch(getAllBill(filterBill));
         dispatch(getListReport(userParam))
     },[])
     return (

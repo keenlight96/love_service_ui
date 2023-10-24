@@ -44,7 +44,11 @@ const ListBill =() =>{
     const closeModal = () => {
         setModal(false);
     };
-    const [filterBill, setFilterBill] = useState('null');
+    const [filterBill, setFilterBill] = useState({
+        idStatus: "null",
+        usernameCCDV: "",
+        usernameUser:""
+    });
 
     const addUserChat = (username) => {
         const account = customAxios.get("userDetail/"+ username)

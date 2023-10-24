@@ -3,8 +3,8 @@ import customAxios from "./api";
 
 export const getAllBill = createAsyncThunk(
     "getAllBill",
-    async (idStatus) => {
-        const res = await customAxios.get("admin/findBillByIdStatus?idStatus=" + idStatus , {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
+    async (filterBill) => {
+        const res = await customAxios.get("admin/findBillByIdStatus" + filterBill , {headers: {Authorization: "Bearer " + localStorage.getItem("token")}});
         return res.data;
     }
 )
